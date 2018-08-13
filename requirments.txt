@@ -1,0 +1,30 @@
+waze,
+spothero
+
+
+ui
+interactive
+emojis,
+
+-management
+sign up
+login
+adding spots
+
+
+
+-customer
+login
+sign up
+booking
+payment
+available spots
+
+
+
+ewallet
+
+
+
+
+
