@@ -1,19 +1,20 @@
-package com.sergentcourier.sendit.network;
+package com.park254.app.park254.network.network;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sergentcourier.sendit.models.ExcludeSerialize;
-import com.sergentcourier.sendit.models.Settings;
+import com.park254.app.park254.models.ExcludeSerialize;
+import com.park254.app.park254.models.Settings;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -35,7 +36,7 @@ public class APIService {
         Init(null);
     }
 
-    public APIService(Context context,String url){
+    public APIService(Context context, String url){
         settings = new Settings(context);
         Init(url);
     }
@@ -48,7 +49,8 @@ public class APIService {
         if(url!=null){
             base_url = url;
         }
-        final String token = settings.getUser().token;
+       FirebaseInstanceId firebaseInstanceId = FirebaseInstanceId.getInstance();
+      final String token = firebaseInstanceId.getToken() ;
         /*
           Setup Logging interceptor.
          */
@@ -58,15 +60,16 @@ public class APIService {
         //Intercept request and add auth-Key header..
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
             @Override
-            public Response intercept(Chain chain) throws IOException {
+            public Response intercept(@NonNull Chain chain) throws IOException {
                 Request request = chain.request().newBuilder()
-                        .addHeader("Authorization",String.format("Token %s",token))
+                       .addHeader("Authorization", String.format("Bearer %s",token))
                         .build();
+
                 return chain.proceed(request);
             }
         }).addInterceptor(interceptor)
                 .readTimeout(60, TimeUnit.SECONDS)
-                .connectTimeout(60,TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
                 .build();
 
 
@@ -88,7 +91,7 @@ public class APIService {
 
    public static class Exclude implements ExclusionStrategy {
 
-        public Exclude() {
+        Exclude() {
             super();
         }
 
