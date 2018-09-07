@@ -1,20 +1,27 @@
 package com.park254.app.park254.models
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.*
+import com.park254.app.park254.models.tc.DateTypeConverter
 import java.util.*
 
-@Entity(tableName = "user")
+@Entity(tableName = "userProfile")
+@TypeConverters(DateTypeConverter::class)
 data class User(
-        @ColumnInfo(name = "userId")
-        var userId: String = "",
+        @ColumnInfo(name = "addedOn")
+        var addedOn: Date = Date(),
 
-        @ColumnInfo(name = "userName")
+        @ColumnInfo(name = "gender")
+        var gender: String = "",
+
+        @ColumnInfo(name = "phoneNumber")
+        var phoneNumber: String = "",
+
+        @PrimaryKey(autoGenerate = false)
+        @ColumnInfo(name = "id")
+        var id: String = "",
+
+        @ColumnInfo(name = "name")
         var userName: String = "",
-        @ColumnInfo(name = "password")
-        var password: String = "")
-{
-    @PrimaryKey(autoGenerate = true)
-    var uid: Long? = null
-}
+
+        @ColumnInfo(name = "email")
+        var email: String = "")

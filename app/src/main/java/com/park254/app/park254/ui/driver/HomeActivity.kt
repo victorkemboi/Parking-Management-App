@@ -1,9 +1,11 @@
 package com.park254.app.park254.ui.driver
 
+import android.app.ActionBar
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import android.util.Base64
 import android.util.Log
 import com.park254.app.park254.R
@@ -27,9 +29,13 @@ class HomeActivity : AppCompatActivity() {
         //toolbar.setLogo(R.drawable.park_logo)
         setSupportActionBar(toolbar)
 
-       supportActionBar!!.setTitle("")
+       supportActionBar!!.setTitle("Park 254")
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeButtonEnabled(true)
         //supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
+
+
 
 
 

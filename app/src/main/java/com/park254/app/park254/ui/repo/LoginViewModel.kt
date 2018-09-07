@@ -28,6 +28,7 @@ constructor(private val firebaseAuth:FirebaseAuth) : ViewModel() {
       lateinit var  mGoogleSignInClient : GoogleSignInClient
       val RC_GOOGLE_SIGN_IN = 1
       val RC_FACEBOOK_SIGN_IN = 2
+      val GOOGLE_WEB_CLIENT_ID = "532535428473-4v6vfn6ijcj19n4q5q2aau53auflh2g4.apps.googleusercontent.com"
 
       val callbackManager = CallbackManager.Factory.create()
       var mFacebookAccessTokenTracker: AccessTokenTracker? = null
@@ -35,6 +36,7 @@ constructor(private val firebaseAuth:FirebaseAuth) : ViewModel() {
      fun setupGoogleUserData( app: Application){
          //requestGoogleUserData
          gso  = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                 .requestIdToken(GOOGLE_WEB_CLIENT_ID)
                  .requestEmail()
                  .build()
          //buildAGoogleSignInClient
@@ -46,9 +48,12 @@ constructor(private val firebaseAuth:FirebaseAuth) : ViewModel() {
         var requestState: Boolean = false
         Log.d("Sign In", "firebaseAuthWithGoogle:" + account.id)
         //progressdialogstart
-        val credential = GoogleAuthProvider.getCredential(account.getIdToken(), null)
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+
+        Log.d("Sign In", "firebaseAuthWithGoogle: google auth provider passed")
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener { task->
+                    Log.w("Sign In task", task.toString())
                     if(task.isSuccessful){
                         Log.d("Sign In", "signInWithCredential:success")
                       var  user = firebaseAuth.currentUser

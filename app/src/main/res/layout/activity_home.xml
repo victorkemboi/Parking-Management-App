@@ -12,11 +12,39 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/appBarLayout_toolbar">
-
+        android:id="@+id/appBarLayout_toolbar"
+        android:fitsSystemWindows="true" >
         <include layout="@layout/toolbar" />
 
     </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v4.widget.DrawerLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:openDrawer="start">
+
+
+
+
+        <!--navigation drawer menu-->
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="220dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="false"
+            android:paddingTop="@dimen/spacing_large"
+            app:itemBackground="@color/blue_grey_50"
+            app:itemIconTint="@color/grey_40"
+            app:itemTextAppearance="@style/TextAppearance.Subhead.Bold"
+            app:itemTextColor="@color/grey_80"
+            app:menu="@menu/menu_navigation_drawer" />
+
+    </android.support.v4.widget.DrawerLayout>
 
     <include
 
@@ -70,7 +98,7 @@
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
-
+<!--
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -83,6 +111,8 @@
         app:itemIconTint="@drawable/color_state_white"
         app:itemTextColor="@drawable/color_state_white"
         app:menu="@menu/menu_bottom_navigation_shifting" />
+
+        -->
 
 
 </android.support.constraint.ConstraintLayout>

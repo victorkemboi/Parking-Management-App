@@ -6,18 +6,17 @@ import android.arch.persistence.room.PrimaryKey
 import android.arch.persistence.room.TypeConverters
 import com.park254.app.park254.models.tc.DateTypeConverter
 import java.util.*
+
+
+@Entity(tableName = "error_model")
 @TypeConverters(DateTypeConverter::class)
-@Entity(tableName = "driver")
-data class Driver(
+data class ErrorModel(
+        @ColumnInfo(name = "code")
+        var code: String = "",
 
-        @ColumnInfo(name = "firstName")
-        var firstName: String = "",
+        @ColumnInfo(name = "description")
+        var description: String = "")
 
-        @ColumnInfo(name = "lastName")
-        var lastName: String = "",
-
-        @ColumnInfo(name = "dob")
-        var dob: Date = Date())
 {
     @PrimaryKey(autoGenerate = true)
     var uid: Long? = null

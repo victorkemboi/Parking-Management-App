@@ -9,6 +9,8 @@
     app:contentInsetStartWithNavigation="0dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    <!--
  <RelativeLayout
      android:layout_width="match_parent"
      android:layout_height="wrap_content">
@@ -20,11 +22,13 @@
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         />
-       <!-- android:layout_centerInParent="true" -->
+        android:layout_centerInParent="true"
 
 
 
  </RelativeLayout>
+
+ -->
 
 </android.support.v7.widget.Toolbar>
 

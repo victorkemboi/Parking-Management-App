@@ -17,7 +17,7 @@
         android:layout_marginTop="30dp"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
-        android:layout_marginStart="145dp"
+        android:layout_marginStart="140dp"
         />
 
     <android.support.v7.widget.CardView
@@ -31,40 +31,116 @@
         app:cardElevation="@dimen/spacing_medium">
 
 
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="40dp"
+            android:text="Sign In"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:layout_marginTop="60dp"
-            android:text="Sign In"
-            android:textSize="20sp"
-            android:textAllCaps="true"/>
+            android:layout_marginTop="80dp"
+            android:text="Park 254 will receive your public profile and email address!"
+            android:textAlignment="center"
+            android:textColor="@color/grey_40"
+            android:textSize="12sp"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:layout_marginEnd="@dimen/spacing_large"
+            />
 
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="40dp"
-            android:orientation="vertical">
+            android:layout_marginBottom="30dp"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_mxlarge">
 
-
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/facebook_sign_in_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="30dp" />
-
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/google_sign_in_button"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"/>
+                android:orientation="horizontal"
+                android:background="@drawable/rounded_corners_facebook_blue"
+                android:layout_gravity="center"
+                android:id="@+id/facebook_sign_in_button"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:elevation="@dimen/spacing_xsmall"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                >
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/com_facebook_button_icon_blue"
+                    android:padding="@dimen/spacing_middle"
+                    android:layout_marginEnd="@dimen/spacing_mxlarge"
+                    android:background="@android:color/white"
+                    android:layout_margin="2dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Continue with Facebook"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginStart="@dimen/spacing_mxlarge"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/rounded_corners_google"
+                android:layout_gravity="center"
+                android:id="@+id/google_sign_in_button"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:elevation="@dimen/spacing_small"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                >
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/google_logo"
+                    android:padding="@dimen/spacing_middle"
+                    android:layout_marginEnd="@dimen/spacing_mxlarge"
+                    android:background="@android:color/white"
+                    android:layout_margin="2dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Continue with Google"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginStart="@dimen/spacing_mxlarge"/>
+            </LinearLayout>
+
+
+
+
+
+
 
 
 

@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/D:/Soft/android-studio-ide-182.4928781-windows/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_more_vert_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/D:/Soft/android-studio-ide-182.4928781-windows/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_help_outline_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -29,7 +29,8 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="313131" />
-                            <entry key="outputName" value="ic_more_vert_black" />
+                            <entry key="opacityPercent" value="84" />
+                            <entry key="outputName" value="ic_help_outline" />
                             <entry key="sourceFile" value="C:\Users\vicki" />
                           </map>
                         </option>

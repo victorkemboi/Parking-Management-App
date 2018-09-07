@@ -18,10 +18,12 @@ import com.facebook.login.LoginResult
 import com.facebook.FacebookCallback
 import com.facebook.AccessToken
 import com.facebook.AccessTokenTracker
+import com.facebook.login.LoginManager
 import com.park254.app.park254.App
 import com.park254.app.park254.di.AppModule
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
+import java.util.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -38,23 +40,32 @@ class LoginActivity : AppCompatActivity() {
 
         google_sign_in_button.setOnClickListener { googleSignIn() }
 
-        facebook_sign_in_button.setReadPermissions(viewModel.EMAIL)
+       // LoginManager.getInstance().setReadPermissions(viewModel.EMAIL)
 
+      facebook_sign_in_button.setOnClickListener { view->
 
+          Log.d("Fb Button","PRESSED")
+          LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(viewModel.EMAIL));
+      }
 
-        facebook_sign_in_button.registerCallback(viewModel.callbackManager, object : FacebookCallback<LoginResult> {
+        LoginManager.getInstance().registerCallback(viewModel.callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 // App code
+
+                Log.d("Fb Login","SUCCESS")
 
                 viewModel.handleFacebookAccessToken(loginResult.accessToken);
             }
 
             override fun onCancel() {
                 // App code
+                Log.w("Fb Login","cancelled")
             }
 
             override fun onError(exception: FacebookException) {
                 // App code
+
+                Log.e("Fb Login","FAILED")
 
             }
         })

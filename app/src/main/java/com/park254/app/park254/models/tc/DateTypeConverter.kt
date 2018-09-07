@@ -1,4 +1,4 @@
-package com.selfmate.mes.selfmate.models.tc
+package com.park254.app.park254.models.tc
 
 import android.arch.persistence.room.TypeConverter
 import java.util.*
