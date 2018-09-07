@@ -4,13 +4,13 @@ import dagger.Provides
 import javax.inject.Singleton
 import android.arch.persistence.room.Room
 import android.app.Application
-import android.arch.persistence.room.RoomDatabase
-import com.park254.app.park254.repo.Park254Database
+import com.park254.app.park254.App
+import com.park254.app.park254.models.Park254Database
 import dagger.Module
 
 
 @Module
-class RoomModule(park254App: Application) {
+class RoomModule(park254App: App) {
 
     private val park254Database: Park254Database
 

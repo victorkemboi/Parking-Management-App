@@ -1,9 +1,15 @@
-package com.park254.app.park254
+package com.park254.app.park254.ui.driver
 
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import android.util.Base64
+import android.util.Log
+import com.park254.app.park254.R
 import kotlinx.android.synthetic.main.toolbar.*
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 class HomeActivity : AppCompatActivity() {
 
@@ -11,6 +17,9 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         initToolbar()
+
+
+
     }
 
     private fun initToolbar() {
@@ -21,6 +30,8 @@ class HomeActivity : AppCompatActivity() {
        supportActionBar!!.setTitle("")
         //supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
+
+
 
 
 }
