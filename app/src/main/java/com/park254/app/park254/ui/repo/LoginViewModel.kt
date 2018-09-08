@@ -33,6 +33,10 @@ constructor(private val firebaseAuth:FirebaseAuth) : ViewModel() {
       val callbackManager = CallbackManager.Factory.create()
       var mFacebookAccessTokenTracker: AccessTokenTracker? = null
       val EMAIL = "email"
+     var phoneNumber = ""
+     var gender = 0
+
+
      fun setupGoogleUserData( app: Application){
          //requestGoogleUserData
          gso  = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

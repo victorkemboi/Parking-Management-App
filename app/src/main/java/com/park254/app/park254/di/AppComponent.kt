@@ -1,15 +1,12 @@
 package com.park254.app.park254.di
 
-import android.app.Application
 import com.google.firebase.auth.FirebaseAuth
 import com.park254.app.park254.App
+import com.park254.app.park254.ui.AddUserInfoActivity
 import com.park254.app.park254.ui.LoginActivity
 import com.park254.app.park254.ui.repo.LoginViewModel
 import dagger.Component
 import javax.inject.Singleton
-import dagger.BindsInstance
-import dagger.android.AndroidInjectionModule
-import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 
 
@@ -32,7 +29,7 @@ interface AppComponent{
     */
 
     fun inject(loginActivity: LoginActivity)
-
+   fun inject(addUserInfoActivity: AddUserInfoActivity)
 
    fun provideApplication(): App
 

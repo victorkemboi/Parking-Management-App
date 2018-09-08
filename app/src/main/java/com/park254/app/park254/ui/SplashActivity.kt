@@ -5,10 +5,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.park254.app.park254.ui.driver.HomeActivity
-import com.google.firebase.auth.FirebaseUser
-
-
 
 
 class SplashActivity : AppCompatActivity() {
