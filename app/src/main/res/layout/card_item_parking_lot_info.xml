@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
 
     <LinearLayout
         android:orientation="horizontal"
@@ -11,7 +11,7 @@
         android:layout_height="160dp">
 
         <ImageView
-            android:id="@+id/parking_item_image"
+            android:id="@+id/card_parking_item_image"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:scaleType="centerCrop"
@@ -36,7 +36,7 @@
                 android:text="The Hub"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="@color/grey_90"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
 
@@ -44,40 +44,27 @@
 
 
 
+
+
             <TextView
-                android:id="@+id/date_title"
+                android:id="@+id/street_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Date: "
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/grey_60"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/parking_name"
-
-                android:layout_marginTop="@dimen/spacing_medium"/>
-
-            <TextView
-                android:id="@+id/date_of_booking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Aug 22"
+                android:text="Langata Rd"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="@color/grey_60"
                 android:textSize="12sp"
-                app:layout_constraintLeft_toRightOf="@id/date_title"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/parking_name"
-                android:layout_marginStart="@dimen/spacing_medium"
                 android:layout_marginTop="2.5dp"/>
 
             <TextView
-                android:id="@+id/time_title"
+                android:id="@+id/spots_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Time: "
+                android:text="Spots: "
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="@color/grey_60"
                 android:textSize="10sp"
@@ -87,16 +74,16 @@
                 android:layout_marginTop="@dimen/spacing_medium"/>
 
             <TextView
-                android:id="@+id/time_of_booked"
+                android:id="@+id/spots_available"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="7:00 AM"
+                android:text="38"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="@color/grey_60"
                 android:textSize="12sp"
-                app:layout_constraintLeft_toRightOf="@id/time_title"
-                app:layout_constraintTop_toBottomOf="@id/date_of_booking"
+                app:layout_constraintLeft_toRightOf="@id/spots_title"
+                app:layout_constraintTop_toBottomOf="@id/street_name"
                 android:layout_marginStart="@dimen/spacing_medium"
                 android:layout_marginTop="@dimen/spacing_medium"/>
 
@@ -104,6 +91,8 @@
         </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
+
+
 
 
 </LinearLayout>

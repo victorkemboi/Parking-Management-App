@@ -21,8 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.HomeActivity"  android:windowSoftInputMode="stateHidden"></activity>
-        <activity android:name=".ui.LoginActivity"></activity>
+        <activity android:name=".ui.HomeActivity"  android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ui.LoginActivity"/>
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 

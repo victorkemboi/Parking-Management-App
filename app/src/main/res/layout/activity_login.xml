@@ -78,12 +78,12 @@
                 android:layout_marginBottom="30dp"
                 android:elevation="@dimen/spacing_xsmall"
                 android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
+                android:foreground="?attr/selectableItemBackground"
                 >
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/com_facebook_button_icon_blue"
+                    app:srcCompat="@drawable/com_facebook_button_icon_blue"
                     android:padding="@dimen/spacing_middle"
                     android:layout_marginEnd="@dimen/spacing_mxlarge"
                     android:background="@android:color/white"
@@ -113,12 +113,12 @@
                 android:layout_marginTop="@dimen/spacing_large"
                 android:elevation="@dimen/spacing_small"
                 android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
+                android:foreground="?attr/selectableItemBackground"
                 >
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/google_logo"
+                    app:srcCompat="@drawable/google_logo"
                     android:padding="@dimen/spacing_middle"
                     android:layout_marginEnd="@dimen/spacing_mxlarge"
                     android:background="@android:color/white"

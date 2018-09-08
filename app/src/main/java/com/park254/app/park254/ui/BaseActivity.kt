@@ -1,11 +1,10 @@
 package com.park254.app.park254.ui
 
 import android.app.ActionBar
-import android.app.Activity
+import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.park254.app.park254.R
 import kotlinx.android.synthetic.main.activity_base.*

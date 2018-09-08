@@ -1,16 +1,34 @@
 package com.park254.app.park254.ui
 
-import android.app.ActionBar
+import android.net.Uri
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.park254.app.park254.R
+import com.park254.app.park254.R.id.nav_home
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(),
+        MainHomeFragment.OnFragmentInteractionListener,
+        NavigationView.OnNavigationItemSelectedListener {
+
+
+
+
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        selectDrawerItem(item)
+        return true
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,28 +36,31 @@ class HomeActivity : AppCompatActivity() {
        // initToolbar()
 
 
+
         val actionBar: ActionBar? = supportActionBar as ActionBar?
        actionBar?.title = "Park 254"
         actionBar?.apply { setDisplayHomeAsUpEnabled(false)
         setHomeAsUpIndicator(R.drawable.ic_menu)}
 
+
+
         initNavigationMenu()
 
 
-    }
 
-    private fun initToolbar() {
-        //toolbar.setNavigationIcon(R.drawable.park_logo)
-        //toolbar.setLogo(R.drawable.park_logo)
-        setSupportActionBar(toolbar)
-
-       supportActionBar!!.setTitle("Park 254")
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setHomeButtonEnabled(true)
-        //supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
+        var fragment: Fragment? = null
+        val fragmentClass: Class<*> =   MainHomeFragment::class.java
+        fragment = fragmentClass.newInstance() as Fragment
+        val fragmentManager = supportFragmentManager
+        fragmentManager.beginTransaction().replace(R.id.mainHomeContentFrameLayout, fragment).commit()
 
     }
+
+    override fun onFragmentInteraction(uri: Uri) {
+        // TODO Implement
+    }
+
+
 
 
     private fun initNavigationMenu() {
@@ -59,24 +80,38 @@ class HomeActivity : AppCompatActivity() {
         drawer_layout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
         nav_view.setNavigationItemSelectedListener { item ->
-            when(item.itemId){
-                R.id.nav_home -> drawer_layout.closeDrawer(GravityCompat.START)
-            }
+            selectDrawerItem(item)
 
             drawer_layout.closeDrawer(GravityCompat.START)
             true
         }
-
-
-
-
-        // open drawer at start
-        //drawer_layout.openDrawer(GravityCompat.START)
     }
 
 
+    fun selectDrawerItem(menuItem: MenuItem) {
+        // Create a new fragment and specify the fragment to show based on nav item clicked
+        var fragment: Fragment? = null
+        val fragmentClass: Class<*> = when (menuItem.itemId) {
+            R.id.nav_owner -> OwnerFragment::class.java
+            else -> MainHomeFragment::class.java
+        }
 
+        try {
+            fragment = fragmentClass.newInstance() as Fragment
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
+        // Insert the fragment by replacing any existing fragment
+        val fragmentManager = supportFragmentManager
+        fragmentManager.beginTransaction().replace(R.id.mainHomeContentFrameLayout, fragment!!).commit()
 
+        // Highlight the selected item has been done by NavigationView
+        menuItem.isChecked = true
+        // Set action bar title
+        title = menuItem.title
+        // Close the navigation drawer
+        drawer_layout.closeDrawers()
+    }
 
 }
