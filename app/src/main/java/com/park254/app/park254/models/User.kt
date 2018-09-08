@@ -25,3 +25,5 @@ data class User(
 
         @ColumnInfo(name = "email")
         var email: String = "")
+
+

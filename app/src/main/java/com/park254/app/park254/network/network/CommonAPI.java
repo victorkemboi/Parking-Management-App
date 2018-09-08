@@ -2,6 +2,8 @@ package com.park254.app.park254.network.network;
 
 
 
+import com.park254.app.park254.models.User;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -17,8 +19,8 @@ public interface CommonAPI {
     @POST("/")
     Call<String> DirectCall();
 
-    //@POST("login")
-   // Call<User> Login(@Body User user);
+    @POST("profiles")
+    Call<User> Login();
 
 
 

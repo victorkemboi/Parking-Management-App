@@ -11,7 +11,7 @@
         android:layout_height="160dp">
 
         <ImageView
-            android:id="@+id/parking_item_image"
+            android:id="@+id/parking_item_image1"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:scaleType="centerCrop"
@@ -29,7 +29,7 @@
             android:layout_marginStart="@dimen/spacing_large">
 
             <TextView
-                android:id="@+id/parking_name"
+                android:id="@+id/parking_name1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
