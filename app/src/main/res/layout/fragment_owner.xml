@@ -60,6 +60,8 @@
             app:srcCompat="@drawable/ic_add"
             android:clickable="true"
             android:id="@+id/btn_add_parking_lot"
+             android:backgroundTint="@color/colorAccentDark2"
+            android:elevation="@dimen/spacing_medium"
             />
 
 

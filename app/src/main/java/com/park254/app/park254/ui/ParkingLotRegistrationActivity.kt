@@ -30,7 +30,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() {
         initToolbar()
         initComponent()
 
-        lyt_back.visibility = View.VISIBLE
+        lyt_back.visibility = View.INVISIBLE
 
     }
 
@@ -116,7 +116,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() {
 
         if (dots.isNotEmpty()) {
             dots[current_index]!!.setImageResource(R.drawable.shape_circle)
-            dots[current_index]!!.setColorFilter(resources.getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN)
+            dots[current_index]!!.setColorFilter(resources.getColor(R.color.colorAccentDark2), PorterDuff.Mode.SRC_IN)
         }
     }
 }
