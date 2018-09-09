@@ -14,7 +14,7 @@ data class Lot(
         var id: String = "",
 
         @ColumnInfo(name = "latitude")
-        var latitude: String = "",
+        var latitude: Double = 0.0,
 
         @ColumnInfo(name = "ownerId")
         var ownerId: String = "",
@@ -23,7 +23,7 @@ data class Lot(
         var joinedOn: Date = Date(),
 
         @ColumnInfo(name = "longitude")
-        var longitude: String = "",
+        var longitude: Double = 0.0,
 
         @ColumnInfo(name = "name")
         var name: String = "",

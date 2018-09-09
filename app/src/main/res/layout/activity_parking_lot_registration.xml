@@ -18,6 +18,25 @@
             <include layout="@layout/toolbar" />
 
         </android.support.design.widget.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+        <TextView
+        android:id="@+id/txtRegHeader"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="Parking Lot Registration"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="24sp"
+        android:layout_marginStart="@dimen/spacing_middle"
+        android:layout_marginEnd="@dimen/spacing_middle"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="@dimen/spacing_medium"/></LinearLayout>
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -25,201 +44,19 @@
             android:orientation="vertical">
 
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/cardViewLotRegContent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:orientation="vertical"
+
+            <FrameLayout
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginBottom="@dimen/spacing_xxlarge"
-                android:paddingStart="@dimen/spacing_mxlarge"
-                android:paddingEnd="@dimen/spacing_large">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/lotRegistrationContentFrameLayout"
+                />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorPrimary"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif"
-                            android:text="Parking Lot Registration"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                            android:textSize="24sp"
-                            android:layout_marginStart="@dimen/spacing_middle"
-                            android:layout_marginEnd="@dimen/spacing_middle"
-                            android:layout_marginTop="@dimen/spacing_large"
-                            android:textColor="@android:color/white"
-                            android:layout_marginBottom="@dimen/spacing_medium"/>
-
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginEnd="@dimen/spacing_middle"
-                            android:layout_marginStart="@dimen/spacing_middle"
-                            android:layout_marginTop="@dimen/spacing_mlarge"
-                           >
-
-
-                            <LinearLayout
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <android.support.design.widget.TextInputLayout
-                                    android:id="@+id/input_layout_parking_lot_name"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    >
-                                    <android.support.v7.widget.AppCompatEditText
-                                        android:layout_gravity="center"
-                                        android:id="@+id/input_parking_lot_name"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:inputType="text"
-                                        android:hint="Name"
-                                        android:maxLines="1"
-                                        android:textSize="24sp"
-                                        android:textColor="@android:color/white"
-                                        android:backgroundTint="@android:color/white"/>
-                                </android.support.design.widget.TextInputLayout>
-
-                            </LinearLayout>
-                            <LinearLayout
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/spacing_medium"
-                                android:layout_marginBottom="@dimen/spacing_medium">
-
-                                <android.support.design.widget.TextInputLayout
-                                    android:id="@+id/input_layout_street_name"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    >
-                                    <android.support.v7.widget.AppCompatEditText
-                                        android:layout_gravity="center"
-                                        android:id="@+id/input_street_name"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:inputType="text"
-                                        android:textColor="@android:color/white"
-                                        android:hint="Street Name"
-                                        android:maxLines="1"
-                                        android:textSize="15sp"
-                                        android:backgroundTint="@android:color/white"/>
-                                </android.support.design.widget.TextInputLayout>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="bottom"
-                        android:layout_marginTop="@dimen/spacing_xlarge"
-                        android:layout_marginEnd="@dimen/spacing_middle"
-                        android:layout_marginStart="@dimen/spacing_middle">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Total parking Spaces:"
-                            android:paddingBottom="@dimen/spacing_mlarge"
-                            />
-
-                        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/input_layout_spaces"
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_marginStart="@dimen/spacing_medium"
-                            android:layout_marginEnd="@dimen/spacing_xxlarge"
-                            >
-                            <com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                app:mnpMaxValue="250"
-                                app:mnpMinValue="1"
-                                app:mnpEditable="false"
-                                app:mnpTextColor="@color/colorPrimaryDark"
-                                app:mnpTextSize="20sp"
-                                app:mnpTextStyle="bold"
-                                app:mnpValue="1"
-                                app:mnpWrapped="false" />
-                        </android.support.design.widget.TextInputLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="parent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/spacing_xxxlarge"
-                        android:layout_marginEnd="@dimen/spacing_middle"
-                        android:layout_marginStart="@dimen/spacing_middle">
-
-
-                        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/input_layout_location"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            >
-                            <Button
-                                android:layout_gravity="center"
-                                android:id="@+id/input_location"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:maxLines="1"
-                                android:textSize="16sp"
-                                android:text="Pick Location"
-                                android:textStyle="bold"
-                                android:textColor="@android:color/white"
-                                android:background="@drawable/rounded_corners_accent_color"
-                                android:elevation="@dimen/spacing_medium"/>
-                        </android.support.design.widget.TextInputLayout>
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txt_display_location_view"
-                        android:layout_marginTop="@dimen/spacing_mlarge"
-                        android:layout_marginEnd="@dimen/spacing_middle"
-                        android:layout_marginStart="@dimen/spacing_middle"
-                        />
-
-
-
-
-
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
 
             <LinearLayout
+                android:id="@+id/bottom_nav_layt"
                 android:baselineAligned="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -227,7 +64,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_alignParentBottom="true"
                 android:background="@color/grey_3"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/spacing_middle">
 
                 <LinearLayout
                     android:id="@+id/lyt_back"
@@ -237,7 +75,7 @@
                     android:clickable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="@dimen/spacing_middle">
+                    android:padding="@dimen/spacing_small">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -251,7 +89,8 @@
                         android:text="BACK"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                         android:textColor="@color/colorAccentDark2"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
 
                 </LinearLayout>
 
@@ -280,7 +119,8 @@
                         android:text="NEXT"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                         android:textColor="@color/colorAccentDark2"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
 
                     <ImageView
                         android:layout_width="wrap_content"

@@ -159,6 +159,7 @@ public class ViewAnimation {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         if (animListener != null) animListener.onFinish();
+                        v.setVisibility(View.GONE);
                         super.onAnimationEnd(animation);
                     }
                 })

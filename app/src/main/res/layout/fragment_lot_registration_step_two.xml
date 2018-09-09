@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragments.LotRegistrationStepTwoFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardViewLotRegContentTwo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="@dimen/spacing_xxlarge"
+        android:paddingStart="@dimen/spacing_mxlarge"
+        android:paddingEnd="@dimen/spacing_large">
+
+
+                <LinearLayout
+                    android:id="@+id/lin_layt_names"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/spacing_middle"
+                    android:layout_marginStart="@dimen/spacing_middle"
+
+                    android:layout_marginTop="@dimen/spacing_mlarge"
+                    >
+
+
+                    <LinearLayout
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_parking_lot_contact_no"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/grey_40"
+                            >
+                            <android.support.v7.widget.AppCompatEditText
+                                android:layout_gravity="center"
+                                android:id="@+id/input_parking_lot_contact_no"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textEmailAddress"
+                                android:hint="Email"
+                                android:maxLines="1"
+                                android:textSize="24sp"
+                                />
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginBottom="@dimen/spacing_medium">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/grey_40"
+                            >
+                            <android.support.v7.widget.AppCompatEditText
+                                android:layout_gravity="center"
+                                android:id="@+id/input_email"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="phone"
+                                android:hint="Contact Number"
+                                android:maxLines="1"
+                                android:textSize="15sp"
+                                android:backgroundTint="@color/grey_40"
+                                />
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginBottom="@dimen/spacing_medium">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_paybill_no"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/grey_40"
+                            >
+                            <android.support.v7.widget.AppCompatEditText
+                                android:textColorHint="@color/grey_40"
+                                android:layout_gravity="center"
+                                android:id="@+id/input_paybill_no"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:hint="Paybill Number"
+                                android:maxLines="1"
+                                android:textSize="15sp"
+                                android:backgroundTint="@color/grey_40"/>
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+
+                    <TableRow
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:gravity="center_horizontal">
+
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_min_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:padding="@dimen/spacing_middle"
+                            android:textColorHint="@color/grey_40"
+                            >
+                            <android.support.v7.widget.AppCompatEditText
+                                android:layout_gravity="center"
+                                android:id="@+id/input_min_time"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:hint="Minimum Time"
+                                android:maxLines="1"
+                                android:textSize="15sp"
+                                android:backgroundTint="@color/grey_40"/>
+                        </android.support.design.widget.TextInputLayout>
+
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_max_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:padding="@dimen/spacing_middle"
+                            android:textColorHint="@color/grey_40"
+                            >
+                            <android.support.v7.widget.AppCompatEditText
+                                android:layout_gravity="center"
+                                android:id="@+id/input_max_time"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:hint="Maximum Time"
+                                android:maxLines="1"
+                                android:textSize="15sp"
+                                android:backgroundTint="@color/grey_40"/>
+                        </android.support.design.widget.TextInputLayout>
+                    </TableRow>
+
+                    <LinearLayout
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginBottom="@dimen/spacing_mlarge">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_cost"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/grey_40"
+                            >
+                            <android.support.v7.widget.AppCompatEditText
+                                android:layout_gravity="center"
+                                android:id="@+id/input_cost"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberDecimal"
+                                android:hint="Cost per Hour"
+                                android:maxLines="1"
+                                android:textSize="15sp"
+                                android:backgroundTint="@color/grey_40"/>
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+    </android.support.v7.widget.CardView>
+
+    </ScrollView>
+
+</FrameLayout>

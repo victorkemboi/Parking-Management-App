@@ -5,6 +5,7 @@ import com.park254.app.park254.App
 import com.park254.app.park254.ui.AddUserInfoActivity
 import com.park254.app.park254.ui.LoginActivity
 import com.park254.app.park254.ui.ParkingLotRegistrationActivity
+import com.park254.app.park254.ui.fragments.LotRegistrationStepOneFragment
 import com.park254.app.park254.ui.repo.LoginViewModel
 import com.park254.app.park254.ui.repo.ParkingLotRegistrationViewModel
 import dagger.Component
@@ -31,8 +32,9 @@ interface AppComponent{
     */
 
     fun inject(loginActivity: LoginActivity)
-   fun inject(addUserInfoActivity: AddUserInfoActivity)
+     fun inject(addUserInfoActivity: AddUserInfoActivity)
     fun inject(parkingLotRegistrationActivity: ParkingLotRegistrationActivity)
+    fun inject(lotRegistrationStepOneFragment: LotRegistrationStepOneFragment)
 
    fun provideApplication(): App
 
