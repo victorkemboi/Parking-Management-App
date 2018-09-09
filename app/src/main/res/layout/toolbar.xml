@@ -11,22 +11,26 @@
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
 
- <RelativeLayout
+ <android.support.constraint.ConstraintLayout
      android:layout_width="match_parent"
      android:layout_height="wrap_content">
 
     <android.support.v7.widget.AppCompatImageView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="85dp"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/park_logo"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
+        android:layout_marginEnd="@dimen/spacing_large"
         />
    <!--     android:layout_centerInParent="true"
 
 
  -->
- </RelativeLayout>
+ </android.support.constraint.ConstraintLayout>
 
 
 

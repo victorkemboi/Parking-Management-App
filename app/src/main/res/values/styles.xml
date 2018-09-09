@@ -8,9 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:textColorHint">@android:color/white</item>
     </style>
 
-    <!-- Splash Screen theme. -->
+    <!-- Splash Scre
+
+
+
+    en theme. -->
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
