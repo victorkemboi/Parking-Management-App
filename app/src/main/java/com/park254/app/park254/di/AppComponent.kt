@@ -4,7 +4,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.park254.app.park254.App
 import com.park254.app.park254.ui.AddUserInfoActivity
 import com.park254.app.park254.ui.LoginActivity
+import com.park254.app.park254.ui.ParkingLotRegistrationActivity
 import com.park254.app.park254.ui.repo.LoginViewModel
+import com.park254.app.park254.ui.repo.ParkingLotRegistrationViewModel
 import dagger.Component
 import javax.inject.Singleton
 import dagger.android.support.AndroidSupportInjectionModule
@@ -30,11 +32,14 @@ interface AppComponent{
 
     fun inject(loginActivity: LoginActivity)
    fun inject(addUserInfoActivity: AddUserInfoActivity)
+    fun inject(parkingLotRegistrationActivity: ParkingLotRegistrationActivity)
 
    fun provideApplication(): App
 
     fun provideFirebaseAuth(): FirebaseAuth
 
     fun providesLoginViewModel(): LoginViewModel
+
+    fun providesParkingLotRegistrationViewModel(): ParkingLotRegistrationViewModel
 
 }

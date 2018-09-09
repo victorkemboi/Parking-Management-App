@@ -23,7 +23,7 @@ import com.park254.app.park254.App
 
 
 class LoginViewModel @Inject
-constructor(private val firebaseAuth:FirebaseAuth) : ViewModel() {
+constructor( val firebaseAuth:FirebaseAuth) : ViewModel() {
       lateinit var gso : GoogleSignInOptions
       lateinit var  mGoogleSignInClient : GoogleSignInClient
       val RC_GOOGLE_SIGN_IN = 1
@@ -46,52 +46,6 @@ constructor(private val firebaseAuth:FirebaseAuth) : ViewModel() {
          //buildAGoogleSignInClient
          mGoogleSignInClient = GoogleSignIn.getClient(app.applicationContext, gso);
      }
-
-    fun firebaseAuthwithGoogle(account:GoogleSignInAccount):Boolean{
-
-        var requestState: Boolean = false
-        Log.d("Sign In", "firebaseAuthWithGoogle:" + account.id)
-        //progressdialogstart
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-
-        Log.d("Sign In", "firebaseAuthWithGoogle: google auth provider passed")
-        firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener { task->
-                    Log.w("Sign In task", task.toString())
-                    if(task.isSuccessful){
-                        Log.d("Sign In", "signInWithCredential:success")
-                      var  user = firebaseAuth.currentUser
-                        requestState = true
-
-                    }else{
-                        Log.w("Sign In", "signInWithCredential:failed")
-                    }
-                }
-
-       return requestState
-    }
-
-     fun handleFacebookAccessToken(token: AccessToken) : Boolean {
-        var requestState : Boolean = false
-        Log.d("FBTokenAccess", "handleFacebookAccessToken:$token")
-
-        val credential = FacebookAuthProvider.getCredential(token.token)
-        firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener { task->
-                    if(task.isSuccessful){
-                        Log.d("Sign In", "signInWithCredential:success")
-                        var  user = firebaseAuth.currentUser
-                        requestState = true
-
-                    }else{
-                        Log.w("Sign In", "signInWithCredential:failed")
-                    }
-                }
-
-        return requestState;
-    }
-
-
 
 
 }

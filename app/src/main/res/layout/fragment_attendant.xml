@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.OwnerFragment">
+    tools:context=".ui.AttendantFragment">
 
+    <!-- TODO: Update blank fragment layout -->
     <!-- TODO: Update blank fragment layout -->
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,7 +24,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="MY PARKING LOTS"
+                android:text="Workplace"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:gravity="center"
@@ -32,35 +33,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="You do not own any parking lot!"
+                android:text="You do not work in any parking lot!"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginTop="@dimen/spacing_large"
                 />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Add one to be an Owner."
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/spacing_medium"
-                />
+
         </LinearLayout>
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_margin="@dimen/spacing_mxlarge"
-            app:srcCompat="@drawable/ic_add"
-            android:clickable="true"
-            android:id="@+id/btn_add_parking_lot"
-            />
 
 
     </android.support.constraint.ConstraintLayout>

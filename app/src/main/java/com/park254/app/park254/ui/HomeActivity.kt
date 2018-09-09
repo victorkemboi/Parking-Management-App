@@ -19,10 +19,13 @@ import kotlinx.android.synthetic.main.toolbar.*
 
 class HomeActivity : AppCompatActivity(),
         MainHomeFragment.OnFragmentInteractionListener,
-        NavigationView.OnNavigationItemSelectedListener {
-
-
-
+        NavigationView.OnNavigationItemSelectedListener,
+        OwnerFragment.OnFragmentInteractionListener,
+        AttendantFragment.OnFragmentInteractionListener,
+         View.OnClickListener{
+    override fun onClick(p0: View?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -93,6 +96,7 @@ class HomeActivity : AppCompatActivity(),
         var fragment: Fragment? = null
         val fragmentClass: Class<*> = when (menuItem.itemId) {
             R.id.nav_owner -> OwnerFragment::class.java
+            R.id.nav_attendant -> AttendantFragment::class.java
             else -> MainHomeFragment::class.java
         }
 

@@ -30,42 +30,59 @@
         app:cardCornerRadius="7dp"
         app:cardElevation="@dimen/spacing_medium">
 
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
 
         <TextView
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/spacing_mxlarge"
             android:text="Sign In"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:id="@+id/txtViewSignIn"/>
 
         <TextView
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtViewSignIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="@dimen/spacing_large"
             android:text="Park 254 will receive your public profile and email address!"
             android:textAlignment="center"
             android:textColor="@color/grey_40"
             android:textSize="12sp"
             android:layout_marginStart="@dimen/spacing_large"
             android:layout_marginEnd="@dimen/spacing_large"
+            android:id="@+id/txtViewSignInExtraInfo"
             />
 
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/spacing_mxlarge"
+    android:layout_marginBottom="30dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/txtViewSignInExtraInfo"
+    android:layout_marginTop="@dimen/spacing_middle">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
             android:orientation="vertical"
-            android:padding="@dimen/spacing_mxlarge">
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -74,7 +91,6 @@
                 android:background="@drawable/rounded_corners_facebook_blue"
                 android:layout_gravity="center"
                 android:id="@+id/facebook_sign_in_button"
-                android:layout_marginTop="30dp"
                 android:layout_marginBottom="30dp"
                 android:elevation="@dimen/spacing_xsmall"
                 android:clickable="true"
@@ -145,6 +161,9 @@
 
 
         </LinearLayout>
+</ScrollView>
+
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
 

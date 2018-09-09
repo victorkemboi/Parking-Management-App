@@ -8,13 +8,19 @@ import android.content.Intent
 import kotlinx.android.synthetic.main.activity_login.*
 import com.google.android.gms.common.api.ApiException
 import android.util.Log
+import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.facebook.FacebookException
 import com.facebook.login.LoginResult
 import com.facebook.FacebookCallback
 import com.facebook.login.LoginManager
+import com.google.firebase.auth.FacebookAuthProvider
 import com.park254.app.park254.App
 import java.util.*
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.GoogleAuthProvider
+
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -45,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
 
                 Log.d("Fb Login","SUCCESS")
 
-                viewModel.handleFacebookAccessToken(loginResult.accessToken);
+                handleFacebookAccessToken(loginResult.accessToken);
             }
 
             override fun onCancel() {
@@ -72,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)
-                viewModel.firebaseAuthwithGoogle(account)
+               firebaseAuthwithGoogle(account)
 
                 //check if new user
                 //if new user, ask for more info
@@ -92,6 +98,56 @@ class LoginActivity : AppCompatActivity() {
         viewModel.setupGoogleUserData(this.application )
         val signInIntent = viewModel.mGoogleSignInClient.getSignInIntent()
         startActivityForResult(signInIntent,  viewModel.RC_GOOGLE_SIGN_IN)
+    }
+
+    fun handleFacebookAccessToken(token: AccessToken) {
+
+        Log.d("FBTokenAccess", "handleFacebookAccessToken:$token")
+
+        val credential = FacebookAuthProvider.getCredential(token.token)
+        viewModel.firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener { task->
+                    if(task.isSuccessful){
+                        var  user = viewModel.firebaseAuth.currentUser
+                       if( task.result.additionalUserInfo.isNewUser){
+                           startActivity(
+                                   Intent(this@LoginActivity, AddUserInfoActivity::class.java))
+                       }else{
+                           startActivity(
+                                   Intent(this@LoginActivity, HomeActivity::class.java))
+                       }
+
+                    }else{
+                        Log.w("Sign In", "signInWithCredential:failed")
+                    }
+                }
+    }
+
+    fun firebaseAuthwithGoogle(account: GoogleSignInAccount){
+
+        Log.d("Sign In", "firebaseAuthWithGoogle:" + account.id)
+        //progressdialogstart
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+
+        Log.d("Sign In", "firebaseAuthWithGoogle: google auth provider passed")
+        viewModel.firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener { task->
+                    Log.w("Sign In task", task.toString())
+                    if(task.isSuccessful){
+                        var  user = viewModel.firebaseAuth.currentUser
+                        if( task.result.additionalUserInfo.isNewUser){
+                            startActivity(
+                                    Intent(this@LoginActivity, AddUserInfoActivity::class.java))
+                        }else{
+                            startActivity(
+                                    Intent(this@LoginActivity, HomeActivity::class.java))
+                        }
+
+
+                    }else{
+                        Log.w("Sign In", "signInWithCredential:failed")
+                    }
+                }
     }
 
 

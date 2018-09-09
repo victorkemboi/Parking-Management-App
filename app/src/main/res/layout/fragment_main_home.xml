@@ -7,7 +7,7 @@
     tools:context=".ui.MainHomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,6 +15,8 @@
         <!-- dummy content list of new -->
 
         <LinearLayout
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -29,7 +31,7 @@
 
                 android:id="@+id/booked_card_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/spacing_medium"
                 android:layout_marginLeft="@dimen/spacing_middle"
                 android:layout_marginRight="@dimen/spacing_middle"
@@ -41,19 +43,37 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_medium"
                     android:paddingStart="@dimen/spacing_large"
                     android:paddingEnd="@dimen/spacing_large">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Recommended"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginBottom="@dimen/spacing_small"
+                        />
+                    <View android:background="@color/grey_20"
+                        android:layout_width = "match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="@dimen/spacing_middle"/>
 
 
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
                     <android.support.v7.widget.RecyclerView
-                        android:id="@+id/booked_items_recycler_view"
+                        android:id="@+id/home_packing_lots_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
                         />
+                    </ScrollView>
 
 
                 </LinearLayout>
@@ -62,6 +82,6 @@
 
         </LinearLayout>
 
-    </android.support.design.widget.CoordinatorLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>
