@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 
 object UtilityClass {
+    val  MAP_BUTTON_REQUEST_CODE  = 305
     fun requestFocus(view: View, window: Window) {
         if (view.requestFocus()) {
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)

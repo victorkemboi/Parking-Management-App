@@ -27,18 +27,23 @@ import javax.inject.Inject
 import com.park254.app.park254.utils.UtilityClass
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_one.*
 import android.widget.TextView
-
-
+import com.park254.app.park254.ui.fragments.LotRegistrationStepThreeFragment
+import kotlinx.android.synthetic.main.fragment_lot_registration_step_two.*
+import kotlinx.android.synthetic.main.toolbar_2.*
 
 
 class ParkingLotRegistrationActivity : AppCompatActivity() ,
         LotRegistrationStepOneFragment.OnFragmentInteractionListener,
-        LotRegistrationStepTwoFragment.OnFragmentInteractionListener
+        LotRegistrationStepTwoFragment.OnFragmentInteractionListener,
+        LotRegistrationStepThreeFragment.OnFragmentInteractionListener
             {
 
 
                 @Inject
     lateinit var viewModel: ParkingLotRegistrationViewModel
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,48 +64,16 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
 
      override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && data != null) {
-            Log.d("RESULT****", "OK")
-            if (requestCode == viewModel.MAP_BUTTON_REQUEST_CODE) {
-                viewModel.lot.latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                Log.d("LATITUDE****", viewModel.lot.latitude.toString())
-                viewModel.lot.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-                Log.d("LONGITUDE****", viewModel.lot.longitude.toString())
-                val address = data.getStringExtra(LOCATION_ADDRESS)
-                Log.d("ADDRESS****", address.toString())
-                val postalcode = data.getStringExtra(ZIPCODE)
-                Log.d("POSTALCODE****", postalcode.toString())
-                val bundle = data.getBundleExtra(TRANSITION_BUNDLE)
-                Log.d("BUNDLE TEXT****", bundle.getString("test"))
-                val fullAddress = data.getParcelableExtra<Address>(ADDRESS)
-                if (fullAddress != null) {
-                    Log.d("FULL ADDRESS****", fullAddress.toString())
-                }
-                val timeZoneId = data.getStringExtra(TIME_ZONE_ID)
-                Log.d("TIME ZONE ID****", timeZoneId)
-                val timeZoneDisplayName = data.getStringExtra(TIME_ZONE_DISPLAY_NAME)
-                Log.d("TIME ZONE NAME****", timeZoneDisplayName)
-            } else if (requestCode == 2) {
-                viewModel.lot.latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                Log.d("LATITUDE****", viewModel.lot.latitude.toString())
-                val longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-                Log.d("LONGITUDE****", viewModel.lot.longitude.toString())
-                val address = data.getStringExtra(LOCATION_ADDRESS)
-                Log.d("ADDRESS****", address.toString())
-                val lekuPoi = data.getParcelableExtra<LekuPoi>(LEKU_POI)
-                Log.d("LekuPoi****", lekuPoi.toString())
-            }
-        }
-        if (resultCode == Activity.RESULT_CANCELED) {
-            Log.d("RESULT****", "CANCELLED")
-        }
+
+         super.onActivityResult(requestCode,resultCode,data);
     }
 
 
     private fun initToolbar() {
-        toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
 
-        setSupportActionBar(toolbar)
+        toolbar2.setNavigationIcon(R.drawable.ic_back_arrow)
+        setSupportActionBar(toolbar2)
+
         supportActionBar!!.title = "Registration"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
@@ -130,18 +103,28 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
 
                 if (progressActive == 1) {
-                    if (validateFirtSetInputs()) {
+                    if (validateFirstSetInputs()) {
+                        viewModel.lot.name = input_parking_lot_name.text.toString()
+                        viewModel.lot.streetName = input_street_name.text.toString()
+                        viewModel.lot.parkingSpaces = input_picker_parking_spaces.value
+
 
                        navigateNextStepper(progressActive)
                     }
-                } else {
-                    navigateNextStepper(progressActive)
+                } else if(progressActive ==2)
+                {
+                    if (validateSecondSetInputs()) {
+                        viewModel.lot.email = input_email.text.toString()
+                        viewModel.lot.contactNumber =  Integer.parseInt(input_parking_lot_contact_no.text.toString())
+                        viewModel.lot.paybillNumber = input_paybill_no.text.toString()
+                        viewModel.rate.minimumTime = Integer.parseInt( input_min_time.text.toString() )
+                        viewModel.rate.maximumTime = Integer.parseInt( input_max_time.text.toString() )
+                        viewModel.rate.cost =   input_cost.text.toString().toDouble()
+
+                        navigateNextStepper(progressActive)
+                    }
                 }
 
-
-
-
-          //  ViewAnimation.fadeOutIn(status)
         }
 
 
@@ -161,6 +144,8 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
         progressStepper(viewModel.current_step)
     }
+
+
     fun progressStepper(current:Int)
     {
         Log.d("Fragment","Enter Stepper")
@@ -170,7 +155,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
             2-> "STEP_TWO"
 
-            else -> "FAILED"
+            else -> "THREE"
 
 
         }
@@ -178,18 +163,19 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         val fragmentClass: Class<*> = when(current){
             1->LotRegistrationStepOneFragment::class.java
             2->LotRegistrationStepTwoFragment::class.java
-           else->LotRegistrationStepOneFragment::class.java
+           else->LotRegistrationStepThreeFragment::class.java
         }
 
 
         try {
 
             fragment = fragmentClass.newInstance() as Fragment
-            Log.d("Fragment","Setup done")
+            changeHeader(current)
+           // Log.d("Fragment","Setup done")
 
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("Fragment","Setup failed")
+           // Log.d("Fragment","Setup failed")
         }
 
         // Insert the fragment by replacing any existing fragment
@@ -204,24 +190,13 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                             .replace(R.id.lotRegistrationContentFrameLayout, fragment!!, fragment_tag)
                             .addToBackStack(fragment_tag).commit()
 
-                    viewModel.visible_fragment = fragment
                 } else {
                     fragmentManager.beginTransaction().setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
                             .replace(R.id.lotRegistrationContentFrameLayout, fragment!!, fragment_tag)
                             .addToBackStack(fragment_tag)
                             .commit()
 
-                    viewModel.visible_fragment = fragment
                 }
-
-
-
-
-
-
-
-
-
 
 
     }
@@ -274,14 +249,11 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         }
     }
 
-    fun validateFirtSetInputs():Boolean {
+    fun validateFirstSetInputs():Boolean {
 
 
-
-
-        val tv_parking_name = findViewById<TextView>(R.id.input_parking_lot_name)
-        Log.d("validateFirtSetInputs",tv_parking_name.text.toString())
-        if (tv_parking_name.text.toString().trim { it <= ' ' }.isEmpty()) run {
+       // Log.d("validateFirtSetInputs",input_parking_lot_name.text.toString())
+        if (input_parking_lot_name.text.toString().trim { it <= ' ' }.isEmpty()) run {
 
             input_layout_parking_lot_name.error = "Enter parking lot name!"
             UtilityClass.requestFocus(input_parking_lot_name, window)
@@ -290,15 +262,68 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         if (input_street_name.text.toString().trim { it <= ' ' }.isEmpty()) run {
             input_layout_street_name.error = "Enter street name!"
             UtilityClass.requestFocus(input_layout_street_name,window)
-            //return false
+          return false
         }
         if (viewModel.lot.longitude == 0.0 && viewModel.lot.latitude == 0.0) run {
             input_layout_location.error = "Select Location!"
             UtilityClass.requestFocus(input_layout_street_name, window)
-           // return false
+          return false
+        }
+        if (input_picker_parking_spaces.value == 1) run {
+            input_layout_spaces.error = "Set spaces available!!"
+            UtilityClass.requestFocus(input_layout_spaces, window)
+            return false
         }
 
 
         return true
+    }
+
+     fun validateSecondSetInputs():Boolean {
+
+
+                    if (input_email.text.toString().trim { it <= ' ' }.isEmpty()) run {
+
+                        input_layout_email.error = "Enter Contact Email!"
+                        UtilityClass.requestFocus(input_layout_email, window)
+                        return false
+                    }
+                    if (input_parking_lot_contact_no.text.toString().trim { it <= ' ' }.isEmpty()) run {
+                        input_layout_parking_lot_contact_no.error = "Enter contact number!"
+                        UtilityClass.requestFocus(input_parking_lot_contact_no,window)
+                       return false
+                    }
+                     if (input_paybill_no.text.toString().trim { it <= ' ' }.isEmpty()) run {
+                         input_layout_paybill_no.error = "Enter paybill no!"
+                         UtilityClass.requestFocus(input_layout_paybill_no,window)
+                         return false
+                     }
+                     if (input_min_time.text.toString().trim { it <= ' ' }.isEmpty()) run {
+                         input_layout_min_time.error = "Enter min time allowed!"
+                         UtilityClass.requestFocus(input_layout_min_time,window)
+                        return false
+                     }
+                     if (input_max_time.text.toString().trim { it <= ' ' }.isEmpty()) run {
+                         input_layout_max_time.error = "Enter max time allowed!"
+                         UtilityClass.requestFocus(input_layout_max_time,window)
+                         return false
+                     }
+                     if (input_cost.text.toString().trim { it <= ' ' }.isEmpty()) run {
+                         input_layout_cost.error = "Enter Cost per Hour!"
+                         UtilityClass.requestFocus(input_layout_cost,window)
+                         return false
+                     }
+
+
+                    return true
+                }
+
+
+     fun changeHeader(pos:Int){
+        when(pos){
+            1->txtRegHeader.text = "Basic Info"
+            2->txtRegHeader.text = "Contact Info"
+            3->txtRegHeader.text = "Photos"
+        }
     }
 }

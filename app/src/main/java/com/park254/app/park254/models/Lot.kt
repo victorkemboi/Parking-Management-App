@@ -42,7 +42,9 @@ data class Lot(
 
         @ColumnInfo(name = "rating")
         var rating: Int =  0
-        )
+        ,
+        @ColumnInfo(name = "streetName")
+        var streetName: String = "")
 {
     @PrimaryKey(autoGenerate = true)
     var uid: Long? = null

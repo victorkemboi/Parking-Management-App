@@ -17,23 +17,22 @@
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="@dimen/spacing_xxlarge"
+        android:layout_marginBottom="@dimen/spacing_large"
         android:paddingStart="@dimen/spacing_mxlarge"
         android:paddingEnd="@dimen/spacing_large">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/spacing_medium">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
                 android:orientation="vertical">
 
 
                 <LinearLayout
-                    android:background="@color/colorPrimary"
                     android:id="@+id/lin_layt_names"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -55,6 +54,7 @@
                             android:id="@+id/input_layout_parking_lot_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:textColorHint="@color/grey_40"
                             >
                             <android.support.v7.widget.AppCompatEditText
                                 android:layout_gravity="center"
@@ -64,9 +64,7 @@
                                 android:inputType="text"
                                 android:hint="Name"
                                 android:maxLines="1"
-                                android:textSize="24sp"
-                                android:textColor="@android:color/white"
-                                android:backgroundTint="@android:color/white"/>
+                                android:textSize="24sp"/>
                         </android.support.design.widget.TextInputLayout>
 
                     </LinearLayout>
@@ -77,13 +75,14 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_medium"
-                        android:layout_marginBottom="@dimen/spacing_medium">
+                        android:layout_marginTop="@dimen/spacing_middle"
+                        android:layout_marginBottom="@dimen/spacing_middle">
 
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/input_layout_street_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:textColorHint="@color/grey_40"
                             >
                             <android.support.v7.widget.AppCompatEditText
                                 android:layout_gravity="center"
@@ -91,11 +90,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="text"
-                                android:textColor="@android:color/white"
                                 android:hint="Street Name"
                                 android:maxLines="1"
-                                android:textSize="15sp"
-                                android:backgroundTint="@android:color/white"/>
+                                android:textSize="15sp"/>
                         </android.support.design.widget.TextInputLayout>
 
                     </LinearLayout>
@@ -116,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="bottom"
-                    android:layout_marginTop="@dimen/spacing_xlarge"
+                    android:layout_marginTop="@dimen/spacing_large"
                     android:layout_marginEnd="@dimen/spacing_middle"
                     android:layout_marginStart="@dimen/spacing_middle">
                     <TextView
@@ -130,11 +127,12 @@
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/input_layout_spaces"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="70dp"
                         android:layout_marginStart="@dimen/spacing_medium"
                         android:layout_marginEnd="@dimen/spacing_xxlarge"
                         >
                         <com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker
+                            android:id="@+id/input_picker_parking_spaces"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             app:mnpMaxValue="250"
@@ -149,6 +147,48 @@
 
                 </LinearLayout>
 
+                    <android.support.constraint.ConstraintLayout
+                        android:id="@+id/input_layout_location_display"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:orientation="horizontal"
+                        android:elevation="@dimen/spacing_medium"
+                        android:layout_marginEnd="@dimen/spacing_middle"
+                        android:layout_marginStart="@dimen/spacing_middle"
+                        android:layout_marginTop="@dimen/spacing_mlarge"
+                        android:visibility="gone"
+                        >
+                        <ImageView
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:srcCompat="@drawable/ic_location_on"
+                            android:layout_marginEnd="@dimen/spacing_middle"
+                            android:backgroundTint="@color/red_600"
+                            android:id="@+id/img_display_location"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_display_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:maxLines="3"
+                            android:text="Nairobi, Kenya"
+                            android:textAlignment="center"
+                            android:textSize="15sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/img_display_location"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_marginStart="@dimen/spacing_medium"/>
+
+                    </android.support.constraint.ConstraintLayout>
+
+
+
+
                 <LinearLayout
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -156,9 +196,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="@dimen/spacing_xxxlarge"
+                    android:layout_marginTop="@dimen/spacing_mxlarge"
                     android:layout_marginEnd="@dimen/spacing_middle"
-                    android:layout_marginStart="@dimen/spacing_middle">
+                    android:layout_marginStart="@dimen/spacing_middle"
+                    android:layout_marginBottom="@dimen/spacing_xxxlarge">
 
 
                     <android.support.design.widget.TextInputLayout
@@ -166,30 +207,46 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         >
-                        <Button
+                        <android.support.constraint.ConstraintLayout
+                         android:background="@drawable/rounded_corners_accent_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:orientation="horizontal"
+                            android:elevation="@dimen/spacing_medium"
+                            android:id="@+id/input_location">
+                        <ImageView
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/tv_input_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_add_location"
+                            android:layout_marginEnd="@dimen/spacing_medium"
+                            android:backgroundTint="@android:color/white"
+                            android:id="@+id/img_input_location"/>
+                        <TextView
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             android:layout_gravity="center"
-                            android:id="@+id/input_location"
-                            android:layout_width="match_parent"
+                            android:id="@+id/tv_input_location"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
                             android:textSize="15sp"
                             android:text="Pick Location"
                             android:textStyle="bold"
                             android:textColor="@android:color/white"
-                            android:background="@drawable/rounded_corners_accent_color"
-                            android:elevation="@dimen/spacing_medium"/>
+                            />
+
+                    </android.support.constraint.ConstraintLayout>
+
                     </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txt_display_location_view"
-                    android:layout_marginTop="@dimen/spacing_mlarge"
-                    android:layout_marginEnd="@dimen/spacing_middle"
-                    android:layout_marginStart="@dimen/spacing_middle"
-                    />
+
 
             </LinearLayout>
 

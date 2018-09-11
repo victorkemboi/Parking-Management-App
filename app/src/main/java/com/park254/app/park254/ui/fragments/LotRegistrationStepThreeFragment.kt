@@ -9,9 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.park254.app.park254.R
-import com.park254.app.park254.ui.ParkingLotRegistrationActivity
 import kotlinx.android.synthetic.main.activity_parking_lot_registration.*
-import kotlinx.android.synthetic.main.fragment_lot_registration_step_two.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,13 +19,13 @@ private const val ARG_PARAM2 = "param2"
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [LotRegistrationStepTwoFragment.OnFragmentInteractionListener] interface
+ * [LotRegistrationStepThreeFragment.OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [LotRegistrationStepTwoFragment.newInstance] factory method to
+ * Use the [LotRegistrationStepThreeFragment.newInstance] factory method to
  * create an instance of this fragment.
  *
  */
-class LotRegistrationStepTwoFragment : Fragment() {
+class LotRegistrationStepThreeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -44,7 +42,7 @@ class LotRegistrationStepTwoFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_lot_registration_step_two, container, false)
+        return inflater.inflate(R.layout.fragment_lot_registration_step_three, container, false)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -90,45 +88,16 @@ class LotRegistrationStepTwoFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment LotRegistrationStepTwoFragment.
+         * @return A new instance of fragment LotRegistrationStepThreeFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-                LotRegistrationStepTwoFragment().apply {
+                LotRegistrationStepThreeFragment().apply {
                     arguments = Bundle().apply {
                         putString(ARG_PARAM1, param1)
                         putString(ARG_PARAM2, param2)
                     }
                 }
     }
-
-    override fun onResume() {
-        super.onResume()
-        fillViewValues()
-    }
-
-    fun fillViewValues() {
-
-        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.email != "") {
-            // Log.d("Fill Values","start")
-            input_email.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.email)
-        }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.contactNumber != 0) {
-            input_parking_lot_contact_no.setText(   (activity as ParkingLotRegistrationActivity).viewModel.lot.contactNumber.toString())
-        }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.paybillNumber != "") {
-            input_paybill_no.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.paybillNumber)
-        }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.rate.minimumTime != 0) {
-            input_min_time.setText((activity as ParkingLotRegistrationActivity).viewModel.rate.minimumTime.toString())
-        }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.rate.maximumTime != 0) {
-            input_max_time.setText((activity as ParkingLotRegistrationActivity).viewModel.rate.maximumTime.toString())
-        }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.rate.cost != 0.0) {
-            input_max_time.setText((activity as ParkingLotRegistrationActivity).viewModel.rate.cost.toString())
-        }
-    }
-
 }

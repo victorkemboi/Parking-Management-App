@@ -43,14 +43,21 @@
                         android:orientation="vertical">
 
                         <android.support.design.widget.TextInputLayout
-                            android:id="@+id/input_layout_parking_lot_contact_no"
+                            android:id="@+id/input_layout_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColorHint="@color/grey_40"
                             >
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_email"
+                                android:backgroundTint="@color/grey_40"
+                                android:layout_weight="1"/>
                             <android.support.v7.widget.AppCompatEditText
+                                android:layout_weight="1"
                                 android:layout_gravity="center"
-                                android:id="@+id/input_parking_lot_contact_no"
+                                android:id="@+id/input_email"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="textEmailAddress"
@@ -72,14 +79,14 @@
                         android:layout_marginBottom="@dimen/spacing_medium">
 
                         <android.support.design.widget.TextInputLayout
-                            android:id="@+id/input_layout_email"
+                            android:id="@+id/input_layout_parking_lot_contact_no"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColorHint="@color/grey_40"
                             >
                             <android.support.v7.widget.AppCompatEditText
                                 android:layout_gravity="center"
-                                android:id="@+id/input_email"
+                                android:id="@+id/input_parking_lot_contact_no"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="phone"
@@ -135,8 +142,9 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:padding="@dimen/spacing_middle"
                             android:textColorHint="@color/grey_40"
+                            android:paddingTop="@dimen/spacing_middle"
+                            android:layout_marginBottom="@dimen/spacing_middle"
                             >
                             <android.support.v7.widget.AppCompatEditText
                                 android:layout_gravity="center"
@@ -157,7 +165,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:padding="@dimen/spacing_middle"
+                            android:paddingTop="@dimen/spacing_middle"
+                            android:layout_marginBottom="@dimen/spacing_middle"
                             android:textColorHint="@color/grey_40"
                             >
                             <android.support.v7.widget.AppCompatEditText
@@ -187,6 +196,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColorHint="@color/grey_40"
+                            android:orientation="horizontal"
                             >
                             <android.support.v7.widget.AppCompatEditText
                                 android:layout_gravity="center"

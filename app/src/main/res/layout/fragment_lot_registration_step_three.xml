@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragments.LotRegistrationStepThreeFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/cardViewLotRegContentThreeLyt"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardViewLotRegContentThree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/spacing_xxlarge"
+            android:paddingStart="@dimen/spacing_mxlarge"
+            android:paddingEnd="@dimen/spacing_large">
+
+
+            <LinearLayout
+                android:id="@+id/lin_layt_names"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/spacing_middle"
+                android:layout_marginStart="@dimen/spacing_middle"
+
+                android:layout_marginTop="@dimen/spacing_mlarge"
+                android:paddingBottom="@dimen/spacing_mlarge"
+                >
+
+
+                <LinearLayout
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_middle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/input_layout_img_upload_one"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/spacing_middle">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.14">
+
+                            <ImageView
+                                android:id="@+id/input_img_upload_one"
+                                android:background="@drawable/circle"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"/>
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/input_img_upload_one_txt_view"
+                            android:layout_gravity="center"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.2"
+                            android:text="Select Image"
+                            android:paddingStart="@dimen/spacing_medium"/>
+
+                       <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.1">
+
+                        <ImageView
+                            android:id="@+id/input_btn_add_img_one"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            app:layout_anchorGravity="bottom|right|end"
+                            android:clickable="true"
+                            app:srcCompat="@drawable/ic_photo_camera"
+
+                            />
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+
+                <View android:background="@color/grey_20"
+                    android:layout_width = "match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/spacing_middle"
+                    android:layout_marginStart="@dimen/spacing_middle"
+                    android:layout_marginEnd="@dimen/spacing_xlarge"/>
+
+
+                <LinearLayout
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_middle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/input_layout_img_upload_two"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/spacing_middle">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.14">
+
+                        <ImageView
+                            android:id="@+id/input_img_upload_two"
+                            android:background="@drawable/circle"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/input_img_upload_two_txt_view"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:text="Select Image"
+                        android:paddingStart="@dimen/spacing_medium"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.1">
+
+                        <ImageView
+                            android:id="@+id/input_btn_add_img_two"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            app:layout_anchorGravity="bottom|right|end"
+                            android:clickable="true"
+                            app:srcCompat="@drawable/ic_photo_camera"
+
+                            />
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+
+                <View android:background="@color/grey_20"
+                    android:layout_width = "match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/spacing_middle"
+                    android:layout_marginStart="@dimen/spacing_middle"
+                    android:layout_marginEnd="@dimen/spacing_xlarge"/>
+
+
+                <LinearLayout
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:layout_marginEnd="@dimen/spacing_middle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/input_layout_img_upload_three"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/spacing_middle">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.14">
+
+                        <ImageView
+                            android:id="@+id/input_img_upload_three"
+                            android:background="@drawable/circle"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/input_img_upload_three_txt_view"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:text="Select Image"
+                        android:paddingStart="@dimen/spacing_medium"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.1">
+
+                        <ImageView
+                            android:id="@+id/input_btn_add_img_three"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            app:layout_anchorGravity="bottom|right|end"
+                            android:clickable="true"
+                            app:srcCompat="@drawable/ic_photo_camera"
+
+                            />
+
+
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+            </LinearLayout>
+
+
+
+        </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            app:layout_constraintTop_toBottomOf="@id/cardViewLotRegContentThreeLyt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/lyt_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/spacing_medium"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/spacing_xlarge"
+            android:visibility="gone">
+
+            <com.park254.app.park254.widgets.ViewLoadingDotsBounce
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:background="@color/colorAccentDark2"
+
+                />
+
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

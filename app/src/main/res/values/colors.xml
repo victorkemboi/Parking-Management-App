@@ -10,6 +10,8 @@
 
 
 
+    <color name="colorControlActivated">#E91E63</color>
+
 
     <color name="grey_3">#f7f7f7</color>
     <color name="grey_5">#f2f2f2</color>

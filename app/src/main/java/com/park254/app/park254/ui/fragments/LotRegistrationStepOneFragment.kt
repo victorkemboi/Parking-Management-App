@@ -1,7 +1,7 @@
 package com.park254.app.park254.ui.fragments
 
+import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,12 +10,18 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.park254.app.park254.R
-import com.park254.app.park254.ui.RegistrationInterface
 import com.park254.app.park254.ui.repo.ParkingLotRegistrationViewModel
 import com.park254.app.park254.utils.UtilityClass
-import com.schibstedspain.leku.LocationPickerActivity
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_one.*
 import javax.inject.Inject
+import android.content.Intent
+import android.location.Address
+import android.util.Log
+import com.park254.app.park254.models.Lot
+import com.park254.app.park254.ui.ParkingLotRegistrationActivity
+import com.schibstedspain.leku.*
+import kotlinx.android.synthetic.main.activity_parking_lot_registration.*
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,34 +37,12 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class LotRegistrationStepOneFragment : Fragment(),RegistrationInterface {
+class LotRegistrationStepOneFragment : Fragment() {
 
-
-
-    override fun validateInputs():Boolean {
-
-        if (input_parking_lot_name.text.toString().trim { it <= ' ' }.isEmpty()) run {
-            input_layout_parking_lot_name.error = "Enter parking lot name!"
-            UtilityClass.requestFocus(input_parking_lot_name, activity!!.window)
-            return false
-        }
-        if (input_street_name.text.toString().trim { it <= ' ' }.isEmpty()) run {
-            input_layout_street_name.error = "Enter street name!"
-            UtilityClass.requestFocus(input_layout_street_name, activity!!.window)
-            return false
-        }
-        if (viewModel.lot.longitude == 0.0 && viewModel.lot.latitude == 0.0) run {
-            input_layout_location.error = "Select Location!"
-            UtilityClass.requestFocus(input_layout_street_name, activity!!.window)
-            return false
-        }
-
-
-        return true
-    }
 
     @Inject
     lateinit var viewModel: ParkingLotRegistrationViewModel
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -78,27 +62,28 @@ class LotRegistrationStepOneFragment : Fragment(),RegistrationInterface {
         return inflater.inflate(R.layout.fragment_lot_registration_step_one, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        input_location.setOnClickListener {
-            val locationPickerIntent = LocationPickerActivity.Builder()
-                    .withLocation(41.4036299, 2.1743558)
-                    .withGeolocApiKey("<PUT API KEY HERE>")
-                    .withSearchZone("es_ES")
-                    .shouldReturnOkOnBackPressed()
-                    .withStreetHidden()
-                    .withCityHidden()
-                    .withZipCodeHidden()
-                    .withSatelliteViewHidden()
-                    .withGooglePlacesEnabled()
-                    .withGoogleTimeZoneEnabled()
-                    .withVoiceSearchHidden()
-                    .build(activity!!.applicationContext)
 
-            startActivityForResult(locationPickerIntent, viewModel.MAP_BUTTON_REQUEST_CODE)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == UtilityClass.MAP_BUTTON_REQUEST_CODE) {
+
+
+            if (resultCode == Activity.RESULT_OK && data != null) {
+
+               // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
+                (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude = data.getDoubleExtra(LATITUDE, 0.0)
+                //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude.toString())
+                (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
+               // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude.toString())
+                (activity as ParkingLotRegistrationActivity).viewModel.addresss = data.getStringExtra(LOCATION_ADDRESS)
+                //Log.d("ADDRESS****", address.toString())
+
+            }
+            else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.d("RESULT****", "CANCELLED")
+            }
+
         }
-
 
     }
 
@@ -121,6 +106,31 @@ class LotRegistrationStepOneFragment : Fragment(),RegistrationInterface {
         listener = null
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        input_location.setOnClickListener {
+            val locationPickerIntent = LocationPickerActivity.Builder()
+                    .withLocation(41.4036299, 2.1743558)
+                    .withGeolocApiKey("AIzaSyD3pEPtNFUNirTobNZciq7wDbxD_J0QXtw")
+                    .withSearchZone("en-US")
+                    .shouldReturnOkOnBackPressed()
+                    .withStreetHidden()
+                    .withCityHidden()
+                    .withZipCodeHidden()
+                    .withSatelliteViewHidden()
+                    .withGooglePlacesEnabled()
+                    .withGoogleTimeZoneEnabled()
+                    .withVoiceSearchHidden()
+                    .build(activity!!.applicationContext)
+
+            startActivityForResult(locationPickerIntent, UtilityClass.MAP_BUTTON_REQUEST_CODE)
+        }
+
+
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -132,6 +142,7 @@ class LotRegistrationStepOneFragment : Fragment(),RegistrationInterface {
      * (http://developer.android.com/training/basics/fragments/communicating.html)
      * for more information.
      */
+
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
@@ -155,5 +166,50 @@ class LotRegistrationStepOneFragment : Fragment(),RegistrationInterface {
                         putString(ARG_PARAM2, param2)
                     }
                 }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fillViewValues()
+        setAddress()
+    }
+
+    fun fillViewValues(){
+
+        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.name!=""){
+           // Log.d("Fill Values","start")
+            input_parking_lot_name.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.name)
+        }
+        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.streetName!=""){
+            input_street_name.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.name)
+        }
+        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.parkingSpaces!=0){
+            input_picker_parking_spaces.value = (activity as ParkingLotRegistrationActivity).viewModel.lot.parkingSpaces
+        }
+
+
+
+        /* if (viewModel.addresss!=""){
+             input_picker_parking_spaces.value = viewModel.lot.parkingSpaces
+         }  */
+    }
+
+    fun setAddress(){
+        if ((activity as ParkingLotRegistrationActivity).viewModel.addresss!=""){
+
+            input_layout_location_display.visibility = View.VISIBLE
+            tv_display_location.text = (activity as ParkingLotRegistrationActivity).viewModel.addresss
+            img_input_location.setImageResource(R.drawable.ic_edit_location)
+            tv_input_location.text = "Change Location"
+
+
+        }else{
+            input_layout_location_display.visibility = View.GONE
+            tv_display_location.text = ""
+            img_input_location.setImageResource(R.drawable.ic_add_location)
+            tv_input_location.text = "Pick Location"
+        }
+
+
     }
 }
