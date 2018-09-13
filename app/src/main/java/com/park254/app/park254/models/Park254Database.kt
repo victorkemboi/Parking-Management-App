@@ -2,6 +2,7 @@ package com.park254.app.park254.models
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
+import com.park254.app.park254.models.dao.UserDao
 
 @Database(entities = [Driver::class, BaseEmployeeRegistration::class,
                         Booking::class, ErrorModel::class, FcmRegistration::class
@@ -10,7 +11,7 @@ import android.arch.persistence.room.RoomDatabase
 abstract class Park254Database : RoomDatabase() {
 
 
-   // abstract fun moodLogDao(): MoodLogDao
+   abstract fun userDao(): UserDao
 
 
 

@@ -1,7 +1,9 @@
 package com.park254.app.park254.ui.repo
 
 import android.arch.lifecycle.ViewModel
+import android.net.Uri
 import com.park254.app.park254.models.Lot
+import com.park254.app.park254.models.Photo
 import com.park254.app.park254.models.Rate
 import javax.inject.Inject
 
@@ -16,5 +18,9 @@ constructor( ) : ViewModel() {
 
     val lot: Lot = Lot()
     val rate: Rate = Rate()
+    var imageOneUri : Uri? = null
+    var imageTwoUri : Uri? = null
+    var imageThreeUri : Uri? = null
+    var photo:Photo = Photo()
 
 }

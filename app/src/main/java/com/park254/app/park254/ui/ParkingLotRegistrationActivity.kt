@@ -27,9 +27,12 @@ import javax.inject.Inject
 import com.park254.app.park254.utils.UtilityClass
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_one.*
 import android.widget.TextView
+import com.google.gson.Gson
 import com.park254.app.park254.ui.fragments.LotRegistrationStepThreeFragment
+import kotlinx.android.synthetic.main.fragment_lot_registration_step_three.*
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_two.*
 import kotlinx.android.synthetic.main.toolbar_2.*
+import org.json.JSONObject
 
 
 class ParkingLotRegistrationActivity : AppCompatActivity() ,
@@ -38,8 +41,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         LotRegistrationStepThreeFragment.OnFragmentInteractionListener
             {
 
-
-                @Inject
+    @Inject
     lateinit var viewModel: ParkingLotRegistrationViewModel
 
 
@@ -49,7 +51,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parking_lot_registration)
 
-        App.applicationInjector.inject(this)
+        (application as App).applicationInjector.inject(this)
         initToolbar()
         initComponent()
 
@@ -63,10 +65,6 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                 }
 
 
-     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-         super.onActivityResult(requestCode,resultCode,data);
-    }
 
 
     private fun initToolbar() {
@@ -123,6 +121,12 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
                         navigateNextStepper(progressActive)
                     }
+                }else{
+
+                    if (validateImageSelection()){
+
+                    }
+
                 }
 
         }
@@ -138,7 +142,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         }else{
             lyt_back.visibility = View.INVISIBLE
         }
-        if (progress == viewModel.MAX_STEP){
+        if (viewModel.current_step == viewModel.MAX_STEP){
             lyt_next_txt_view.text = "FINISH"
         }
 
@@ -200,8 +204,6 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
 
     }
-
-
 
     private fun backStep(progressActive: Int) {
         var progress = progressActive
@@ -279,7 +281,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         return true
     }
 
-     fun validateSecondSetInputs():Boolean {
+    fun validateSecondSetInputs():Boolean {
 
 
                     if (input_email.text.toString().trim { it <= ' ' }.isEmpty()) run {
@@ -318,12 +320,45 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                     return true
                 }
 
+    fun validateImageSelection():Boolean{
+        if (viewModel.imageOneUri==null  || viewModel.imageTwoUri==null || viewModel.imageThreeUri==null){
+            display_txt_register_status.text = "Please add three photos of your parking lot."
+            display_txt_register_status.setTextColor(resources.getColor(R.color.red_600))
+            display_txt_register_status.visibility = View.VISIBLE
 
-     fun changeHeader(pos:Int){
+
+        }else{
+            display_txt_register_status.text = "Registration success!"
+            display_txt_register_status.setTextColor(resources.getColor(R.color.colorPrimaryDark))
+            display_txt_register_status.visibility = View.GONE
+        }
+        return  true
+
+    }
+
+    fun changeHeader(pos:Int){
         when(pos){
             1->txtRegHeader.text = "Basic Info"
             2->txtRegHeader.text = "Contact Info"
             3->txtRegHeader.text = "Photos"
         }
+    }
+
+    fun registerParkingLot(){
+
+        bottom_nav_layt.visibility = View.GONE
+        display_txt_register_status.text = "Loading..."
+        display_txt_register_status.setTextColor(resources.getColor(R.color.colorAccent))
+        display_txt_register_status.visibility = View.VISIBLE
+        lyt_progress.visibility = View.VISIBLE
+
+        val gson = Gson()
+        val lotJson = gson.toJson(viewModel.lot)
+
+
+
+
+
+
     }
 }

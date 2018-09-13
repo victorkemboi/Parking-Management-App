@@ -1,14 +1,32 @@
 package com.park254.app.park254.ui.fragments
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.park254.app.park254.R
+import com.park254.app.park254.models.Lot
+import com.park254.app.park254.ui.HomeActivity
+import com.park254.app.park254.ui.LotInfoActivity
+import com.park254.app.park254.ui.adapters.HomeListAdapter
+import com.park254.app.park254.utils.UtilityClass
+import com.schibstedspain.leku.LATITUDE
+import com.schibstedspain.leku.LOCATION_ADDRESS
+import com.schibstedspain.leku.LONGITUDE
+import com.schibstedspain.leku.LocationPickerActivity
+import kotlinx.android.synthetic.main.fragment_main_home.*
+import kotlinx.android.synthetic.main.include_cardview_search_bar.*
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,7 +46,10 @@ class MainHomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
     private var listener: OnFragmentInteractionListener? = null
+    private var mAdapter: HomeListAdapter? = null
+    var items: ArrayList<Lot> = ArrayList<Lot>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,12 +57,83 @@ class MainHomeFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        items.add( Lot("", 0.0,"", Date(), 0.0, "The Hub",
+      21, "5748438",764564 ,"", 0,"Dagoretti Rd"
+        ) )
+        items.add( Lot("", 0.0,"", Date(), 0.0, "Two Rivers Mall",
+                13, "5748438",764564 ,"", 0,"Hype Street"
+        ) )
+
+        items.add( Lot("", 0.0,"", Date(), 0.0, "Juja city Mall",
+                7, "5748438",764564 ,"", 0,"Thika Rd"
+        ) )
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_main_home, container, false)
+
+
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        btn_search_location.setOnClickListener{launchSetLocationActivity()}
+        search_bar.setOnClickListener{
+            launchSetLocationActivity()
+        }
+        home_packing_lots_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
+
+        home_packing_lots_recycler_view.setHasFixedSize(false)
+        mAdapter = HomeListAdapter(activity!!.applicationContext, items)
+
+        home_packing_lots_recycler_view.adapter = mAdapter
+        mAdapter!!.onItemClick = {
+            lot ->
+          //  Snackbar.make(booked_card_view, "Item " + lot.name + " clicked", Snackbar.LENGTH_SHORT).show()
+            startActivity(
+                    Intent(this@MainHomeFragment.context, LotInfoActivity::class.java))
+        }
+
+
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == UtilityClass.MAP_BUTTON_REQUEST_CODE) {
+
+
+            if (resultCode == Activity.RESULT_OK && data != null) {
+
+                // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
+                (activity as HomeActivity).viewModel.latitude = data.getDoubleExtra(LATITUDE, 0.0)
+                //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude.toString())
+                (activity as HomeActivity).viewModel.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
+                // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude.toString())
+                (activity as HomeActivity).viewModel.address = data.getStringExtra(LOCATION_ADDRESS)
+                //Log.d("ADDRESS****", address.toString())
+
+            }
+            else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.d("RESULT****", "CANCELLED")
+            }
+
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+           val model = (activity as HomeActivity).viewModel
+           if (model.address != "" && model.latitude !=0.0 && model.longitude!=0.0){
+
+               txt_view_home_location.text = model.address
+
+               //perform network requests
+           }
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -97,5 +189,30 @@ class MainHomeFragment : Fragment() {
                         putString(ARG_PARAM2, param2)
                     }
                 }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as HomeActivity).viewModel.address = ""
+        (activity as HomeActivity).viewModel.latitude = 0.0
+        (activity as HomeActivity).viewModel.longitude = 0.0
+    }
+
+    fun launchSetLocationActivity(){
+        val locationPickerIntent = LocationPickerActivity.Builder()
+                .withLocation(41.4036299, 2.1743558)
+                .withGeolocApiKey("AIzaSyD3pEPtNFUNirTobNZciq7wDbxD_J0QXtw")
+                .withSearchZone("en-US")
+                .shouldReturnOkOnBackPressed()
+                .withStreetHidden()
+                .withCityHidden()
+                .withZipCodeHidden()
+                .withSatelliteViewHidden()
+                .withGooglePlacesEnabled()
+                .withGoogleTimeZoneEnabled()
+                .withVoiceSearchHidden()
+                .build(activity!!.applicationContext)
+
+        startActivityForResult(locationPickerIntent, UtilityClass.MAP_BUTTON_REQUEST_CODE)
     }
 }

@@ -5,6 +5,7 @@
         android:id="@+id/grp_1"
         android:checkableBehavior="single">
         <item
+            android:checked="true"
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
             android:title="Home" />

@@ -1,5 +1,6 @@
 package com.park254.app.park254.ui
 
+import android.arch.lifecycle.Observer
 import android.net.Uri
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
@@ -8,14 +9,22 @@ import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import com.park254.app.park254.App
 import com.park254.app.park254.R
+import com.park254.app.park254.models.User
+import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.fragments.AttendantFragment
 import com.park254.app.park254.ui.fragments.MainHomeFragment
 import com.park254.app.park254.ui.fragments.OwnerFragment
+import com.park254.app.park254.ui.repo.HomeViewModel
+import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.toolbar_2.*
+import javax.inject.Inject
 
 class HomeActivity : AppCompatActivity(),
         MainHomeFragment.OnFragmentInteractionListener,
@@ -23,6 +32,12 @@ class HomeActivity : AppCompatActivity(),
         OwnerFragment.OnFragmentInteractionListener,
         AttendantFragment.OnFragmentInteractionListener,
          View.OnClickListener{
+    @Inject
+    lateinit var viewModel:HomeViewModel
+    @Inject
+    lateinit var retrofitApiService: RetrofitApiService
+
+
     override fun onClick(p0: View?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -37,13 +52,19 @@ class HomeActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
        // initToolbar()
+        (application as App).applicationInjector.inject(this)
 
 
 
-        val actionBar: ActionBar? = supportActionBar as ActionBar?
-       actionBar?.title = "Park 254"
-        actionBar?.apply { setDisplayHomeAsUpEnabled(false)
-        setHomeAsUpIndicator(R.drawable.ic_menu)}
+        toolbar2.setNavigationIcon(R.drawable.ic_back_arrow)
+        setSupportActionBar(toolbar2)
+
+        supportActionBar!!.title = "Home"
+        supportActionBar?.apply { setDisplayHomeAsUpEnabled(false)
+            setHomeAsUpIndicator(R.drawable.ic_menu)}
+
+
+
 
 
 
@@ -57,6 +78,19 @@ class HomeActivity : AppCompatActivity(),
         val fragmentManager = supportFragmentManager
         fragmentManager.beginTransaction().replace(R.id.mainHomeContentFrameLayout, fragment).commit()
 
+        retrofitApiService.registerUser().observe(this, Observer<ApiResponse<User>> {
+            response->
+            if (response != null) {
+                Log.d("Reg Resp", response.toString())
+                Log.d("Reg Resp", response.body.toString())
+                Log.d("Reg Resp error", response.errorMessage.toString())
+                //  response.body
+                // Log.d("Fire auth", FirebaseInstanceId.getInstance().token)
+            }
+
+
+        })
+
     }
 
     override fun onFragmentInteraction(uri: Uri) {
@@ -69,7 +103,7 @@ class HomeActivity : AppCompatActivity(),
     private fun initNavigationMenu() {
 
 
-        val drawerToggle = object : ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val drawerToggle = object : ActionBarDrawerToggle(this, drawer_layout, toolbar2, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         {   override
             fun onDrawerClosed(drawerView: View) {
                 super.onDrawerClosed(drawerView)
@@ -113,7 +147,8 @@ class HomeActivity : AppCompatActivity(),
         // Highlight the selected item has been done by NavigationView
         menuItem.isChecked = true
         // Set action bar title
-        title = menuItem.title
+        //title = menuItem.title
+        supportActionBar!!.title = menuItem.title
         // Close the navigation drawer
         drawer_layout.closeDrawers()
     }

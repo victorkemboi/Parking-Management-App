@@ -1,41 +1,28 @@
 package com.park254.app.park254
 
 import android.app.Application
-import com.park254.app.park254.di.AppModule
-import com.park254.app.park254.di.DaggerAppComponent
+import com.park254.app.park254.di.*
+import com.park254.app.park254.utils.UtilityClass
 import javax.inject.Singleton
 
 
 class App :Application() {
 
-
-    //lateinit var daggerAppComponent: AppComponent
-
-
-
+    lateinit var applicationInjector: AppComponent
 
     override fun onCreate() {
         super.onCreate()
-       applicationInjector.provideApplication()
+
+        applicationInjector = DaggerAppComponent.builder()
+                .appModule(AppModule(this))
+                .roomModule(RoomModule(this))
+                .netModule(NetModule(UtilityClass.BASE_URL))
+                .build()
 
 
-
-    }
-
-    @Singleton
-    companion object {
-         val applicationInjector = DaggerAppComponent.builder()
-                 .appModule(AppModule(App()))
-                 .build()!!
+        applicationInjector.provideApplication()
 
     }
-
-
-
-    //override fun applicationInjector() = applicationInjector
-
-
-
 
 }
 

@@ -102,13 +102,14 @@ public class ViewLoadingDotsBounce extends LinearLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        for (int i = 0; i < OBJECT_SIZE; i++) {
+     /*   for (int i = 0; i < OBJECT_SIZE; i++) {
             if (animator[i].isRunning()) {
                 animator[i].removeAllListeners();
                 animator[i].end();
                 animator[i].cancel();
             }
         }
+        */
     }
 
     private void animateView() {

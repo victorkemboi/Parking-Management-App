@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/appBarLayout_toolbar"
         android:fitsSystemWindows="true" >
-        <include layout="@layout/toolbar" />
+        <include layout="@layout/toolbar_2" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -43,16 +43,14 @@
         <!--navigation drawer menu-->
         <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"
-            android:layout_width="220dp"
+            android:layout_width="250dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="false"
-            android:paddingTop="@dimen/spacing_large"
-            app:itemIconTint="@color/grey_40"
-            app:itemTextAppearance="@style/TextAppearance.Subhead.Bold"
-            app:itemTextColor="@color/grey_80"
-            app:menu="@menu/menu_navigation_drawer"
-            android:background="@color/grey_5"/>
+            app:headerLayout="@layout/drawer_header_layout"
+            app:itemIconTint="@color/grey_80"
+            app:itemTextColor="@color/blue_grey_900"
+            app:menu="@menu/menu_navigation_drawer" />
 
     </android.support.v4.widget.DrawerLayout>
 

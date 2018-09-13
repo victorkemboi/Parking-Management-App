@@ -55,6 +55,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColorHint="@color/grey_40"
+
                             >
                             <android.support.v7.widget.AppCompatEditText
                                 android:layout_gravity="center"
@@ -105,6 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <LinearLayout
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -112,16 +114,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="bottom"
+                    android:gravity="center_vertical"
                     android:layout_marginTop="@dimen/spacing_large"
                     android:layout_marginEnd="@dimen/spacing_middle"
                     android:layout_marginStart="@dimen/spacing_middle">
                     <TextView
+                        android:gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Total parking Spaces:"
-                        android:paddingBottom="@dimen/spacing_mlarge"
                         android:textSize="15sp"
+                        android:textColor="@color/grey_40"
                         />
 
                     <android.support.design.widget.TextInputLayout
@@ -196,7 +199,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="@dimen/spacing_mxlarge"
+                    android:layout_marginTop="@dimen/spacing_xlarge"
                     android:layout_marginEnd="@dimen/spacing_middle"
                     android:layout_marginStart="@dimen/spacing_middle"
                     android:layout_marginBottom="@dimen/spacing_xxxlarge">

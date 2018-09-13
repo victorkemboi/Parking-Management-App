@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="@dimen/spacing_xxlarge"
+            android:layout_marginBottom="@dimen/spacing_mlarge"
             android:paddingStart="@dimen/spacing_mxlarge"
             android:paddingEnd="@dimen/spacing_large">
 
@@ -53,24 +53,29 @@
                     android:gravity="center_horizontal"
                     android:layout_marginBottom="@dimen/spacing_middle">
 
-                        <LinearLayout
+                        <android.support.v7.widget.CardView
+                            android:elevation="12dp"
+                            android:id="@+id/cardView1"
+                            app:cardCornerRadius="50dp"
+                            android:layout_centerHorizontal="true"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.14">
+                            android:layout_height="100dp"
+                            android:layout_weight="0.13">
 
                             <ImageView
-                                android:id="@+id/input_img_upload_one"
+                                android:id="@+id/display_img_upload_one"
+                                android:scaleType="centerCrop"
                                 android:background="@drawable/circle"
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"/>
-                        </LinearLayout>
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"/>
+                        </android.support.v7.widget.CardView>
                         <TextView
                             android:id="@+id/input_img_upload_one_txt_view"
                             android:layout_gravity="center"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.2"
-                            android:text="Select Image"
+                            android:text="Select image"
                             android:paddingStart="@dimen/spacing_medium"/>
 
                        <LinearLayout
@@ -83,12 +88,33 @@
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_gravity="center"
-                            app:layout_anchorGravity="bottom|right|end"
+                            app:layout_anchorGravity="bottom|right|start"
                             android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
                             app:srcCompat="@drawable/ic_photo_camera"
 
                             />
+
+                           <ImageView
+
+                               android:id="@+id/input_btn_clear_img_one"
+                               android:layout_width="35dp"
+                               android:layout_height="35dp"
+                               android:layout_gravity="center|end"
+                               app:layout_anchorGravity="bottom|right|end"
+                               android:clickable="true"
+                               android:focusable="true"
+                               android:focusableInTouchMode="true"
+                               app:srcCompat="@drawable/ic_clear"
+                               android:layout_marginStart="@dimen/spacing_middle"
+                               android:visibility="gone"
+
+                               />
+
                     </LinearLayout>
+
+
 
 
 
@@ -116,17 +142,22 @@
                     android:gravity="center_horizontal"
                     android:layout_marginBottom="@dimen/spacing_middle">
 
-                    <LinearLayout
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cardView2"
+                        android:elevation="12dp"
+                        app:cardCornerRadius="50dp"
+                        android:layout_centerHorizontal="true"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.14">
+                        android:layout_height="100dp"
+                        android:layout_weight="0.13">
 
                         <ImageView
-                            android:id="@+id/input_img_upload_two"
+                            android:id="@+id/display_img_upload_two"
                             android:background="@drawable/circle"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"/>
-                    </LinearLayout>
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"/>
+                    </android.support.v7.widget.CardView>
                     <TextView
                         android:id="@+id/input_img_upload_two_txt_view"
                         android:layout_gravity="center"
@@ -149,6 +180,21 @@
                             app:layout_anchorGravity="bottom|right|end"
                             android:clickable="true"
                             app:srcCompat="@drawable/ic_photo_camera"
+
+                            />
+                        <ImageView
+
+                            android:id="@+id/input_btn_clear_img_two"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center|end"
+                            app:layout_anchorGravity="bottom|right|end"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            app:srcCompat="@drawable/ic_clear"
+                            android:layout_marginStart="@dimen/spacing_middle"
+                            android:visibility="gone"
 
                             />
                     </LinearLayout>
@@ -179,17 +225,22 @@
                     android:gravity="center_horizontal"
                     android:layout_marginBottom="@dimen/spacing_middle">
 
-                    <LinearLayout
+                    <android.support.v7.widget.CardView
+                        android:elevation="12dp"
+                        android:id="@+id/cardView3"
+                        app:cardCornerRadius="50dp"
+                        android:layout_centerHorizontal="true"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.14">
+                        android:layout_height="100dp"
+                        android:layout_weight="0.13">
 
                         <ImageView
-                            android:id="@+id/input_img_upload_three"
+                            android:id="@+id/display_img_upload_three"
                             android:background="@drawable/circle"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"/>
-                    </LinearLayout>
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"/>
+                    </android.support.v7.widget.CardView>
                     <TextView
                         android:id="@+id/input_img_upload_three_txt_view"
                         android:layout_gravity="center"
@@ -212,6 +263,22 @@
                             app:layout_anchorGravity="bottom|right|end"
                             android:clickable="true"
                             app:srcCompat="@drawable/ic_photo_camera"
+
+                            />
+
+                        <ImageView
+
+                            android:id="@+id/input_btn_clear_img_three"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center|end"
+                            app:layout_anchorGravity="bottom|right|end"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            app:srcCompat="@drawable/ic_clear"
+                            android:layout_marginStart="@dimen/spacing_middle"
+                            android:visibility="gone"
 
                             />
 
@@ -245,23 +312,64 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/lyt_progress"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="@dimen/spacing_medium"
             android:orientation="vertical"
-            android:layout_marginTop="@dimen/spacing_xlarge"
-            android:visibility="gone">
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/spacing_mlarge">
 
-            <com.park254.app.park254.widgets.ViewLoadingDotsBounce
-                android:layout_width="50dp"
-                android:layout_height="40dp"
-                android:background="@color/colorAccentDark2"
-
+            <TextView
+                android:id="@+id/display_txt_register_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/grey_40"
+                android:text="Registration success!"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:visibility="gone"
                 />
 
+            <LinearLayout
+
+                android:id="@+id/lyt_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/spacing_medium"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+
+
+                <com.park254.app.park254.widgets.ViewLoadingDotsBounce
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:background="@color/colorAccentDark2"
+
+                    />
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_close_registration"
+                app:layout_constraintTop_toBottomOf="@id/lyt_progress"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_corners_accent_color"
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_marginStart="@dimen/spacing_xxxlarge"
+                android:layout_marginEnd="@dimen/spacing_xxxlarge"
+                android:text="Close"
+                android:textColor="@android:color/white"
+                android:visibility="gone"/>
+
         </LinearLayout>
+
+
 
     </android.support.constraint.ConstraintLayout>
 

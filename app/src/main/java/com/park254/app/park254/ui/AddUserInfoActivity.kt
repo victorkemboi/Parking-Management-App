@@ -1,9 +1,11 @@
 package com.park254.app.park254.ui
 
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -11,11 +13,17 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import com.google.firebase.iid.FirebaseInstanceId
 import com.park254.app.park254.App
 import com.park254.app.park254.R
+import com.park254.app.park254.models.Park254Database
+import com.park254.app.park254.models.User
+import com.park254.app.park254.models.dao.UserDao
+import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.repo.LoginViewModel
 import com.park254.app.park254.utils.UtilityClass.hideKeyboard
 import com.park254.app.park254.utils.UtilityClass.requestFocus
+import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import kotlinx.android.synthetic.main.activity_add_user_info.*
 import kotlinx.android.synthetic.main.activity_add_user_info.view.*
 import javax.inject.Inject
@@ -24,10 +32,15 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
     @Inject
     lateinit var viewModel: LoginViewModel
 
+    @Inject
+    lateinit var retrofitApiService: RetrofitApiService
+    @Inject
+    lateinit var userDao: UserDao
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_user_info)
-        App.applicationInjector.inject(this)
+        (application as App).applicationInjector.inject(this)
 
         btn_finish_sign_in.setOnClickListener { finishSignIn() }
 
@@ -61,9 +74,66 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
             //viewModel.api  patch user
 
             hideKeyboard(this)
+            btn_finish_sign_in.visibility = View.GONE
+            lyt_progress_login.visibility = View.VISIBLE
 
-            startActivity(
-                    Intent(this@AddUserInfoActivity, HomeActivity::class.java))
+            Log.d("Login", "Start")
+          /*  retrofitApiService.registerUser().observe(
+                    this, Observer<User> { user ->
+                Log.d("Login", "Response 1")
+                if (user != null) {
+                    user.phoneNumber = viewModel.phoneNumber
+                    user.gender = when(viewModel.gender){
+                        1->"Male"
+                        else -> "Female"
+
+                    }
+
+                    Log.d("Login", "Start 2")
+
+                /*    retrofitApiService.updateUser(user).observe(
+                            this, Observer<User> { updatedUser->
+                        run {
+
+                            Log.d("Login", "response 2")
+                            if (updatedUser != null) {
+                                userDao.insertUser(user)
+
+                            }
+
+                        }
+                    }) */
+
+
+
+
+
+                }else{
+                    btn_finish_sign_in.visibility = View.VISIBLE
+                    lyt_progress_login.visibility = View.GONE
+                }
+            }
+            )
+
+            */
+
+            retrofitApiService.registerUser().observe(this, Observer<ApiResponse<User>> {
+                response->
+                if (response != null) {
+                    Log.d("Reg Resp", response.toString())
+                    Log.d("Reg Resp", response.body.toString())
+                    Log.d("Reg Resp error", response.errorMessage.toString())
+                  //  response.body
+                   // Log.d("Fire auth", FirebaseInstanceId.getInstance().token)
+                }
+
+
+            })
+
+
+
+          //  startActivity(
+               //     Intent(this@AddUserInfoActivity, HomeActivity::class.java))
         }
 
 

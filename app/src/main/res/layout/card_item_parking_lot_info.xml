@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.balysv.materialripple.MaterialRippleLayout
+    style="@style/RippleStyleBlack"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="@dimen/spacing_medium"
+    android:layout_marginBottom="@dimen/spacing_mlarge"
+     >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="160dp">
+        android:layout_height="wrap_content"
+        android:id="@+id/lin_lyt_parent"
+        android:clickable="true">
 
         <ImageView
             android:id="@+id/card_parking_item_image"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/the_hub"
 
@@ -24,75 +34,56 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:orientation="horizontal"
-            android:layout_marginStart="@dimen/spacing_large">
+            android:layout_marginBottom="@dimen/spacing_medium"
+            android:layout_marginTop="@dimen/spacing_medium">
 
             <TextView
                 android:id="@+id/parking_name"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_height="15dp"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:gravity="bottom"
                 android:text="The Hub"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/grey_90"
-                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-
-                android:layout_marginTop="@dimen/spacing_small"/>
-
-
-
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <TextView
                 android:id="@+id/street_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="bottom"
                 android:text="Langata Rd"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/grey_60"
-                android:textSize="12sp"
-                app:layout_constraintLeft_toLeftOf="parent"
+                android:textAppearance="@android:style/TextAppearance.Material.Body1"
                 app:layout_constraintTop_toBottomOf="@id/parking_name"
-                android:layout_marginTop="2.5dp"/>
+                app:layout_constraintLeft_toLeftOf="@id/parking_name"
+                android:textSize="13sp"/>
 
-            <TextView
-                android:id="@+id/spots_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Spots: "
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/grey_60"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-
-                android:layout_marginTop="@dimen/spacing_medium"/>
 
             <TextView
                 android:id="@+id/spots_available"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_middle"
                 android:gravity="center"
-                android:text="38"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/grey_60"
-                android:textSize="12sp"
-                app:layout_constraintLeft_toRightOf="@id/spots_title"
-                app:layout_constraintTop_toBottomOf="@id/street_name"
-                android:layout_marginStart="@dimen/spacing_medium"
-                android:layout_marginTop="@dimen/spacing_medium"/>
+                android:text="Spots: 38"
+                android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                app:layout_constraintBottom_toBottomOf="@id/street_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="13sp"/>
 
 
         </android.support.constraint.ConstraintLayout>
+
 
     </LinearLayout>
 
 
 
-
 </LinearLayout>
+
+
+</com.balysv.materialripple.MaterialRippleLayout>

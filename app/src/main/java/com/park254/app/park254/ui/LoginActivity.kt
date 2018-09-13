@@ -5,6 +5,7 @@ import com.park254.app.park254.R
 import com.park254.app.park254.ui.repo.LoginViewModel
 import javax.inject.Inject
 import android.content.Intent
+import android.support.annotation.NonNull
 import kotlinx.android.synthetic.main.activity_login.*
 import com.google.android.gms.common.api.ApiException
 import android.util.Log
@@ -20,24 +21,20 @@ import java.util.*
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.GoogleAuthProvider
 
-
-
 class LoginActivity : AppCompatActivity() {
 
     @Inject
     lateinit var viewModel: LoginViewModel
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-             //   App.INSTANCE.daggerAppComponent.inject(this)
-        //AndroidInjection.inject(this)
-
-        App.applicationInjector.inject(this)
+        (application as App).applicationInjector.inject(this)
 
         google_sign_in_button.setOnClickListener { googleSignIn() }
 
-       // LoginManager.getInstance().setReadPermissions(viewModel.EMAIL)
 
       facebook_sign_in_button.setOnClickListener { view->
 
@@ -96,7 +93,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun googleSignIn() {
         viewModel.setupGoogleUserData(this.application )
-        val signInIntent = viewModel.mGoogleSignInClient.getSignInIntent()
+        val signInIntent = viewModel.mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent,  viewModel.RC_GOOGLE_SIGN_IN)
     }
 
@@ -129,12 +126,26 @@ class LoginActivity : AppCompatActivity() {
         //progressdialogstart
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
 
-        Log.d("Sign In", "firebaseAuthWithGoogle: google auth provider passed")
+       // Log.d("Sign In", "firebaseAuthWithGoogle: google auth provider passed")
         viewModel.firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener { task->
-                    Log.w("Sign In task", task.toString())
+                  //  Log.w("Sign In task", task.toString())
                     if(task.isSuccessful){
-                        var  user = viewModel.firebaseAuth.currentUser
+
+
+                        viewModel.firebaseAuth.getAccessToken(true).addOnCompleteListener {
+                            task2 ->
+                            run {
+                                if (task2.isSuccessful) {
+                                    Log.d("Sign In jwt token",    task2.result.token)
+
+                                }
+                            }
+                        }
+
+
+
+
                         if( task.result.additionalUserInfo.isNewUser){
                             startActivity(
                                     Intent(this@LoginActivity, AddUserInfoActivity::class.java))
