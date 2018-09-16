@@ -1,47 +1,34 @@
 package com.park254.app.park254.network
 
+import android.content.SharedPreferences
 import android.util.Log
+import com.google.android.gms.flags.impl.SharedPreferencesFactory.getSharedPreferences
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.park254.app.park254.App
 import com.park254.app.park254.utils.UtilityClass
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
+import javax.inject.Inject
 
 
-class FirebaseUserIdTokenInterceptor : Interceptor {
-
-    @Throws(IOException::class)
+class FirebaseUserIdTokenInterceptor
+    constructor(val app: App): Interceptor {
     override
     fun intercept(chain: Interceptor.Chain): Response {
+        val settings: SharedPreferences  = getSharedPreferences(app)
+        val token = settings.getString("Token","")
+
         val request = chain.request()
+        val modifiedRequest = request.newBuilder()
+                    .addHeader("Authorization" , UtilityClass.X_FIREBASE_ID_TOKEN + " $token")
+                    .build()
+            return chain.proceed(modifiedRequest)
 
-        try {
-            val user = FirebaseAuth.getInstance().currentUser
-            if (user == null) {
-                throw Exception("User is not logged in.")
-            } else {
-                val task = user.getIdToken(true)
-                val tokenResult = Tasks.await(task)
-                val idToken = tokenResult.token
 
-                if (idToken == null) {
-                    throw Exception("idToken is null")
-                } else {
-                    Log.d("Header Interceptor",idToken)
-                    val modifiedRequest = request.newBuilder()
-                            .addHeader(UtilityClass.X_FIREBASE_ID_TOKEN, " $idToken")
-                            .build()
-                    return chain.proceed(modifiedRequest)
-                }
-            }
-        } catch (e: Exception) {
-            Log.d("Header Interceptor",e.message)
-            throw IOException(e.message)
-
-        }
 
     }
 

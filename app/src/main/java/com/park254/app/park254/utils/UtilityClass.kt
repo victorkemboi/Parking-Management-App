@@ -13,7 +13,7 @@ object UtilityClass {
     val  OPEN_DOCUMENT_FIRST_PHOTO_CODE = 302
     val  OPEN_DOCUMENT_SECOND_PHOTO_CODE = 303
     val  OPEN_DOCUMENT_THIRD_PHOTO_CODE = 304
-    val X_FIREBASE_ID_TOKEN = "YOUR-CUSTOM-HEADER"
+    val X_FIREBASE_ID_TOKEN = "Bearer"
     const val BASE_URL: String = "https://park254.azurewebsites.net/v1/"
     const val DATABASE_NAME = "park254DB"
     fun requestFocus(view: View, window: Window) {

@@ -174,13 +174,13 @@ class LotRegistrationStepThreeFragment : Fragment() {
         val imageOneUri = (activity as ParkingLotRegistrationActivity).viewModel.imageOneUri
         if(imageOneUri!= null){
 
-            displayImageInfo(imageOneUri,input_img_upload_one_txt_view, input_btn_clear_img_one, display_img_upload_one)
+            displayImageInfo(imageOneUri,input_img_upload_one_txt_view, input_btn_clear_img_one, display_img_upload_one,1)
         }
 
         val imageTwoUri = (activity as ParkingLotRegistrationActivity).viewModel.imageTwoUri
         if(imageTwoUri!= null){
 
-        displayImageInfo(imageTwoUri,input_img_upload_two_txt_view,input_btn_clear_img_two, display_img_upload_two)
+        displayImageInfo(imageTwoUri,input_img_upload_two_txt_view,input_btn_clear_img_two, display_img_upload_two,2)
 
 
         }
@@ -188,7 +188,7 @@ class LotRegistrationStepThreeFragment : Fragment() {
         val imageThreeUri = (activity as ParkingLotRegistrationActivity).viewModel.imageThreeUri
         if(imageThreeUri!= null){
 
-            displayImageInfo(imageThreeUri,input_img_upload_three_txt_view,input_btn_clear_img_three,display_img_upload_three)
+            displayImageInfo(imageThreeUri,input_img_upload_three_txt_view,input_btn_clear_img_three,display_img_upload_three,3)
 
 
         }
@@ -196,7 +196,7 @@ class LotRegistrationStepThreeFragment : Fragment() {
 
     }
 
-    fun displayImageInfo(uri: Uri, txtView:TextView, btnClear:ImageView, displayView: ImageView){
+    fun displayImageInfo(uri: Uri, txtView:TextView, btnClear:ImageView, displayView: ImageView, number:Int){
         Glide.with((activity as ParkingLotRegistrationActivity))
                 .load(uri)
                 .thumbnail(0.1f)
@@ -212,6 +212,11 @@ class LotRegistrationStepThreeFragment : Fragment() {
                 cursor = activity!!.contentResolver.query(uri, null, null, null, null)
                 if (cursor != null && cursor.moveToFirst()) {
                     displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                    when(number){
+                        1->(activity as ParkingLotRegistrationActivity).viewModel.imageOneLabel =displayName
+                        2->(activity as ParkingLotRegistrationActivity).viewModel.imageTwoLabel =displayName
+                        3->(activity as ParkingLotRegistrationActivity).viewModel.imageThreeLabel =displayName
+                    }
                 }
             } finally {
                 cursor!!.close()
@@ -223,6 +228,7 @@ class LotRegistrationStepThreeFragment : Fragment() {
             txtView.text = displayName
             btnClear.visibility = View.VISIBLE
         }
+
     }
 
     fun clearImageInfo(txtView:TextView, imageView: ImageView){

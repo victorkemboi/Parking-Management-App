@@ -21,6 +21,10 @@ constructor( ) : ViewModel() {
     var imageOneUri : Uri? = null
     var imageTwoUri : Uri? = null
     var imageThreeUri : Uri? = null
+
+    var imageOneLabel = ""
+    var imageTwoLabel = ""
+    var imageThreeLabel = ""
     var photo:Photo = Photo()
 
 }

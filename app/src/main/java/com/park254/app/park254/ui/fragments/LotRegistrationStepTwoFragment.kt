@@ -114,7 +114,7 @@ class LotRegistrationStepTwoFragment : Fragment() {
             // Log.d("Fill Values","start")
             input_email.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.email)
         }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.contactNumber != 0) {
+        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.contactNumber != "") {
             input_parking_lot_contact_no.setText(   (activity as ParkingLotRegistrationActivity).viewModel.lot.contactNumber.toString())
         }
         if ((activity as ParkingLotRegistrationActivity).viewModel.lot.paybillNumber != "") {

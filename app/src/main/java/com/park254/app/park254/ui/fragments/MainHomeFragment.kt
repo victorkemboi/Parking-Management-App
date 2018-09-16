@@ -51,6 +51,7 @@ class MainHomeFragment : Fragment() {
     private var mAdapter: HomeListAdapter? = null
     var items: ArrayList<Lot> = ArrayList<Lot>()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -58,14 +59,14 @@ class MainHomeFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         items.add( Lot("", 0.0,"", Date(), 0.0, "The Hub",
-      21, "5748438",764564 ,"", 0,"Dagoretti Rd"
+      21, "5748438","764564" ,"", 0,"Dagoretti Rd"
         ) )
         items.add( Lot("", 0.0,"", Date(), 0.0, "Two Rivers Mall",
-                13, "5748438",764564 ,"", 0,"Hype Street"
+                13, "5748438","764564" ,"", 0,"Hype Street"
         ) )
 
         items.add( Lot("", 0.0,"", Date(), 0.0, "Juja city Mall",
-                7, "5748438",764564 ,"", 0,"Thika Rd"
+                7, "5748438","764564" ,"", 0,"Thika Rd"
         ) )
     }
 
@@ -80,10 +81,7 @@ class MainHomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        btn_search_location.setOnClickListener{launchSetLocationActivity()}
-        search_bar.setOnClickListener{
-            launchSetLocationActivity()
-        }
+
         home_packing_lots_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
 
         home_packing_lots_recycler_view.setHasFixedSize(false)
@@ -97,44 +95,15 @@ class MainHomeFragment : Fragment() {
                     Intent(this@MainHomeFragment.context, LotInfoActivity::class.java))
         }
 
-
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == UtilityClass.MAP_BUTTON_REQUEST_CODE) {
-
-
-            if (resultCode == Activity.RESULT_OK && data != null) {
-
-                // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
-                (activity as HomeActivity).viewModel.latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude.toString())
-                (activity as HomeActivity).viewModel.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-                // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude.toString())
-                (activity as HomeActivity).viewModel.address = data.getStringExtra(LOCATION_ADDRESS)
-                //Log.d("ADDRESS****", address.toString())
-
-            }
-            else if (resultCode == Activity.RESULT_CANCELED) {
-                Log.d("RESULT****", "CANCELLED")
-            }
-
+        btn_search_location.setOnClickListener{launchSetLocationActivity()}
+        search_bar.setOnClickListener{
+            launchSetLocationActivity()
         }
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-           val model = (activity as HomeActivity).viewModel
-           if (model.address != "" && model.latitude !=0.0 && model.longitude!=0.0){
-
-               txt_view_home_location.text = model.address
-
-               //perform network requests
-           }
-
 
     }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
@@ -150,10 +119,56 @@ class MainHomeFragment : Fragment() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == UtilityClass.MAP_BUTTON_REQUEST_CODE) {
+
+
+            if (resultCode == Activity.RESULT_OK && data != null) {
+
+                // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
+                (activity as HomeActivity). viewModel.latitude = data.getDoubleExtra(LATITUDE, 0.0)
+                //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude.toString())
+                (activity as HomeActivity).viewModel.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
+                // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude.toString())
+                (activity as HomeActivity).viewModel.address = data.getStringExtra(LOCATION_ADDRESS)
+                //Log.d("ADDRESS****", address.toString())
+
+            }
+            else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.d("RESULT****", "CANCELLED")
+            }
+
+        }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as HomeActivity). viewModel.address = ""
+        (activity as HomeActivity).viewModel.latitude = 0.0
+        (activity as HomeActivity).viewModel.longitude = 0.0
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+
+
+        if ((activity as HomeActivity).viewModel.address != "" && (activity as HomeActivity).viewModel.latitude !=0.0 && (activity as HomeActivity).viewModel.longitude!=0.0){
+
+            txt_view_home_location.text = (activity as HomeActivity).viewModel.address
+
+            //perform network requests
+        }
+
+
+    }
+
     override fun onDetach() {
         super.onDetach()
         listener = null
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -191,13 +206,6 @@ class MainHomeFragment : Fragment() {
                 }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        (activity as HomeActivity).viewModel.address = ""
-        (activity as HomeActivity).viewModel.latitude = 0.0
-        (activity as HomeActivity).viewModel.longitude = 0.0
-    }
-
     fun launchSetLocationActivity(){
         val locationPickerIntent = LocationPickerActivity.Builder()
                 .withLocation(41.4036299, 2.1743558)
@@ -211,8 +219,11 @@ class MainHomeFragment : Fragment() {
                 .withGooglePlacesEnabled()
                 .withGoogleTimeZoneEnabled()
                 .withVoiceSearchHidden()
-                .build(activity!!.applicationContext)
+                .build(activity as HomeActivity)
 
         startActivityForResult(locationPickerIntent, UtilityClass.MAP_BUTTON_REQUEST_CODE)
     }
+
+
+
 }

@@ -1,4 +1,5 @@
 package com.park254.app.park254.ui
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.park254.app.park254.R
@@ -19,12 +20,20 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.park254.app.park254.App
 import java.util.*
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.auth.GoogleAuthProvider
+import com.park254.app.park254.models.Settings
+import com.park254.app.park254.utils.SharedPrefs
 
 class LoginActivity : AppCompatActivity() {
 
     @Inject
     lateinit var viewModel: LoginViewModel
+
+    @Inject
+    lateinit var settings: SharedPrefs
 
 
 
@@ -99,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
 
     fun handleFacebookAccessToken(token: AccessToken) {
 
-        Log.d("FBTokenAccess", "handleFacebookAccessToken:$token")
+       // Log.d("FBTokenAccess", "handleFacebookAccessToken:$token")
 
         val credential = FacebookAuthProvider.getCredential(token.token)
         viewModel.firebaseAuth.signInWithCredential(credential)
@@ -107,6 +116,19 @@ class LoginActivity : AppCompatActivity() {
                     if(task.isSuccessful){
                         var  user = viewModel.firebaseAuth.currentUser
                        if( task.result.additionalUserInfo.isNewUser){
+                           viewModel.firebaseAuth.getAccessToken(true).addOnCompleteListener {
+                               task2 ->
+                               run {
+                                   if (task2.isSuccessful) {
+                                       val tokenSet = task2.result.token
+                                       settings.token = tokenSet
+
+                                       Log.d("Sign In jwt token", tokenSet   )
+
+
+                                   }
+                               }
+                           }
                            startActivity(
                                    Intent(this@LoginActivity, AddUserInfoActivity::class.java))
                        }else{
@@ -137,7 +159,11 @@ class LoginActivity : AppCompatActivity() {
                             task2 ->
                             run {
                                 if (task2.isSuccessful) {
-                                    Log.d("Sign In jwt token",    task2.result.token)
+                                    val token = task2.result.token
+                                    settings.token = token
+
+                                    Log.d("Sign In jwt token", token   )
+
 
                                 }
                             }
@@ -147,6 +173,7 @@ class LoginActivity : AppCompatActivity() {
 
 
                         if( task.result.additionalUserInfo.isNewUser){
+
                             startActivity(
                                     Intent(this@LoginActivity, AddUserInfoActivity::class.java))
                         }else{

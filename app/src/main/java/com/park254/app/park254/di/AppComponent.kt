@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.park254.app.park254.App
 import com.park254.app.park254.models.Park254Database
 import com.park254.app.park254.models.dao.UserDao
+import com.park254.app.park254.network.FirebaseUserIdTokenInterceptor
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.AddUserInfoActivity
 import com.park254.app.park254.ui.HomeActivity
@@ -15,6 +16,7 @@ import com.park254.app.park254.ui.fragments.LotRegistrationStepTwoFragment
 import com.park254.app.park254.ui.repo.HomeViewModel
 import com.park254.app.park254.ui.repo.LoginViewModel
 import com.park254.app.park254.ui.repo.ParkingLotRegistrationViewModel
+import com.park254.app.park254.utils.SharedPrefs
 import dagger.Component
 import javax.inject.Singleton
 import dagger.android.support.AndroidSupportInjectionModule
@@ -41,7 +43,6 @@ interface AppComponent{
      fun inject(addUserInfoActivity: AddUserInfoActivity)
     fun inject(homeActivity: HomeActivity)
     fun inject(parkingLotRegistrationActivity: ParkingLotRegistrationActivity)
-
     fun inject(lotRegistrationStepOneFragment: LotRegistrationStepOneFragment)
     fun inject(lotRegistrationStepTwoFragment: LotRegistrationStepTwoFragment)
     fun inject(lotRegistrationStepThreeFragment: LotRegistrationStepThreeFragment)
@@ -57,6 +58,8 @@ interface AppComponent{
     fun providesHomeViewModel(): HomeViewModel
 
     fun providesNetworkModule(): RetrofitApiService
+
+    fun providesSettings(): SharedPrefs
 
     fun providesLocalDb(): Park254Database
 

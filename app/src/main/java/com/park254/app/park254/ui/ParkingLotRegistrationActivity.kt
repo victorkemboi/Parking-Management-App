@@ -3,10 +3,12 @@ package com.park254.app.park254.ui
 import android.app.Activity
 import android.app.PendingIntent.getActivity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.location.Address
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
@@ -28,11 +30,19 @@ import com.park254.app.park254.utils.UtilityClass
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_one.*
 import android.widget.TextView
 import com.google.gson.Gson
+import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.fragments.LotRegistrationStepThreeFragment
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_three.*
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_two.*
 import kotlinx.android.synthetic.main.toolbar_2.*
 import org.json.JSONObject
+import android.R.attr.bitmap
+import android.arch.lifecycle.Observer
+import android.util.Base64
+import com.park254.app.park254.models.Lot
+import com.park254.app.park254.models.LotImage
+import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import java.io.ByteArrayOutputStream
 
 
 class ParkingLotRegistrationActivity : AppCompatActivity() ,
@@ -43,6 +53,9 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
     @Inject
     lateinit var viewModel: ParkingLotRegistrationViewModel
+
+                @Inject
+                lateinit var retrofitApiService: RetrofitApiService
 
 
 
@@ -113,7 +126,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                 {
                     if (validateSecondSetInputs()) {
                         viewModel.lot.email = input_email.text.toString()
-                        viewModel.lot.contactNumber =  Integer.parseInt(input_parking_lot_contact_no.text.toString())
+                        viewModel.lot.contactNumber =  input_parking_lot_contact_no.text.toString()
                         viewModel.lot.paybillNumber = input_paybill_no.text.toString()
                         viewModel.rate.minimumTime = Integer.parseInt( input_min_time.text.toString() )
                         viewModel.rate.maximumTime = Integer.parseInt( input_max_time.text.toString() )
@@ -121,14 +134,65 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
                         navigateNextStepper(progressActive)
                     }
-                }else{
-
-                    if (validateImageSelection()){
-
-                    }
-
                 }
 
+        }else{
+            if (validateImageSelection()){
+
+                lyt_progress.visibility = View.VISIBLE
+                bottom_nav_layt.visibility = View.GONE
+
+                val image1:Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, viewModel.imageOneUri)
+                val image2: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, viewModel.imageTwoUri)
+                val image3: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, viewModel.imageThreeUri)
+
+                val byteArrayOutputStream1 = ByteArrayOutputStream()
+                image1.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream1)
+                val byteArray1 = byteArrayOutputStream1.toByteArray()
+                val  encodedImage1:String = Base64.encodeToString(byteArray1, Base64.DEFAULT)
+
+                val byteArrayOutputStream2 = ByteArrayOutputStream()
+                image2.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream2)
+                val byteArray2 = byteArrayOutputStream2.toByteArray()
+                val  encodedImage2:String = Base64.encodeToString(byteArray2, Base64.DEFAULT)
+
+                val byteArrayOutputStream3 = ByteArrayOutputStream()
+                image3.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream3)
+                val byteArray3 = byteArrayOutputStream3.toByteArray()
+                val  encodedImage3:String = Base64.encodeToString(byteArray3, Base64.DEFAULT)
+
+                val lotImage1 = LotImage(encodedImage1,viewModel.imageOneLabel)
+                val lotImage2 = LotImage(encodedImage2,viewModel.imageTwoLabel)
+                val lotImage3 = LotImage(encodedImage3,viewModel.imageThreeLabel)
+                val lotImages: ArrayList<LotImage> = arrayListOf(lotImage1,lotImage2,lotImage3)
+                viewModel.lot.photos = lotImages
+
+                Log.d("Parking Lot",viewModel.lot.toString())
+
+                retrofitApiService.registerParkingLot(viewModel.lot).observe(this, Observer<ApiResponse<Lot>> {
+                    response->
+                    if (response != null) {
+                        Log.d("Reg Resp", response.toString())
+                        Log.d("Reg Resp error", response.errorMessage.toString())
+                        if (response.errorMessage!=null){
+                            bottom_nav_layt.visibility = View.VISIBLE
+                            display_txt_register_status.text = "Failed! Try Again."
+                            display_txt_register_status.setTextColor(resources.getColor(R.color.red_600))
+                            display_txt_register_status.visibility = View.VISIBLE
+                            lyt_progress.visibility = View.GONE
+                        }else{
+                            finish()
+                        }
+                    }else{
+                        bottom_nav_layt.visibility = View.VISIBLE
+                        display_txt_register_status.text = "Failed! Try Again."
+                        display_txt_register_status.setTextColor(resources.getColor(R.color.red_600))
+                        display_txt_register_status.visibility = View.VISIBLE
+                        lyt_progress.visibility = View.GONE
+                    }
+                })
+
+            }
         }
 
 
@@ -326,6 +390,8 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
             display_txt_register_status.setTextColor(resources.getColor(R.color.red_600))
             display_txt_register_status.visibility = View.VISIBLE
 
+            return false
+
 
         }else{
             display_txt_register_status.text = "Registration success!"
@@ -355,10 +421,13 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         val gson = Gson()
         val lotJson = gson.toJson(viewModel.lot)
 
-
-
-
-
-
     }
-}
+
+                override fun onBackPressed() {
+                    if (viewModel.current_step ==1){
+                        finish()
+                    }else{
+                        super.onBackPressed()
+                    }
+                }
+            }

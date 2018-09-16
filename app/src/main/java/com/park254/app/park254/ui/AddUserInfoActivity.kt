@@ -3,6 +3,7 @@ package com.park254.app.park254.ui
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -13,6 +14,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import com.google.android.gms.flags.impl.SharedPreferencesFactory
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.iid.FirebaseInstanceId
 import com.park254.app.park254.App
 import com.park254.app.park254.R
@@ -21,6 +26,7 @@ import com.park254.app.park254.models.User
 import com.park254.app.park254.models.dao.UserDao
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.repo.LoginViewModel
+import com.park254.app.park254.utils.SharedPrefs
 import com.park254.app.park254.utils.UtilityClass.hideKeyboard
 import com.park254.app.park254.utils.UtilityClass.requestFocus
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
@@ -35,7 +41,7 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
     @Inject
     lateinit var retrofitApiService: RetrofitApiService
     @Inject
-    lateinit var userDao: UserDao
+    lateinit var settings: SharedPrefs
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +55,10 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
        val items  = arrayOf("Select Gender.","Male", "Female")
 
         sp_gender.adapter = ArrayAdapter<String>(this,R.layout.spinner_item,items)
+
+
+
+        Log.d("Token in shared pref", settings.token)
 
 
     }
@@ -116,6 +126,8 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
             )
 
             */
+
+
 
             retrofitApiService.registerUser().observe(this, Observer<ApiResponse<User>> {
                 response->

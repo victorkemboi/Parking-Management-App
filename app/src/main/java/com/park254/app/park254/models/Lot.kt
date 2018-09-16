@@ -1,11 +1,9 @@
 package com.park254.app.park254.models
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
-import android.arch.persistence.room.TypeConverters
+import android.arch.persistence.room.*
 import com.park254.app.park254.models.tc.DateTypeConverter
 import java.util.*
+import kotlin.collections.ArrayList
 
 @Entity(tableName = "lot")
 @TypeConverters(DateTypeConverter::class)
@@ -35,7 +33,7 @@ data class Lot(
         var paybillNumber: String = "",
 
         @ColumnInfo(name = "contactNumber")
-        var contactNumber: Int =  0,
+        var contactNumber: String =  "",
 
         @ColumnInfo(name = "email")
         var email: String =  "",
@@ -44,7 +42,11 @@ data class Lot(
         var rating: Int =  0
         ,
         @ColumnInfo(name = "streetName")
-        var streetName: String = "")
+        var streetName: String = "",
+
+        @Ignore
+        @ColumnInfo(name = "photos")
+        var photos: ArrayList<LotImage> = ArrayList())
 {
     @PrimaryKey(autoGenerate = true)
     var uid: Long? = null
