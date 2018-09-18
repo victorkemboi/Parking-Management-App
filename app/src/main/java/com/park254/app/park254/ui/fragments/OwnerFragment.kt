@@ -1,17 +1,28 @@
 package com.park254.app.park254.ui.fragments
 
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.park254.app.park254.R
+import com.park254.app.park254.models.Lot
+import com.park254.app.park254.ui.HomeActivity
+import com.park254.app.park254.ui.LotInfoActivity
+import com.park254.app.park254.ui.OwnerLotInfoActivity
 import com.park254.app.park254.ui.ParkingLotRegistrationActivity
+import com.park254.app.park254.ui.adapters.HomeListAdapter
+import com.park254.app.park254.ui.adapters.OwnerAdapter
+import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import kotlinx.android.synthetic.main.fragment_owner.*
+import java.util.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,6 +43,60 @@ class OwnerFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
+    private var mAdapter: OwnerAdapter? = null
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        owner_packing_lots_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
+
+        owner_packing_lots_recycler_view.setHasFixedSize(false)
+
+        (activity as HomeActivity).retrofitApiService.getOwnedParkingLots().observe(this, Observer<ApiResponse<List<Lot>>> {
+            response->
+            if (response != null && response.isSuccessful) {
+
+                //Log.d("Resp",response.body.toString())
+                val items = response.body as ArrayList<Lot>
+                if (items.isNotEmpty()){
+                    owner_parking_lots.visibility = View.VISIBLE
+                    owner_preview.visibility = View.GONE
+                    mAdapter = OwnerAdapter( activity!!.applicationContext, items )
+
+                    owner_packing_lots_recycler_view.adapter = mAdapter
+
+
+
+                    mAdapter!!.onItemClick = {
+                        lot ->
+                        (activity as HomeActivity).viewModel.parsedLot = lot
+                        //  Snackbar.make(booked_card_view, "Item " + lot.name + " clicked", Snackbar.LENGTH_SHORT).show()
+                        startActivity(
+                                Intent(this@OwnerFragment.context, OwnerLotInfoActivity::class.java))
+                    }
+                }else{
+
+                }
+
+
+
+
+
+
+
+
+            }else{
+                if (response != null) {
+                    owner_parking_lots.visibility = View.GONE
+                    owner_preview.visibility = View.VISIBLE
+                    Log.d("Resp",response.body.toString())
+                }
+            }
+
+
+        })
+
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -16,9 +16,11 @@ import kotlinx.android.synthetic.main.fragment_lot_registration_step_one.*
 import javax.inject.Inject
 import android.content.Intent
 import android.location.Address
+import android.support.v4.app.FragmentActivity
 import android.util.Log
 import com.park254.app.park254.models.Lot
 import com.park254.app.park254.ui.ParkingLotRegistrationActivity
+import com.park254.app.park254.ui.UpdateInfoActivity
 import com.schibstedspain.leku.*
 import kotlinx.android.synthetic.main.activity_parking_lot_registration.*
 
@@ -68,20 +70,39 @@ class LotRegistrationStepOneFragment : Fragment() {
         if(requestCode == UtilityClass.MAP_BUTTON_REQUEST_CODE) {
 
 
-            if (resultCode == Activity.RESULT_OK && data != null) {
+            try {
+                if (resultCode == Activity.RESULT_OK && data != null) {
 
-               // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
-                (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude.toString())
-                (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-               // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude.toString())
-                (activity as ParkingLotRegistrationActivity).viewModel.addresss = data.getStringExtra(LOCATION_ADDRESS)
-                //Log.d("ADDRESS****", address.toString())
+                    // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
+                    (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude = data.getDoubleExtra(LATITUDE, 0.0)
+                    //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude.toString())
+                    (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
+                    // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude.toString())
+                    (activity as ParkingLotRegistrationActivity).viewModel.addresss = data.getStringExtra(LOCATION_ADDRESS)
+                    //Log.d("ADDRESS****", address.toString())
 
+                }
+                else if (resultCode == Activity.RESULT_CANCELED) {
+                    Log.d("RESULT****", "CANCELLED")
+                }
+
+            }catch (e:ClassCastException){
+                if (resultCode == Activity.RESULT_OK && data != null) {
+
+                    // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
+                    (activity as UpdateInfoActivity).viewModel.lot.latitude = data.getDoubleExtra(LATITUDE, 0.0)
+                    //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude.toString())
+                    (activity as UpdateInfoActivity).viewModel.lot.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
+                    // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude.toString())
+                    (activity as UpdateInfoActivity).viewModel.addresss = data.getStringExtra(LOCATION_ADDRESS)
+                    //Log.d("ADDRESS****", address.toString())
+
+                }
+                else if (resultCode == Activity.RESULT_CANCELED) {
+                    Log.d("RESULT****", "CANCELLED")
+                }
             }
-            else if (resultCode == Activity.RESULT_CANCELED) {
-                Log.d("RESULT****", "CANCELLED")
-            }
+
 
         }
 
@@ -176,25 +197,62 @@ class LotRegistrationStepOneFragment : Fragment() {
 
     fun fillViewValues(){
 
-        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.name!=""){
-           // Log.d("Fill Values","start")
-            input_parking_lot_name.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.name)
-        }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.streetName!=""){
-            input_street_name.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.name)
-        }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.parkingSpaces!=0){
-            input_picker_parking_spaces.value = (activity as ParkingLotRegistrationActivity).viewModel.lot.parkingSpaces
+
+
+        try {
+            if ((activity as ParkingLotRegistrationActivity).viewModel.lot.name!=""){
+                // Log.d("Fill Values","start")
+                input_parking_lot_name.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.name)
+            }
+            if ((activity as ParkingLotRegistrationActivity).viewModel.lot.streetName!=""){
+                input_street_name.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.name)
+            }
+            if ((activity as ParkingLotRegistrationActivity).viewModel.lot.parkingSpaces!=0){
+                input_picker_parking_spaces.value = (activity as ParkingLotRegistrationActivity).viewModel.lot.parkingSpaces
+            }
+            if ((activity as ParkingLotRegistrationActivity).viewModel.lot.email != "") {
+                // Log.d("Fill Values","start")
+                input_email.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.email)
+            }
+            if ((activity as ParkingLotRegistrationActivity).viewModel.lot.contactNumber != "") {
+                input_parking_lot_contact_no.setText(   (activity as ParkingLotRegistrationActivity).viewModel.lot.contactNumber.toString())
+            }
+            if ((activity as ParkingLotRegistrationActivity).viewModel.lot.paybillNumber != "") {
+                input_paybill_no.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.paybillNumber)
+            }
+        }catch (e:ClassCastException){
+
+            if ((activity as UpdateInfoActivity).viewModel.lot.name!=""){
+                // Log.d("Fill Values","start")
+                input_parking_lot_name.setText((activity as UpdateInfoActivity).viewModel.lot.name)
+            }
+            if ((activity as UpdateInfoActivity).viewModel.lot.streetName!=""){
+                input_street_name.setText((activity as UpdateInfoActivity).viewModel.lot.name)
+            }
+            if ((activity as UpdateInfoActivity).viewModel.lot.parkingSpaces!=0){
+                input_picker_parking_spaces.value = (activity as UpdateInfoActivity).viewModel.lot.parkingSpaces
+            }
+            if ((activity as UpdateInfoActivity).viewModel.lot.email != "") {
+                // Log.d("Fill Values","start")
+                input_email.setText((activity as UpdateInfoActivity).viewModel.lot.email)
+            }
+            if ((activity as UpdateInfoActivity).viewModel.lot.contactNumber != "") {
+                input_parking_lot_contact_no.setText(   (activity as UpdateInfoActivity).viewModel.lot.contactNumber.toString())
+            }
+            if ((activity as UpdateInfoActivity).viewModel.lot.paybillNumber != "") {
+                input_paybill_no.setText((activity as UpdateInfoActivity).viewModel.lot.paybillNumber)
+            }
         }
 
 
 
-        /* if (viewModel.addresss!=""){
-             input_picker_parking_spaces.value = viewModel.lot.parkingSpaces
-         }  */
     }
 
     fun setAddress(){
+
+        try {
+
+
         if ((activity as ParkingLotRegistrationActivity).viewModel.addresss!=""){
 
             input_layout_location_display.visibility = View.VISIBLE
@@ -211,5 +269,21 @@ class LotRegistrationStepOneFragment : Fragment() {
         }
 
 
+    }catch (e:ClassCastException){
+            if ((activity as UpdateInfoActivity).viewModel.addresss!=""){
+
+                input_layout_location_display.visibility = View.VISIBLE
+                tv_display_location.text = (activity as UpdateInfoActivity).viewModel.addresss
+                img_input_location.setImageResource(R.drawable.ic_edit_location)
+                tv_input_location.text = "Change Location"
+
+
+            }else{
+                input_layout_location_display.visibility = View.GONE
+                tv_display_location.text = ""
+                img_input_location.setImageResource(R.drawable.ic_add_location)
+                tv_input_location.text = "Pick Location"
+            }
+        }
     }
 }

@@ -24,6 +24,10 @@ data class User(
         var userName: String = "",
 
         @ColumnInfo(name = "email")
-        var email: String = "")
+        var email: String = "",
+        @ColumnInfo(name = "photoUrl")
+        var photoUrl: String = ""
+
+)
 
 

@@ -110,24 +110,15 @@ class LotRegistrationStepTwoFragment : Fragment() {
 
     fun fillViewValues() {
 
-        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.email != "") {
-            // Log.d("Fill Values","start")
-            input_email.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.email)
+
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate1.minimumTime != 0) {
+            input_min_time.setText((activity as ParkingLotRegistrationActivity).viewModel.rate1.minimumTime.toString())
         }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.contactNumber != "") {
-            input_parking_lot_contact_no.setText(   (activity as ParkingLotRegistrationActivity).viewModel.lot.contactNumber.toString())
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate1.maximumTime != 0) {
+            input_max_time.setText((activity as ParkingLotRegistrationActivity).viewModel.rate1.maximumTime.toString())
         }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.lot.paybillNumber != "") {
-            input_paybill_no.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.paybillNumber)
-        }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.rate.minimumTime != 0) {
-            input_min_time.setText((activity as ParkingLotRegistrationActivity).viewModel.rate.minimumTime.toString())
-        }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.rate.maximumTime != 0) {
-            input_max_time.setText((activity as ParkingLotRegistrationActivity).viewModel.rate.maximumTime.toString())
-        }
-        if ((activity as ParkingLotRegistrationActivity).viewModel.rate.cost != 0.0) {
-            input_max_time.setText((activity as ParkingLotRegistrationActivity).viewModel.rate.cost.toString())
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate1.cost != 0.0) {
+            input_max_time.setText((activity as ParkingLotRegistrationActivity).viewModel.rate1.cost.toString())
         }
     }
 

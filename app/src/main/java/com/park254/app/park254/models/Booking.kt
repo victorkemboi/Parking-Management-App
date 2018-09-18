@@ -20,10 +20,10 @@ data class Booking(
         var id: String = "",
 
         @ColumnInfo(name = "starting")
-        var starting: Date = Date(),
+        var starting: String = "",
 
         @ColumnInfo(name = "ending")
-        var ending: Date = Date(),
+        var ending: String = "",
 
         @ColumnInfo(name = "cost")
         var cost: Double =  0.0,

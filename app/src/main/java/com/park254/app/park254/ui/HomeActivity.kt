@@ -24,8 +24,10 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GetTokenResult
+import com.google.firebase.internal.FirebaseAppHelper.addIdTokenListener
 import com.park254.app.park254.App
 import com.park254.app.park254.R
+import com.park254.app.park254.models.Lot
 import com.park254.app.park254.models.User
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.fragments.AttendantFragment
@@ -62,6 +64,7 @@ class HomeActivity : AppCompatActivity(),
     lateinit var settings: SharedPrefs
 
 
+
     override fun onClick(p0: View?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -77,7 +80,6 @@ class HomeActivity : AppCompatActivity(),
         setContentView(R.layout.activity_home)
        // initToolbar()
         (application as App).applicationInjector.inject(this)
-
 
 
         toolbar2.setNavigationIcon(R.drawable.ic_back_arrow)
@@ -98,19 +100,6 @@ class HomeActivity : AppCompatActivity(),
         val fragmentManager = supportFragmentManager
         fragmentManager.beginTransaction().replace(R.id.mainHomeContentFrameLayout, fragment).commit()
 
-        Log.w("Trying to login",settings.token)
-
-        retrofitApiService.registerUser().observe(this, Observer<ApiResponse<User>> {
-            response->
-            if (response != null) {
-
-                Log.d("Resp",response.body.toString())
-                //  response.body
-                // Log.d("Fire auth", FirebaseInstanceId.getInstance().token)
-            }
-
-
-        })
 
         //Log.d("User:", FirebaseAuth.getInstance().currentUser.toString())
         val headerView  = nav_view.getHeaderView(0)

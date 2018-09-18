@@ -41,6 +41,8 @@ import android.arch.lifecycle.Observer
 import android.util.Base64
 import com.park254.app.park254.models.Lot
 import com.park254.app.park254.models.LotImage
+import com.park254.app.park254.models.Photo
+import com.park254.app.park254.models.Rate
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import java.io.ByteArrayOutputStream
 
@@ -54,8 +56,8 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
     @Inject
     lateinit var viewModel: ParkingLotRegistrationViewModel
 
-                @Inject
-                lateinit var retrofitApiService: RetrofitApiService
+    @Inject
+    lateinit var retrofitApiService: RetrofitApiService
 
 
 
@@ -118,6 +120,9 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                         viewModel.lot.name = input_parking_lot_name.text.toString()
                         viewModel.lot.streetName = input_street_name.text.toString()
                         viewModel.lot.parkingSpaces = input_picker_parking_spaces.value
+                        viewModel.lot.email = input_email.text.toString()
+                        viewModel.lot.contactNumber =  input_parking_lot_contact_no.text.toString()
+                        viewModel.lot.paybillNumber = input_paybill_no.text.toString()
 
 
                        navigateNextStepper(progressActive)
@@ -125,12 +130,50 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                 } else if(progressActive ==2)
                 {
                     if (validateSecondSetInputs()) {
-                        viewModel.lot.email = input_email.text.toString()
-                        viewModel.lot.contactNumber =  input_parking_lot_contact_no.text.toString()
-                        viewModel.lot.paybillNumber = input_paybill_no.text.toString()
-                        viewModel.rate.minimumTime = Integer.parseInt( input_min_time.text.toString() )
-                        viewModel.rate.maximumTime = Integer.parseInt( input_max_time.text.toString() )
-                        viewModel.rate.cost =   input_cost.text.toString().toDouble()
+
+
+                        //save first rate to viewmodel
+                        viewModel.rate1.minimumTime = Integer.parseInt(input_min_time.text.toString())
+                        viewModel.rate1.maximumTime =  Integer.parseInt(input_max_time.text.toString())
+                        viewModel.rate1.cost =   input_cost.text.toString().toDouble()
+
+                        //save second rate to viewmodel
+                        if (    input_min_time_two.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                                input_max_time_two.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                                input_cost_two.text.toString().trim { it <= ' ' }.isNotEmpty()
+                        ) run {
+                            viewModel.rate2.minimumTime = Integer.parseInt(input_min_time_two.text.toString())
+                            viewModel.rate2.maximumTime = Integer.parseInt(input_max_time_two.text.toString() )
+                            viewModel.rate2.cost =   input_cost_two.text.toString().toDouble()
+
+                        }
+
+                        //save third rate to viewmodel
+                        if (    input_min_time_three.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                                input_max_time_three.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                                input_cost_three.text.toString().trim { it <= ' ' }.isNotEmpty()
+                        ) run {
+                            viewModel.rate3.minimumTime = Integer.parseInt(input_min_time_three.text.toString())
+                            viewModel.rate3.maximumTime = Integer.parseInt(input_max_time_three.text.toString())
+                            viewModel.rate3.cost =   input_cost_three.text.toString().toDouble()
+
+                        }
+                        //save fourth rate to viewmodel
+                        if (    input_min_time_four.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                                input_max_time_four.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                                input_cost_four.text.toString().trim { it <= ' ' }.isNotEmpty()
+                        ) run {
+                            viewModel.rate4.minimumTime = Integer.parseInt(input_min_time_four.text.toString() )
+                            viewModel.rate4.maximumTime = Integer.parseInt(input_max_time_four.text.toString())
+                            viewModel.rate4.cost =   input_cost_four.text.toString().toDouble()
+
+                        }
+
+                        //save fifth rate to viewmodel
+                        viewModel.rate5.minimumTime = Integer.parseInt(input_min_time_five.text.toString())
+                        viewModel.rate5.maximumTime =  10000
+                        viewModel.rate5.cost =   input_cost_five.text.toString().toDouble()
+
 
                         navigateNextStepper(progressActive)
                     }
@@ -165,7 +208,22 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                 val lotImage2 = LotImage(encodedImage2,viewModel.imageTwoLabel)
                 val lotImage3 = LotImage(encodedImage3,viewModel.imageThreeLabel)
                 val lotImages: ArrayList<LotImage> = arrayListOf(lotImage1,lotImage2,lotImage3)
-                viewModel.lot.photos = lotImages
+                viewModel.lot.parkingLotPhotos = lotImages
+
+                val ratesList = ArrayList<Rate>()
+                ratesList.add(viewModel.rate1)
+                if (viewModel.rate2.minimumTime != 0){
+                    ratesList.add(viewModel.rate2)
+                }
+                if (viewModel.rate3.minimumTime !=0){
+                    ratesList.add(viewModel.rate3)
+                }
+                if (viewModel.rate4.minimumTime != 0){
+                    ratesList.add(viewModel.rate4)
+                }
+                ratesList.add(viewModel.rate5)
+
+                viewModel.lot.parkingRates = ratesList
 
                 Log.d("Parking Lot",viewModel.lot.toString())
 
@@ -180,8 +238,19 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                             display_txt_register_status.setTextColor(resources.getColor(R.color.red_600))
                             display_txt_register_status.visibility = View.VISIBLE
                             lyt_progress.visibility = View.GONE
+                            btn_close_registration.visibility = View.GONE
                         }else{
-                            finish()
+
+                            bottom_nav_layt.visibility = View.GONE
+                            display_txt_register_status.text = "Parking Lot Registration Successful."
+                            display_txt_register_status.setTextColor(resources.getColor(R.color.colorPrimaryDark))
+                            display_txt_register_status.visibility = View.VISIBLE
+                            lyt_progress.visibility = View.GONE
+                            btn_close_registration.visibility = View.VISIBLE
+                            btn_close_registration.setOnClickListener {
+                                finish()
+                            }
+
                         }
                     }else{
                         bottom_nav_layt.visibility = View.VISIBLE
@@ -189,6 +258,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                         display_txt_register_status.setTextColor(resources.getColor(R.color.red_600))
                         display_txt_register_status.visibility = View.VISIBLE
                         lyt_progress.visibility = View.GONE
+                        btn_close_registration.visibility = View.GONE
                     }
                 })
 
@@ -340,6 +410,22 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
             UtilityClass.requestFocus(input_layout_spaces, window)
             return false
         }
+        if (input_email.text.toString().trim { it <= ' ' }.isEmpty()) run {
+
+            input_layout_email.error = "Enter Contact Email!"
+            UtilityClass.requestFocus(input_layout_email, window)
+            return false
+        }
+        if (input_parking_lot_contact_no.text.toString().trim { it <= ' ' }.isEmpty()) run {
+            input_layout_parking_lot_contact_no.error = "Enter contact number!"
+            UtilityClass.requestFocus(input_parking_lot_contact_no,window)
+            return false
+        }
+        if (input_paybill_no.text.toString().trim { it <= ' ' }.isEmpty()) run {
+            input_layout_paybill_no.error = "Enter paybill no!"
+            UtilityClass.requestFocus(input_layout_paybill_no,window)
+            return false
+        }
 
 
         return true
@@ -348,22 +434,8 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
     fun validateSecondSetInputs():Boolean {
 
 
-                    if (input_email.text.toString().trim { it <= ' ' }.isEmpty()) run {
+                    //validate first row of parking rates
 
-                        input_layout_email.error = "Enter Contact Email!"
-                        UtilityClass.requestFocus(input_layout_email, window)
-                        return false
-                    }
-                    if (input_parking_lot_contact_no.text.toString().trim { it <= ' ' }.isEmpty()) run {
-                        input_layout_parking_lot_contact_no.error = "Enter contact number!"
-                        UtilityClass.requestFocus(input_parking_lot_contact_no,window)
-                       return false
-                    }
-                     if (input_paybill_no.text.toString().trim { it <= ' ' }.isEmpty()) run {
-                         input_layout_paybill_no.error = "Enter paybill no!"
-                         UtilityClass.requestFocus(input_layout_paybill_no,window)
-                         return false
-                     }
                      if (input_min_time.text.toString().trim { it <= ' ' }.isEmpty()) run {
                          input_layout_min_time.error = "Enter min time allowed!"
                          UtilityClass.requestFocus(input_layout_min_time,window)
@@ -375,11 +447,101 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                          return false
                      }
                      if (input_cost.text.toString().trim { it <= ' ' }.isEmpty()) run {
-                         input_layout_cost.error = "Enter Cost per Hour!"
+                         input_layout_cost.error = "Enter cost!"
                          UtilityClass.requestFocus(input_layout_cost,window)
                          return false
                      }
 
+
+                    //validate second row of parking rates
+
+                    if (    input_min_time_two.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                            input_max_time_two.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                            input_cost_two.text.toString().trim { it <= ' ' }.isNotEmpty()
+                    ) run {
+
+                        if (input_min_time_two.text.toString().trim { it <= ' ' }.isEmpty()) {
+                            input_layout_cost_two.error = "Enter min time!"
+                            UtilityClass.requestFocus(input_layout_min_time_two,window)
+                            return false
+                        }
+
+                        if (input_max_time_two.text.toString().trim { it <= ' ' }.isEmpty()) {
+                            input_layout_max_time_two.error = "Enter max time!"
+                            UtilityClass.requestFocus(input_layout_max_time_two,window)
+                            return false
+                        }
+
+                        if (input_cost_two.text.toString().trim { it <= ' ' }.isEmpty()) {
+                            input_layout_cost_two.error = "Enter duration cost!"
+                            UtilityClass.requestFocus(input_layout_cost_two,window)
+                            return false
+                        }
+                    }
+             //validate third row of parking rates
+
+                if (    input_min_time_three.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                        input_max_time_three.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                        input_cost_three.text.toString().trim { it <= ' ' }.isNotEmpty()
+                ) run {
+
+                    if (input_min_time_three.text.toString().trim { it <= ' ' }.isEmpty()) {
+                        input_layout_min_time_three.error = "Enter min time!"
+                        UtilityClass.requestFocus(input_layout_min_time_three,window)
+                        return false
+                    }
+
+                    if (input_max_time_three.text.toString().trim { it <= ' ' }.isEmpty()) {
+                        input_layout_max_time_three.error = "Enter max time!"
+                        UtilityClass.requestFocus(input_layout_max_time_three,window)
+                        return false
+                    }
+
+                    if (input_cost_three.text.toString().trim { it <= ' ' }.isEmpty()) {
+                        input_layout_cost_three.error = "Enter duration cost!"
+                        UtilityClass.requestFocus(input_layout_cost_three,window)
+                        return false
+                    }
+                }
+
+                //validate fourth row of parking rates
+
+                if (    input_min_time_four.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                        input_max_time_four.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                        input_cost_four.text.toString().trim { it <= ' ' }.isNotEmpty()
+                ) run {
+
+                    if (input_min_time_four.text.toString().trim { it <= ' ' }.isEmpty()) {
+                        input_layout_min_time_four.error = "Enter min time!"
+                        UtilityClass.requestFocus(input_layout_min_time_four,window)
+                        return false
+                    }
+
+                    if (input_max_time_four.text.toString().trim { it <= ' ' }.isEmpty()) {
+                        input_layout_max_time_four.error = "Enter max time!"
+                        UtilityClass.requestFocus(input_layout_max_time_four,window)
+                        return false
+                    }
+
+                    if (input_cost_four.text.toString().trim { it <= ' ' }.isEmpty()) {
+                        input_layout_cost_four.error = "Enter duration cost!"
+                        UtilityClass.requestFocus(input_layout_cost_four,window)
+                        return false
+                    }
+                }
+                //validate fifth row of parking rates
+
+                if (input_min_time_five.text.toString().trim { it <= ' ' }.isEmpty()) run {
+                    input_layout_min_time_five.error = "Enter min overtime!"
+                    UtilityClass.requestFocus(input_layout_cost,window)
+                    return false
+                }
+
+                if (input_cost_five.text.toString().trim { it <= ' ' }.isEmpty()) run {
+                    input_layout_cost_five.error = "Enter min overtime charge!"
+                    UtilityClass.requestFocus(input_layout_cost,window)
+                    return false
+                }
 
                     return true
                 }
@@ -405,29 +567,42 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
     fun changeHeader(pos:Int){
         when(pos){
             1->txtRegHeader.text = "Basic Info"
-            2->txtRegHeader.text = "Contact Info"
+            2->txtRegHeader.text = "Parking Charges"
             3->txtRegHeader.text = "Photos"
         }
     }
 
-    fun registerParkingLot(){
 
-        bottom_nav_layt.visibility = View.GONE
-        display_txt_register_status.text = "Loading..."
-        display_txt_register_status.setTextColor(resources.getColor(R.color.colorAccent))
-        display_txt_register_status.visibility = View.VISIBLE
-        lyt_progress.visibility = View.VISIBLE
+     override fun onBackPressed() {
+        if (viewModel.current_step ==1){
+            finish()
+        }else{
+            super.onBackPressed()
+        }
+        }
 
-        val gson = Gson()
-        val lotJson = gson.toJson(viewModel.lot)
+        override fun onDestroy() {
+            viewModel.MAX_STEP = 3
 
+            viewModel.current_step  = 1
+            viewModel.previous_step = 0
+            viewModel.addresss = ""
+
+            viewModel.lot = Lot()
+            viewModel.rate1= Rate()
+            viewModel.rate2 = Rate()
+            viewModel.rate3= Rate()
+            viewModel.rate4= Rate()
+            viewModel.rate5 = Rate()
+
+            viewModel.imageOneUri  = null
+            viewModel.imageTwoUri  = null
+            viewModel.imageThreeUri  = null
+
+            viewModel.imageOneLabel = ""
+            viewModel.imageTwoLabel = ""
+            viewModel.imageThreeLabel = ""
+            viewModel.photo= Photo()
+            super.onDestroy()
+        }
     }
-
-                override fun onBackPressed() {
-                    if (viewModel.current_step ==1){
-                        finish()
-                    }else{
-                        super.onBackPressed()
-                    }
-                }
-            }

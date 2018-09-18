@@ -7,7 +7,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="240dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -71,6 +71,7 @@
 
 
                     <TextView
+                        android:id="@+id/lot_info_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_middle"
@@ -86,6 +87,7 @@
                         android:layout_marginBottom="@dimen/spacing_middle">
 
                         <TextView
+                            android:id="@+id/lot_info_street"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/spacing_large"
@@ -97,6 +99,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
+                            android:id="@+id/txt_book_tag"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -139,26 +142,45 @@
                 android:textColor="@color/grey_80"/>
 
             <LinearLayout
+                android:layout_marginStart="@dimen/spacing_large"
+                android:layout_marginEnd="@dimen/spacing_large"
+                xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Min Time"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Max Time"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cost"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginTop="@dimen/spacing_medium"
                 android:layout_marginStart="@dimen/spacing_large"
                 android:layout_marginEnd="@dimen/spacing_large"
                 android:layout_marginBottom="@dimen/spacing_middle">
-                <TextView
-                    android:layout_gravity="left"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.8"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/lot_rates_recycler_view"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Cost per Hour:"/>
-
-                <TextView
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Ksh. 300"/>
+                    />
             </LinearLayout>
 
             <TextView
@@ -217,6 +239,8 @@
                                 android:textSize="15sp"
                                 android:backgroundTint="@color/grey_40"
                                 android:clickable="true"
+                                android:focusableInTouchMode="false"
+                                android:textColor="@color/colorPrimaryDark"
                                 android:focusable="false"/>
                         </android.support.design.widget.TextInputLayout>
 
@@ -238,7 +262,9 @@
                                 android:hint="Check-In  Time"
                                 android:maxLines="1"
                                 android:textSize="15sp"
+                                android:textColor="@color/colorPrimaryDark"
                                 android:backgroundTint="@color/grey_40"
+                                android:focusableInTouchMode="false"
                                 android:focusable="false"/>
                         </android.support.design.widget.TextInputLayout>
                     </TableRow>
@@ -277,7 +303,9 @@
                                 android:maxLines="1"
                                 android:textSize="15sp"
                                 android:backgroundTint="@color/grey_40"
-                                android:focusable="false"/>
+                                android:textColor="@color/colorPrimaryDark"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"/>
                         </android.support.design.widget.TextInputLayout>
 
 
@@ -298,10 +326,89 @@
                                 android:hint="Check-Out  Time"
                                 android:maxLines="1"
                                 android:textSize="15sp"
+                                android:textColor="@color/colorPrimaryDark"
                                 android:backgroundTint="@color/grey_40"
-                                android:focusable="false"/>
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"/>
                         </android.support.design.widget.TextInputLayout>
                     </TableRow>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/input_lyt_car_registrationg_no">
+                        <EditText
+                            android:id="@+id/input_car_registrationg_no"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:hint="Car Registration Number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <LinearLayout
+
+                        android:id="@+id/lyt_progress_book"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="@dimen/spacing_medium"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        >
+
+
+                        <com.park254.app.park254.widgets.ViewLoadingDotsBounce
+                            android:layout_width="50dp"
+                            android:layout_height="40dp"
+                            android:background="@color/colorAccentDark2"
+
+                            />
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/display_txt_book_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/grey_40"
+                        android:text="Book success!"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:layout_gravity="center_horizontal"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:visibility="gone"
+                        />
+
+                    <Button
+                        android:id="@+id/btn_change_booking"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/red_600"
+                        android:layout_marginStart="@dimen/spacing_mlarge"
+                        android:layout_marginEnd="@dimen/spacing_mlarge"
+                        android:text="Change booking"
+                        android:textColor="@color/leku_white"
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:layout_marginBottom="@dimen/spacing_medium"
+
+                        />
+
+                    <Button
+                        android:id="@+id/btn_confirm_booking"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:layout_marginStart="@dimen/spacing_mlarge"
+                        android:layout_marginEnd="@dimen/spacing_mlarge"
+                        android:text="Confirm Booking"
+                        android:textColor="@color/leku_white"
+                        android:visibility="gone"
+                        />
 
 
 

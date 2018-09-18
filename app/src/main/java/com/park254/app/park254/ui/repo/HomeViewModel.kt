@@ -12,8 +12,6 @@ constructor( ) : ViewModel() {
     var longitude = 0.0
     var latitude  = 0.0
 
-
-
-
+    var parsedLot:Lot? = null
 
 }

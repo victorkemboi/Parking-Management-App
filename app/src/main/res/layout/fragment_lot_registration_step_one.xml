@@ -75,9 +75,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_middle"
-                        android:layout_marginBottom="@dimen/spacing_middle">
+                        android:layout_height="wrap_content">
 
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/input_layout_street_name"
@@ -97,6 +95,63 @@
                         </android.support.design.widget.TextInputLayout>
 
                     </LinearLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/grey_40"
+                        >
+                        <android.support.v7.widget.AppCompatEditText
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:id="@+id/input_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
+                            android:hint="Email"
+                            android:maxLines="1"
+                            android:textSize="15sp"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_parking_lot_contact_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/grey_40"
+                        >
+                        <android.support.v7.widget.AppCompatEditText
+                            android:layout_gravity="center"
+                            android:id="@+id/input_parking_lot_contact_no"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="phone"
+                            android:hint="Contact Number"
+                            android:maxLines="1"
+                            android:textSize="15sp"
+                            android:backgroundTint="@color/grey_40"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_paybill_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/grey_40"
+                        >
+                        <android.support.v7.widget.AppCompatEditText
+                            android:textColorHint="@color/grey_40"
+                            android:layout_gravity="center"
+                            android:id="@+id/input_paybill_no"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:hint="Paybill Number"
+                            android:maxLines="1"
+                            android:textSize="15sp"
+                            android:backgroundTint="@color/grey_40"/>
+                    </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
             </LinearLayout>
@@ -130,7 +185,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/input_layout_spaces"
                         android:layout_width="match_parent"
-                        android:layout_height="70dp"
+                        android:layout_height="50dp"
                         android:layout_marginStart="@dimen/spacing_medium"
                         android:layout_marginEnd="@dimen/spacing_xxlarge"
                         >

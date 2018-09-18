@@ -83,7 +83,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.ParkingLotRegistrationActivity" />
         </activity>
-        <activity android:name=".ui.LotInfoActivity"></activity>
+        <activity android:name=".ui.LotInfoActivity" />
+
+        <service android:name=".ui.services.MyFirebaseInstanceIDService" />
+
+        <activity android:name=".ui.OwnerLotInfoActivity" />
+        <activity android:name=".ui.RegisterEmployeeActivity" />
+        <activity android:name=".ui.UpdateInfoActivity" />
+        <activity android:name=".ui.EmployeeActivity" />
+        <activity android:name=".ui.BookingsActivity"></activity>
     </application>
 
 </manifest>

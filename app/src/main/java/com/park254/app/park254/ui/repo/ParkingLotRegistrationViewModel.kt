@@ -16,8 +16,13 @@ constructor( ) : ViewModel() {
     var previous_step = 0
     var addresss = ""
 
-    val lot: Lot = Lot()
-    val rate: Rate = Rate()
+    var lot: Lot = Lot()
+    var rate1: Rate = Rate()
+    var rate2: Rate = Rate()
+    var rate3: Rate = Rate()
+    var rate4: Rate = Rate()
+    var rate5: Rate = Rate()
+
     var imageOneUri : Uri? = null
     var imageTwoUri : Uri? = null
     var imageThreeUri : Uri? = null

@@ -22,12 +22,12 @@
             android:title="Attendant" />
     </group>
     <group
-        android:id="@+id/grp_2"
+        android:id="@+id/nav_bookings"
         android:checkableBehavior="none">
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_profile"
-            android:title="Profile" />
+            android:icon="@drawable/ic_collections_bookings"
+            android:title="My Bookings" />
         <item
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_help_outline"

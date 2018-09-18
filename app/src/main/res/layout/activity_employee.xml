@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.OwnerFragment">
-
-    <!-- TODO: Update blank fragment layout -->
     <android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.EmployeeActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_emp"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+
+    </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
             android:id="@+id/owner_preview"
@@ -25,7 +43,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="MY PARKING LOTS"
+                android:text="Employees"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:gravity="center"
@@ -34,22 +52,13 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="You do not own any parking lot!"
+                android:text="Please register employees!"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginTop="@dimen/spacing_large"
                 />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Add one to be an Owner."
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/spacing_medium"
-                />
         </LinearLayout>
 
         <ScrollView
@@ -63,33 +72,33 @@
             android:layout_marginTop="@dimen/spacing_large"
             >
             <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/owner_parking_lots"
                 android:visibility="gone">
 
-            <TextView
-                android:id="@+id/owner_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Parking lots you own."
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:layout_marginBottom="@dimen/spacing_small"
-                />
-            <View android:background="@color/grey_20"
-                android:layout_width = "match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/spacing_middle"/>
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/owner_packing_lots_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                <TextView
+                    android:id="@+id/owner_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Employees"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:layout_marginBottom="@dimen/spacing_small"
+                    />
+                <View android:background="@color/grey_20"
+                    android:layout_width = "match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/spacing_middle"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/employees_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
 
-        </LinearLayout>
+            </LinearLayout>
         </ScrollView>
 
 
@@ -103,12 +112,11 @@
             android:layout_margin="@dimen/spacing_mxlarge"
             app:srcCompat="@drawable/ic_add"
             android:clickable="true"
-            android:id="@+id/btn_add_parking_lot"
-             android:backgroundTint="@color/colorAccentDark1"
+            android:id="@+id/btn_add_employee"
+            android:backgroundTint="@color/colorAccentDark1"
             android:elevation="@dimen/spacing_medium"
             />
 
 
     </android.support.constraint.ConstraintLayout>
 
-</FrameLayout>

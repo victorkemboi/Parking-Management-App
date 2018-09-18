@@ -18,7 +18,7 @@ data class Lot(
         var ownerId: String = "",
 
         @ColumnInfo(name = "joinedOn")
-        var joinedOn: Date = Date(),
+        var joinedOn: String = "",
 
         @ColumnInfo(name = "longitude")
         var longitude: Double = 0.0,
@@ -45,8 +45,11 @@ data class Lot(
         var streetName: String = "",
 
         @Ignore
-        @ColumnInfo(name = "photos")
-        var photos: ArrayList<LotImage> = ArrayList())
+        @ColumnInfo(name = "parkingLotPhotos")
+        var parkingLotPhotos: ArrayList<LotImage> = ArrayList(),
+        @Ignore
+        @ColumnInfo(name = "parkingRates")
+        var parkingRates: ArrayList<Rate> = ArrayList())
 {
     @PrimaryKey(autoGenerate = true)
     var uid: Long? = null

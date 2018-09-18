@@ -1,12 +1,9 @@
 package com.park254.app.park254.network
 
 import android.arch.lifecycle.LiveData
-import com.park254.app.park254.models.Lot
-import com.park254.app.park254.models.User
+import com.park254.app.park254.models.*
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
-import retrofit2.http.Body
-import retrofit2.http.PATCH
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface RetrofitApiService{
     /**
@@ -20,5 +17,23 @@ interface RetrofitApiService{
 
     @POST("Registration/lot")
     fun registerParkingLot(@Body lot: Lot): LiveData<ApiResponse<Lot>>
+
+    @GET("Registration/owned")
+    fun getOwnedParkingLots() :  LiveData<ApiResponse<List<Lot>>>
+
+    @GET("Registration")
+    fun getParkingLots():  LiveData<ApiResponse<List<Lot>>>
+
+    @GET("Profiles/email")
+    fun getUserByEmail(@Query("q")  email:String ) :  LiveData<ApiResponse<User>>
+
+    @POST("Management")
+    fun registerEmployee(@Body employee: Employee): LiveData<ApiResponse<Employee>>
+
+    @POST("Parking/book")
+    fun bookParkingLot(@Body bookRequest: BookRequest): LiveData<ApiResponse<Booking>>
+
+    @POST("Parking/estimate")
+    fun getBookingEstimation(@Body estimateRequest: EstimateRequest): LiveData<ApiResponse<Double>>
 
 }

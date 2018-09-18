@@ -6,16 +6,11 @@ import com.park254.app.park254.models.Park254Database
 import com.park254.app.park254.models.dao.UserDao
 import com.park254.app.park254.network.FirebaseUserIdTokenInterceptor
 import com.park254.app.park254.network.RetrofitApiService
-import com.park254.app.park254.ui.AddUserInfoActivity
-import com.park254.app.park254.ui.HomeActivity
-import com.park254.app.park254.ui.LoginActivity
-import com.park254.app.park254.ui.ParkingLotRegistrationActivity
+import com.park254.app.park254.ui.*
 import com.park254.app.park254.ui.fragments.LotRegistrationStepOneFragment
 import com.park254.app.park254.ui.fragments.LotRegistrationStepThreeFragment
 import com.park254.app.park254.ui.fragments.LotRegistrationStepTwoFragment
-import com.park254.app.park254.ui.repo.HomeViewModel
-import com.park254.app.park254.ui.repo.LoginViewModel
-import com.park254.app.park254.ui.repo.ParkingLotRegistrationViewModel
+import com.park254.app.park254.ui.repo.*
 import com.park254.app.park254.utils.SharedPrefs
 import dagger.Component
 import javax.inject.Singleton
@@ -46,6 +41,11 @@ interface AppComponent{
     fun inject(lotRegistrationStepOneFragment: LotRegistrationStepOneFragment)
     fun inject(lotRegistrationStepTwoFragment: LotRegistrationStepTwoFragment)
     fun inject(lotRegistrationStepThreeFragment: LotRegistrationStepThreeFragment)
+    fun inject(lotInfoActivity: LotInfoActivity)
+    fun inject(ownerLotInfoActivity: OwnerLotInfoActivity)
+    fun inject(updateInfoActivity: UpdateInfoActivity)
+    fun inject(employeeActivity: EmployeeActivity)
+    fun inject(registerEmployeeActivity: RegisterEmployeeActivity)
 
    fun provideApplication(): App
 
@@ -56,6 +56,12 @@ interface AppComponent{
     fun providesParkingLotRegistrationViewModel(): ParkingLotRegistrationViewModel
 
     fun providesHomeViewModel(): HomeViewModel
+
+    fun providesEmployeeViewModel(): EmployeeViewModel
+
+    fun providesLotInfoViewModel(): LotInfoViewModel
+
+    fun providesParkingLotViewModel(): ParkingLotViewModel
 
     fun providesNetworkModule(): RetrofitApiService
 

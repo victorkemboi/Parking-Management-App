@@ -1,6 +1,7 @@
 package com.park254.app.park254.ui.fragments
 
 import android.app.Activity
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -16,10 +17,12 @@ import android.view.ViewGroup
 
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Lot
+import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.HomeActivity
 import com.park254.app.park254.ui.LotInfoActivity
 import com.park254.app.park254.ui.adapters.HomeListAdapter
 import com.park254.app.park254.utils.UtilityClass
+import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import com.schibstedspain.leku.LATITUDE
 import com.schibstedspain.leku.LOCATION_ADDRESS
 import com.schibstedspain.leku.LONGITUDE
@@ -27,6 +30,7 @@ import com.schibstedspain.leku.LocationPickerActivity
 import kotlinx.android.synthetic.main.fragment_main_home.*
 import kotlinx.android.synthetic.main.include_cardview_search_bar.*
 import java.util.*
+import javax.inject.Inject
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -49,7 +53,9 @@ class MainHomeFragment : Fragment() {
 
     private var listener: OnFragmentInteractionListener? = null
     private var mAdapter: HomeListAdapter? = null
-    var items: ArrayList<Lot> = ArrayList<Lot>()
+
+    @Inject
+    lateinit var retrofitApiService: RetrofitApiService
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,16 +64,9 @@ class MainHomeFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        items.add( Lot("", 0.0,"", Date(), 0.0, "The Hub",
-      21, "5748438","764564" ,"", 0,"Dagoretti Rd"
-        ) )
-        items.add( Lot("", 0.0,"", Date(), 0.0, "Two Rivers Mall",
-                13, "5748438","764564" ,"", 0,"Hype Street"
-        ) )
 
-        items.add( Lot("", 0.0,"", Date(), 0.0, "Juja city Mall",
-                7, "5748438","764564" ,"", 0,"Thika Rd"
-        ) )
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -85,15 +84,36 @@ class MainHomeFragment : Fragment() {
         home_packing_lots_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
 
         home_packing_lots_recycler_view.setHasFixedSize(false)
-        mAdapter = HomeListAdapter(activity!!.applicationContext, items)
 
-        home_packing_lots_recycler_view.adapter = mAdapter
-        mAdapter!!.onItemClick = {
-            lot ->
-          //  Snackbar.make(booked_card_view, "Item " + lot.name + " clicked", Snackbar.LENGTH_SHORT).show()
-            startActivity(
-                    Intent(this@MainHomeFragment.context, LotInfoActivity::class.java))
-        }
+        (activity as HomeActivity).retrofitApiService.getParkingLots().observe(this, Observer<ApiResponse<List<Lot>>> {
+            response->
+            if (response != null && response.isSuccessful) {
+
+                Log.d("Resp",response.body.toString())
+                mAdapter = HomeListAdapter(activity!!.applicationContext, response.body as ArrayList<Lot>)
+
+                home_packing_lots_recycler_view.adapter = mAdapter
+
+                mAdapter!!.onItemClick = {
+                    lot ->
+                    //  Snackbar.make(booked_card_view, "Item " + lot.name + " clicked", Snackbar.LENGTH_SHORT).show()
+
+                    (activity as HomeActivity).viewModel.parsedLot = lot
+                    startActivity(
+                            Intent(this@MainHomeFragment.context, LotInfoActivity::class.java))
+                }
+
+            }else{
+                if (response != null) {
+                    Log.d("Resp",response.body.toString())
+                }
+            }
+
+
+        })
+
+
+
 
         btn_search_location.setOnClickListener{launchSetLocationActivity()}
         search_bar.setOnClickListener{
