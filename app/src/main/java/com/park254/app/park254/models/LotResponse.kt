@@ -1,13 +1,10 @@
 package com.park254.app.park254.models
 
-import android.arch.persistence.room.*
-import com.park254.app.park254.models.tc.DateTypeConverter
-import java.util.*
-import kotlin.collections.ArrayList
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Ignore
+import android.arch.persistence.room.PrimaryKey
 
-@Entity(tableName = "requestLot")
-@TypeConverters(DateTypeConverter::class)
-data class Lot(
+data class LotResponse(
         @ColumnInfo(name = "id")
         var id: String = "",
 
@@ -46,7 +43,7 @@ data class Lot(
 
         @Ignore
         @ColumnInfo(name = "parkingLotPhotos")
-        var parkingLotPhotos: ArrayList<LotImage> = ArrayList(),
+        var parkingLotPhotos: ArrayList<Photo> = ArrayList(),
         @Ignore
         @ColumnInfo(name = "parkingRates")
         var parkingRates: ArrayList<Rate> = ArrayList())

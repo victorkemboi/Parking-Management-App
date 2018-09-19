@@ -15,14 +15,14 @@ interface RetrofitApiService{
     @PATCH("Profiles")
     fun updateUser(user:User): LiveData<ApiResponse<User>>
 
-    @POST("Registration/lot")
+    @POST("Registration/requestLot")
     fun registerParkingLot(@Body lot: Lot): LiveData<ApiResponse<Lot>>
 
     @GET("Registration/owned")
-    fun getOwnedParkingLots() :  LiveData<ApiResponse<List<Lot>>>
+    fun getOwnedParkingLots() :  LiveData<ApiResponse<List<LotResponse>>>
 
     @GET("Registration")
-    fun getParkingLots():  LiveData<ApiResponse<List<Lot>>>
+    fun getParkingLots():  LiveData<ApiResponse<List<LotResponse>>>
 
     @GET("Profiles/email")
     fun getUserByEmail(@Query("q")  email:String ) :  LiveData<ApiResponse<User>>

@@ -17,7 +17,7 @@ interface LotDao {
     @Update
     fun updateLot(lot: Lot)
 
-    @get:Query("Select * from lot")
+    @get:Query("Select * from requestLot")
     val lots: LiveData<List<Lot>>
 
 

@@ -25,7 +25,14 @@ class UpdateInfoActivity : AppCompatActivity(), LotRegistrationStepOneFragment.O
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_info)
         (application as App).applicationInjector.inject(this)
-        viewModel.lot = homeViewModel.parsedLot!!
+        viewModel.requestLot.name = homeViewModel.parsedLot!!.name
+        viewModel.requestLot.streetName = homeViewModel.parsedLot!!.streetName
+        viewModel.requestLot.email = homeViewModel.parsedLot!!.email
+        viewModel.requestLot.contactNumber = homeViewModel.parsedLot!!.contactNumber
+        viewModel.requestLot.paybillNumber = homeViewModel.parsedLot!!.paybillNumber
+        viewModel.requestLot.parkingSpaces = homeViewModel.parsedLot!!.parkingSpaces
+        viewModel.requestLot.latitude = homeViewModel.parsedLot!!.latitude
+        viewModel.requestLot.longitude = homeViewModel.parsedLot!!.longitude
 
         var fragment: Fragment? = null
         val fragmentClass: Class<*> =   LotRegistrationStepOneFragment::class.java

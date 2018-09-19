@@ -42,7 +42,7 @@ class ParkingLotAdapter (val items : ArrayList<Rate>, val context: Context): Rec
     }
 
     class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
-        // Holds the TextView that will add each parking lot
+        // Holds the TextView that will add each parking requestLot
         val min_time = view.parking_rate_min_time
         val max_time = view.parking_rate_max_time
         val cost = view.parking_rate_cost

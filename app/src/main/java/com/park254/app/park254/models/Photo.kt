@@ -11,8 +11,8 @@ import java.util.*
 @Entity(tableName = "photo")
 @TypeConverters(DateTypeConverter::class)
 data class Photo(
-        @ColumnInfo(name = "parkingLotImageBase64Encoded")
-        var parkingLotImageBase64Encoded: String = "",
+        @ColumnInfo(name = "blobUrl")
+        var blobUrl: String = "",
 
         @ColumnInfo(name = "label")
         var label: String = "",
@@ -24,7 +24,7 @@ data class Photo(
         var id: String = "",
 
         @ColumnInfo(name = "addedOn")
-        var addedOn: Date = Date() )
+        var addedOn: String = "" )
 {
     @PrimaryKey(autoGenerate = true)
     var uid: Long? = null

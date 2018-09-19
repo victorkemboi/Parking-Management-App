@@ -15,14 +15,10 @@ import com.park254.app.park254.utils.UtilityClass
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_one.*
 import javax.inject.Inject
 import android.content.Intent
-import android.location.Address
-import android.support.v4.app.FragmentActivity
 import android.util.Log
-import com.park254.app.park254.models.Lot
 import com.park254.app.park254.ui.ParkingLotRegistrationActivity
 import com.park254.app.park254.ui.UpdateInfoActivity
 import com.schibstedspain.leku.*
-import kotlinx.android.synthetic.main.activity_parking_lot_registration.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -74,10 +70,10 @@ class LotRegistrationStepOneFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK && data != null) {
 
                     // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
-                    (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                    //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude.toString())
-                    (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-                    // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude.toString())
+                    (activity as ParkingLotRegistrationActivity).viewModel.requestLot.latitude = data.getDoubleExtra(LATITUDE, 0.0)
+                    //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.latitude.toString())
+                    (activity as ParkingLotRegistrationActivity).viewModel.requestLot.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
+                    // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.longitude.toString())
                     (activity as ParkingLotRegistrationActivity).viewModel.addresss = data.getStringExtra(LOCATION_ADDRESS)
                     //Log.d("ADDRESS****", address.toString())
 
@@ -90,10 +86,10 @@ class LotRegistrationStepOneFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK && data != null) {
 
                     // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
-                    (activity as UpdateInfoActivity).viewModel.lot.latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                    //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude.toString())
-                    (activity as UpdateInfoActivity).viewModel.lot.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-                    // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude.toString())
+                    (activity as UpdateInfoActivity).viewModel.requestLot.latitude = data.getDoubleExtra(LATITUDE, 0.0)
+                    //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.latitude.toString())
+                    (activity as UpdateInfoActivity).viewModel.requestLot.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
+                    // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.longitude.toString())
                     (activity as UpdateInfoActivity).viewModel.addresss = data.getStringExtra(LOCATION_ADDRESS)
                     //Log.d("ADDRESS****", address.toString())
 
@@ -200,47 +196,47 @@ class LotRegistrationStepOneFragment : Fragment() {
 
 
         try {
-            if ((activity as ParkingLotRegistrationActivity).viewModel.lot.name!=""){
+            if ((activity as ParkingLotRegistrationActivity).viewModel.requestLot.name!=""){
                 // Log.d("Fill Values","start")
-                input_parking_lot_name.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.name)
+                input_parking_lot_name.setText((activity as ParkingLotRegistrationActivity).viewModel.requestLot.name)
             }
-            if ((activity as ParkingLotRegistrationActivity).viewModel.lot.streetName!=""){
-                input_street_name.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.name)
+            if ((activity as ParkingLotRegistrationActivity).viewModel.requestLot.streetName!=""){
+                input_street_name.setText((activity as ParkingLotRegistrationActivity).viewModel.requestLot.name)
             }
-            if ((activity as ParkingLotRegistrationActivity).viewModel.lot.parkingSpaces!=0){
-                input_picker_parking_spaces.value = (activity as ParkingLotRegistrationActivity).viewModel.lot.parkingSpaces
+            if ((activity as ParkingLotRegistrationActivity).viewModel.requestLot.parkingSpaces!=0){
+                input_picker_parking_spaces.value = (activity as ParkingLotRegistrationActivity).viewModel.requestLot.parkingSpaces
             }
-            if ((activity as ParkingLotRegistrationActivity).viewModel.lot.email != "") {
+            if ((activity as ParkingLotRegistrationActivity).viewModel.requestLot.email != "") {
                 // Log.d("Fill Values","start")
-                input_email.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.email)
+                input_email.setText((activity as ParkingLotRegistrationActivity).viewModel.requestLot.email)
             }
-            if ((activity as ParkingLotRegistrationActivity).viewModel.lot.contactNumber != "") {
-                input_parking_lot_contact_no.setText(   (activity as ParkingLotRegistrationActivity).viewModel.lot.contactNumber.toString())
+            if ((activity as ParkingLotRegistrationActivity).viewModel.requestLot.contactNumber != "") {
+                input_parking_lot_contact_no.setText(   (activity as ParkingLotRegistrationActivity).viewModel.requestLot.contactNumber.toString())
             }
-            if ((activity as ParkingLotRegistrationActivity).viewModel.lot.paybillNumber != "") {
-                input_paybill_no.setText((activity as ParkingLotRegistrationActivity).viewModel.lot.paybillNumber)
+            if ((activity as ParkingLotRegistrationActivity).viewModel.requestLot.paybillNumber != "") {
+                input_paybill_no.setText((activity as ParkingLotRegistrationActivity).viewModel.requestLot.paybillNumber)
             }
         }catch (e:ClassCastException){
 
-            if ((activity as UpdateInfoActivity).viewModel.lot.name!=""){
+            if ((activity as UpdateInfoActivity).viewModel.requestLot.name!=""){
                 // Log.d("Fill Values","start")
-                input_parking_lot_name.setText((activity as UpdateInfoActivity).viewModel.lot.name)
+                input_parking_lot_name.setText((activity as UpdateInfoActivity).viewModel.requestLot.name)
             }
-            if ((activity as UpdateInfoActivity).viewModel.lot.streetName!=""){
-                input_street_name.setText((activity as UpdateInfoActivity).viewModel.lot.name)
+            if ((activity as UpdateInfoActivity).viewModel.requestLot.streetName!=""){
+                input_street_name.setText((activity as UpdateInfoActivity).viewModel.requestLot.name)
             }
-            if ((activity as UpdateInfoActivity).viewModel.lot.parkingSpaces!=0){
-                input_picker_parking_spaces.value = (activity as UpdateInfoActivity).viewModel.lot.parkingSpaces
+            if ((activity as UpdateInfoActivity).viewModel.requestLot.parkingSpaces!=0){
+                input_picker_parking_spaces.value = (activity as UpdateInfoActivity).viewModel.requestLot.parkingSpaces
             }
-            if ((activity as UpdateInfoActivity).viewModel.lot.email != "") {
+            if ((activity as UpdateInfoActivity).viewModel.requestLot.email != "") {
                 // Log.d("Fill Values","start")
-                input_email.setText((activity as UpdateInfoActivity).viewModel.lot.email)
+                input_email.setText((activity as UpdateInfoActivity).viewModel.requestLot.email)
             }
-            if ((activity as UpdateInfoActivity).viewModel.lot.contactNumber != "") {
-                input_parking_lot_contact_no.setText(   (activity as UpdateInfoActivity).viewModel.lot.contactNumber.toString())
+            if ((activity as UpdateInfoActivity).viewModel.requestLot.contactNumber != "") {
+                input_parking_lot_contact_no.setText(   (activity as UpdateInfoActivity).viewModel.requestLot.contactNumber.toString())
             }
-            if ((activity as UpdateInfoActivity).viewModel.lot.paybillNumber != "") {
-                input_paybill_no.setText((activity as UpdateInfoActivity).viewModel.lot.paybillNumber)
+            if ((activity as UpdateInfoActivity).viewModel.requestLot.paybillNumber != "") {
+                input_paybill_no.setText((activity as UpdateInfoActivity).viewModel.requestLot.paybillNumber)
             }
         }
 

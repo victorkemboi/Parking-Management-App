@@ -8,7 +8,6 @@ import com.park254.app.park254.R
 import com.park254.app.park254.ui.repo.HomeViewModel
 import com.park254.app.park254.ui.repo.ParkingLotRegistrationViewModel
 import kotlinx.android.synthetic.main.activity_employee.*
-import kotlinx.android.synthetic.main.activity_lot_info.*
 import javax.inject.Inject
 
 class EmployeeActivity : AppCompatActivity() {
@@ -23,13 +22,11 @@ class EmployeeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_employee)
         (application as App).applicationInjector.inject(this)
 
-        viewModel.lot = homeViewModel.parsedLot!!
+        viewModel.lotResponse = homeViewModel.parsedLot!!
         initToolbar()
         btn_add_employee.setOnClickListener{
             startActivity(Intent(this@EmployeeActivity, RegisterEmployeeActivity::class.java))
         }
-
-
 
     }
 

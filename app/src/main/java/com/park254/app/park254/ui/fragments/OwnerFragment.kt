@@ -14,6 +14,7 @@ import android.view.ViewGroup
 
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Lot
+import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.ui.HomeActivity
 import com.park254.app.park254.ui.LotInfoActivity
 import com.park254.app.park254.ui.OwnerLotInfoActivity
@@ -51,12 +52,12 @@ class OwnerFragment : Fragment() {
 
         owner_packing_lots_recycler_view.setHasFixedSize(false)
 
-        (activity as HomeActivity).retrofitApiService.getOwnedParkingLots().observe(this, Observer<ApiResponse<List<Lot>>> {
+        (activity as HomeActivity).retrofitApiService.getOwnedParkingLots().observe(this, Observer<ApiResponse<List<LotResponse>>> {
             response->
             if (response != null && response.isSuccessful) {
 
                 //Log.d("Resp",response.body.toString())
-                val items = response.body as ArrayList<Lot>
+                val items = response.body as ArrayList<LotResponse>
                 if (items.isNotEmpty()){
                     owner_parking_lots.visibility = View.VISIBLE
                     owner_preview.visibility = View.GONE
@@ -65,11 +66,10 @@ class OwnerFragment : Fragment() {
                     owner_packing_lots_recycler_view.adapter = mAdapter
 
 
-
                     mAdapter!!.onItemClick = {
                         lot ->
                         (activity as HomeActivity).viewModel.parsedLot = lot
-                        //  Snackbar.make(booked_card_view, "Item " + lot.name + " clicked", Snackbar.LENGTH_SHORT).show()
+                        //  Snackbar.make(booked_card_view, "Item " + requestLot.name + " clicked", Snackbar.LENGTH_SHORT).show()
                         startActivity(
                                 Intent(this@OwnerFragment.context, OwnerLotInfoActivity::class.java))
                     }

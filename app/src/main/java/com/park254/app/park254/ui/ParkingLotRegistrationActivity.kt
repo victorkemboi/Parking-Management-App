@@ -1,11 +1,7 @@
 package com.park254.app.park254.ui
 
-import android.app.Activity
-import android.app.PendingIntent.getActivity
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.PorterDuff
-import android.location.Address
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -22,26 +18,19 @@ import com.park254.app.park254.R
 import com.park254.app.park254.ui.fragments.LotRegistrationStepOneFragment
 import com.park254.app.park254.ui.fragments.LotRegistrationStepTwoFragment
 import com.park254.app.park254.ui.repo.ParkingLotRegistrationViewModel
-import com.schibstedspain.leku.*
 import kotlinx.android.synthetic.main.activity_parking_lot_registration.*
-import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 import com.park254.app.park254.utils.UtilityClass
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_one.*
-import android.widget.TextView
-import com.google.gson.Gson
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.fragments.LotRegistrationStepThreeFragment
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_three.*
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_two.*
 import kotlinx.android.synthetic.main.toolbar_2.*
-import org.json.JSONObject
-import android.R.attr.bitmap
 import android.arch.lifecycle.Observer
 import android.util.Base64
 import com.park254.app.park254.models.Lot
 import com.park254.app.park254.models.LotImage
-import com.park254.app.park254.models.Photo
 import com.park254.app.park254.models.Rate
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import java.io.ByteArrayOutputStream
@@ -117,12 +106,12 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
                 if (progressActive == 1) {
                     if (validateFirstSetInputs()) {
-                        viewModel.lot.name = input_parking_lot_name.text.toString()
-                        viewModel.lot.streetName = input_street_name.text.toString()
-                        viewModel.lot.parkingSpaces = input_picker_parking_spaces.value
-                        viewModel.lot.email = input_email.text.toString()
-                        viewModel.lot.contactNumber =  input_parking_lot_contact_no.text.toString()
-                        viewModel.lot.paybillNumber = input_paybill_no.text.toString()
+                        viewModel.requestLot.name = input_parking_lot_name.text.toString()
+                        viewModel.requestLot.streetName = input_street_name.text.toString()
+                        viewModel.requestLot.parkingSpaces = input_picker_parking_spaces.value
+                        viewModel.requestLot.email = input_email.text.toString()
+                        viewModel.requestLot.contactNumber =  input_parking_lot_contact_no.text.toString()
+                        viewModel.requestLot.paybillNumber = input_paybill_no.text.toString()
 
 
                        navigateNextStepper(progressActive)
@@ -208,7 +197,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                 val lotImage2 = LotImage(encodedImage2,viewModel.imageTwoLabel)
                 val lotImage3 = LotImage(encodedImage3,viewModel.imageThreeLabel)
                 val lotImages: ArrayList<LotImage> = arrayListOf(lotImage1,lotImage2,lotImage3)
-                viewModel.lot.parkingLotPhotos = lotImages
+                viewModel.requestLot.parkingLotPhotos = lotImages
 
                 val ratesList = ArrayList<Rate>()
                 ratesList.add(viewModel.rate1)
@@ -223,11 +212,11 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                 }
                 ratesList.add(viewModel.rate5)
 
-                viewModel.lot.parkingRates = ratesList
+                viewModel.requestLot.parkingRates = ratesList
 
-                Log.d("Parking Lot",viewModel.lot.toString())
+                Log.d("Parking Lot",viewModel.requestLot.toString())
 
-                retrofitApiService.registerParkingLot(viewModel.lot).observe(this, Observer<ApiResponse<Lot>> {
+                retrofitApiService.registerParkingLot(viewModel.requestLot).observe(this, Observer<ApiResponse<Lot>> {
                     response->
                     if (response != null) {
                         Log.d("Reg Resp", response.toString())
@@ -391,7 +380,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
        // Log.d("validateFirtSetInputs",input_parking_lot_name.text.toString())
         if (input_parking_lot_name.text.toString().trim { it <= ' ' }.isEmpty()) run {
 
-            input_layout_parking_lot_name.error = "Enter parking lot name!"
+            input_layout_parking_lot_name.error = "Enter parking requestLot name!"
             UtilityClass.requestFocus(input_parking_lot_name, window)
             return false
         }
@@ -400,7 +389,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
             UtilityClass.requestFocus(input_layout_street_name,window)
           return false
         }
-        if (viewModel.lot.longitude == 0.0 && viewModel.lot.latitude == 0.0) run {
+        if (viewModel.requestLot.longitude == 0.0 && viewModel.requestLot.latitude == 0.0) run {
             input_layout_location.error = "Select Location!"
             UtilityClass.requestFocus(input_layout_street_name, window)
           return false
@@ -548,7 +537,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
     fun validateImageSelection():Boolean{
         if (viewModel.imageOneUri==null  || viewModel.imageTwoUri==null || viewModel.imageThreeUri==null){
-            display_txt_register_status.text = "Please add three photos of your parking lot."
+            display_txt_register_status.text = "Please add three photos of your parking requestLot."
             display_txt_register_status.setTextColor(resources.getColor(R.color.red_600))
             display_txt_register_status.visibility = View.VISIBLE
 
@@ -588,7 +577,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
             viewModel.previous_step = 0
             viewModel.addresss = ""
 
-            viewModel.lot = Lot()
+            viewModel.requestLot = Lot()
             viewModel.rate1= Rate()
             viewModel.rate2 = Rate()
             viewModel.rate3= Rate()
@@ -602,7 +591,6 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
             viewModel.imageOneLabel = ""
             viewModel.imageTwoLabel = ""
             viewModel.imageThreeLabel = ""
-            viewModel.photo= Photo()
             super.onDestroy()
         }
     }

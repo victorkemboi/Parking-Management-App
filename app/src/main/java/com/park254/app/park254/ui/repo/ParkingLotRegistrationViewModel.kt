@@ -3,6 +3,7 @@ package com.park254.app.park254.ui.repo
 import android.arch.lifecycle.ViewModel
 import android.net.Uri
 import com.park254.app.park254.models.Lot
+import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.models.Photo
 import com.park254.app.park254.models.Rate
 import javax.inject.Inject
@@ -16,7 +17,8 @@ constructor( ) : ViewModel() {
     var previous_step = 0
     var addresss = ""
 
-    var lot: Lot = Lot()
+    var requestLot: Lot = Lot()
+    var lotResponse: LotResponse =LotResponse()
     var rate1: Rate = Rate()
     var rate2: Rate = Rate()
     var rate3: Rate = Rate()
@@ -30,6 +32,5 @@ constructor( ) : ViewModel() {
     var imageOneLabel = ""
     var imageTwoLabel = ""
     var imageThreeLabel = ""
-    var photo:Photo = Photo()
 
 }

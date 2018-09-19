@@ -8,23 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Lot
+import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.utils.ItemAnimation
 import kotlinx.android.synthetic.main.card_item_parking_lot_info.view.*
 import kotlinx.android.synthetic.main.owner_lot_item.view.*
 import java.util.ArrayList
 
-class OwnerAdapter(private val ctx: Context, items: ArrayList<Lot>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class OwnerAdapter(private val ctx: Context, items: ArrayList<LotResponse>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var items = ArrayList<Lot>()
+    private var items = ArrayList<LotResponse>()
     private var mOnItemClickListener: OnItemClickListener? = null
 
     private var lastPosition = -1
     private var on_attach = true
 
-    var onItemClick: ((Lot) -> Unit)? = null
+    var onItemClick: ((LotResponse) -> Unit)? = null
 
     interface OnItemClickListener {
-        fun onItemClick(view: View, obj: Lot, position: Int)
+        fun onItemClick(view: View, obj: LotResponse, position: Int)
     }
 
     fun setOnItemClickListener(mItemClickListener: OnItemClickListener) {

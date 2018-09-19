@@ -165,14 +165,22 @@ class LotInfoActivity : AppCompatActivity() {
 
                         display_txt_book_status.visibility = View.GONE
 
+                        input_pick_start_date.isFocusableInTouchMode = false
+                        input_pick_start_date.isFocusable = false
                         input_pick_start_date.isClickable = false
 
+                        input_start_time.isFocusableInTouchMode = false
+                        input_start_time.isFocusable = false
                         input_start_time.isClickable = false
 
+                        input_pick_end_date.isFocusableInTouchMode = false
+                        input_pick_end_date.isFocusable = false
                         input_pick_end_date.isClickable = false
 
+                        input_end_time.isFocusableInTouchMode = false
+                        input_end_time.isFocusable = false
                         input_end_time.isClickable = false
-
+                        lyt_progress_book.visibility = View.GONE
                         input_car_registrationg_no.isFocusableInTouchMode = false
                         input_car_registrationg_no.isFocusable = false
                         input_car_registrationg_no.isClickable = false
@@ -230,6 +238,9 @@ class LotInfoActivity : AppCompatActivity() {
     @SuppressLint("RestrictedApi")
     fun confirmBooking(){
 
+        lyt_progress_book.visibility = View.VISIBLE
+        btn_change_booking.visibility = View.GONE
+
         retrofitApiService.bookParkingLot(lotInfoViewModel.bookRequest).observe(this,Observer<ApiResponse<Booking>>{
             response -> run{
             if (response != null) {
@@ -251,6 +262,8 @@ class LotInfoActivity : AppCompatActivity() {
                         } else {
                             display_txt_book_status.setTextColor(applicationContext.getColor(R.color.red_600))
                         }
+                        lyt_progress_book.visibility = View.GONE
+                        btn_change_booking.visibility = View.VISIBLE
 
                         display_txt_book_status.text = "Booking process failed! Try again."
                         display_txt_book_status.visibility = View.VISIBLE
@@ -260,6 +273,16 @@ class LotInfoActivity : AppCompatActivity() {
 
                 }else{
 
+                    if (Build.VERSION.SDK_INT < 23) {
+                        display_txt_book_status.setTextColor(resources.getColor(R.color.red_600))
+                    } else {
+                        display_txt_book_status.setTextColor(applicationContext.getColor(R.color.red_600))
+                    }
+                    lyt_progress_book.visibility = View.VISIBLE
+                    btn_change_booking.visibility = View.VISIBLE
+
+                    display_txt_book_status.text = "Booking process failed! Try again."
+                    display_txt_book_status.visibility = View.VISIBLE
                 }
             }
         }

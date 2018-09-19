@@ -17,6 +17,7 @@ import android.view.ViewGroup
 
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Lot
+import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.HomeActivity
 import com.park254.app.park254.ui.LotInfoActivity
@@ -85,18 +86,18 @@ class MainHomeFragment : Fragment() {
 
         home_packing_lots_recycler_view.setHasFixedSize(false)
 
-        (activity as HomeActivity).retrofitApiService.getParkingLots().observe(this, Observer<ApiResponse<List<Lot>>> {
+        (activity as HomeActivity).retrofitApiService.getParkingLots().observe(this, Observer<ApiResponse<List<LotResponse>>> {
             response->
             if (response != null && response.isSuccessful) {
 
                 Log.d("Resp",response.body.toString())
-                mAdapter = HomeListAdapter(activity!!.applicationContext, response.body as ArrayList<Lot>)
+                mAdapter = HomeListAdapter(activity!!.applicationContext, response.body as ArrayList<LotResponse>)
 
                 home_packing_lots_recycler_view.adapter = mAdapter
 
                 mAdapter!!.onItemClick = {
                     lot ->
-                    //  Snackbar.make(booked_card_view, "Item " + lot.name + " clicked", Snackbar.LENGTH_SHORT).show()
+                    //  Snackbar.make(booked_card_view, "Item " + requestLot.name + " clicked", Snackbar.LENGTH_SHORT).show()
 
                     (activity as HomeActivity).viewModel.parsedLot = lot
                     startActivity(
@@ -147,9 +148,9 @@ class MainHomeFragment : Fragment() {
 
                 // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
                 (activity as HomeActivity). viewModel.latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.latitude.toString())
+                //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.latitude.toString())
                 (activity as HomeActivity).viewModel.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-                // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.lot.longitude.toString())
+                // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.longitude.toString())
                 (activity as HomeActivity).viewModel.address = data.getStringExtra(LOCATION_ADDRESS)
                 //Log.d("ADDRESS****", address.toString())
 
