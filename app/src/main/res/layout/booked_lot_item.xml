@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/RippleStyleBlack"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/lyt_parent_booking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/lyt_parent_booked_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_multi_selection"
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/spacing_xmedium"
+            android:paddingTop="@dimen/spacing_xmedium"
+            android:paddingStart="@dimen/spacing_large"
+            android:paddingEnd="@dimen/spacing_large">
+            <ImageView
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/booking_lot_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/the_hub"
+                android:scaleType="centerCrop"/>
+            <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/booking_lot_image"
+                android:layout_marginStart="@dimen/spacing_large"
+                android:id="@+id/lot_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="The Hub"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/grey_90"
+                android:textStyle="bold" />
+
+            <TextView
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/booking_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="10:30 AM"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/blue_300"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/check_in_lyt"
+                app:layout_constraintTop_toBottomOf="@id/lot_name"
+                app:layout_constraintStart_toEndOf="@id/booking_lot_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_large"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/check_in_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="Check - In"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/grey_90"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/check_in_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="19 Sept"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/check_in_time"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="17:00 hrs"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/check_out_lyt"
+                app:layout_constraintTop_toBottomOf="@id/lot_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_large"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/check_out_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="Check - Out"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/grey_90"
+                    android:textStyle="bold"
+                    android:layout_gravity="end"/>
+
+                <TextView
+                    android:layout_gravity="end"
+                    android:id="@+id/check_out_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="19 Sept"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:layout_gravity="end"
+                    android:id="@+id/check_out_time"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="21:00 hrs"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+
+        </android.support.constraint.ConstraintLayout>
+
+        <View android:background="@color/grey_20"
+            android:layout_width = "match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/spacing_middle"/>
+
+    </LinearLayout>
+
+</com.balysv.materialripple.MaterialRippleLayout>

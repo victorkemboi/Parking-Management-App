@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.glide.slider.library.Tricks.ViewPagerEx
 
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Lot
@@ -47,7 +48,13 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class MainHomeFragment : Fragment() {
+class MainHomeFragment : Fragment()
+
+{
+
+
+
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -90,7 +97,7 @@ class MainHomeFragment : Fragment() {
             response->
             if (response != null && response.isSuccessful) {
 
-                Log.d("Resp",response.body.toString())
+               // Log.d("Resp",response.body.toString())
                 mAdapter = HomeListAdapter(activity!!.applicationContext, response.body as ArrayList<LotResponse>)
 
                 home_packing_lots_recycler_view.adapter = mAdapter

@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import com.park254.app.park254.App
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Booking
@@ -23,6 +21,8 @@ import javax.inject.Inject
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Build
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import com.park254.app.park254.models.EstimateRequest
 import com.park254.app.park254.utils.UtilityClass
@@ -47,10 +47,15 @@ class LotInfoActivity : AppCompatActivity() {
         (application as App).applicationInjector.inject(this)
 
         if (viewModel.parsedLot !=null){
+            Log.d("parsed Lot", viewModel.parsedLot.toString())
             lot_info_name.text = viewModel.parsedLot!!.name
             lot_info_street.text = viewModel.parsedLot!!.streetName
 
-            val mAdapter: ParkingLotAdapter? = ParkingLotAdapter(viewModel.parsedLot!!.parkingRates, this)
+            val mAdapter: ParkingLotAdapter? = ParkingLotAdapter(viewModel.parsedLot!!.parkingRates , this)
+
+            lot_rates_recycler_view.layoutManager = LinearLayoutManager(this)
+
+            lot_rates_recycler_view.setHasFixedSize(false)
             lot_rates_recycler_view.adapter = mAdapter
 
             //lot_info_parking_rate.text = "${viewModel.parsedLot.}"
@@ -130,13 +135,13 @@ class LotInfoActivity : AppCompatActivity() {
 
                 if (viewModel.parsedLot != null){
                 lotInfoViewModel.bookRequest.carRegistration = input_car_registrationg_no.text.toString()
-                lotInfoViewModel.bookRequest.sarting = UtilityClass.getStringTimeStampWithDate( lotInfoViewModel.checkInDate.time)
+                lotInfoViewModel.bookRequest.starting = UtilityClass.getStringTimeStampWithDate( lotInfoViewModel.checkInDate.time)
                 lotInfoViewModel.bookRequest.ending = UtilityClass.getStringTimeStampWithDate(lotInfoViewModel.checkOutDate.time)
                 lotInfoViewModel.bookRequest.parkinglotId = viewModel.parsedLot!!.id
 
                     val estimateRequest = EstimateRequest(
                             lotInfoViewModel.bookRequest.parkinglotId,
-                           lotInfoViewModel.bookRequest.sarting  ,
+                           lotInfoViewModel.bookRequest.starting  ,
                            lotInfoViewModel.bookRequest.ending)
 
 
@@ -241,6 +246,8 @@ class LotInfoActivity : AppCompatActivity() {
         lyt_progress_book.visibility = View.VISIBLE
         btn_change_booking.visibility = View.GONE
 
+       // Log.d("Lot Booking:", lotInfoViewModel.bookRequest.toString())
+
         retrofitApiService.bookParkingLot(lotInfoViewModel.bookRequest).observe(this,Observer<ApiResponse<Booking>>{
             response -> run{
             if (response != null) {
@@ -278,7 +285,7 @@ class LotInfoActivity : AppCompatActivity() {
                     } else {
                         display_txt_book_status.setTextColor(applicationContext.getColor(R.color.red_600))
                     }
-                    lyt_progress_book.visibility = View.VISIBLE
+                    lyt_progress_book.visibility = View.GONE
                     btn_change_booking.visibility = View.VISIBLE
 
                     display_txt_book_status.text = "Booking process failed! Try again."

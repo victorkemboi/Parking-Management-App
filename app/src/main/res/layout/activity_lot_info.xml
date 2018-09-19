@@ -408,6 +408,7 @@
                         android:text="Confirm Booking"
                         android:textColor="@color/leku_white"
                         android:visibility="gone"
+                        android:layout_marginBottom="@dimen/spacing_mxlarge"
                         />
 
 

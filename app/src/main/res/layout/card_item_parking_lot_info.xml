@@ -20,7 +20,7 @@
         android:id="@+id/lin_lyt_parent"
         android:clickable="true">
 
-        <ImageView
+    <!--    <ImageView
             android:id="@+id/card_parking_item_image"
             android:layout_width="match_parent"
             android:layout_height="180dp"
@@ -28,6 +28,12 @@
             app:srcCompat="@drawable/the_hub"
 
             />
+            -->
+        <com.glide.slider.library.SliderLayout
+            android:id="@+id/slider"
+
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
 
 
 

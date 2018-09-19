@@ -8,20 +8,25 @@ import android.view.View
 import android.view.ViewGroup
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Lot
+import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.models.Rate
 import kotlinx.android.synthetic.main.card_item_parking_lot_info.view.*
 import kotlinx.android.synthetic.main.parking_rates_layout.view.*
 
 
-class ParkingLotAdapter (val items : ArrayList<Rate>, val context: Context): RecyclerView.Adapter<ParkingLotAdapter.ViewHolder>() {
+class ParkingLotAdapter ( items : ArrayList<Rate>, val context: Context): RecyclerView.Adapter<ParkingLotAdapter.ViewHolder>() {
 
 
+    private var items = java.util.ArrayList<Rate>()
 
+    init {
+        this.items = items
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ParkingLotAdapter.ViewHolder {
 
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.parking_rates_layout, parent, false))
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
 
 
 
@@ -29,7 +34,7 @@ class ParkingLotAdapter (val items : ArrayList<Rate>, val context: Context): Rec
 
     override fun getItemCount(): Int {
         return items.size
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
 
     }
 

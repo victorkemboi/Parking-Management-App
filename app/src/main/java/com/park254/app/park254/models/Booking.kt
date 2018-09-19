@@ -29,7 +29,10 @@ data class Booking(
         var cost: Double =  0.0,
 
         @ColumnInfo(name = "carRegistration")
-        var carRegistration: String = "")
+        var carRegistration: String = "",
+        @ColumnInfo(name = "bookedOn")
+        var bookedOn: String = "")
+
 {
     @PrimaryKey(autoGenerate = true)
     var uid: Long? = null

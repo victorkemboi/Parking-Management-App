@@ -13,14 +13,11 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.park254.app.park254.R
-import com.park254.app.park254.models.Lot
 import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.ui.HomeActivity
-import com.park254.app.park254.ui.LotInfoActivity
 import com.park254.app.park254.ui.OwnerLotInfoActivity
 import com.park254.app.park254.ui.ParkingLotRegistrationActivity
-import com.park254.app.park254.ui.adapters.HomeListAdapter
-import com.park254.app.park254.ui.adapters.OwnerAdapter
+import com.park254.app.park254.ui.adapters.OwnerListAdapter
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import kotlinx.android.synthetic.main.fragment_owner.*
 import java.util.ArrayList
@@ -44,7 +41,7 @@ class OwnerFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-    private var mAdapter: OwnerAdapter? = null
+    private var mListAdapter: OwnerListAdapter? = null
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -61,12 +58,12 @@ class OwnerFragment : Fragment() {
                 if (items.isNotEmpty()){
                     owner_parking_lots.visibility = View.VISIBLE
                     owner_preview.visibility = View.GONE
-                    mAdapter = OwnerAdapter( activity!!.applicationContext, items )
+                    mListAdapter = OwnerListAdapter( activity!!.applicationContext, items )
 
-                    owner_packing_lots_recycler_view.adapter = mAdapter
+                    owner_packing_lots_recycler_view.adapter = mListAdapter
 
 
-                    mAdapter!!.onItemClick = {
+                    mListAdapter!!.onItemClick = {
                         lot ->
                         (activity as HomeActivity).viewModel.parsedLot = lot
                         //  Snackbar.make(booked_card_view, "Item " + requestLot.name + " clicked", Snackbar.LENGTH_SHORT).show()

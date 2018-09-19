@@ -1,6 +1,8 @@
 package com.park254.app.park254.ui.adapters
 
 import android.content.Context
+import android.graphics.Color
+import android.os.Build
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,24 +10,57 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.request.RequestOptions
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Lot
 import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.utils.ItemAnimation
 import kotlinx.android.synthetic.main.card_item_parking_lot_info.view.*
-import java.util.ArrayList
+import android.os.Bundle
+import com.glide.slider.library.SliderLayout
+import com.glide.slider.library.SliderTypes.DefaultSliderView
+import com.glide.slider.library.Animations.DescriptionAnimation
+import com.glide.slider.library.Tricks.ViewPagerEx
+import com.park254.app.park254.utils.UtilityClass
+import java.util.*
+
+
+class HomeListAdapter(private val ctx: Context, items: ArrayList<LotResponse>)
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ViewPagerEx.OnPageChangeListener {
+
+    override fun onPageScrollStateChanged(p0: Int) {
+
+
+    }
+
+    override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+
+        Log.d("Page scrolled", p0.toString()+ " : " + p1.toString() + " : " + p2 .toString())
 
 
 
-class HomeListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    }
+
+
+
+    override fun onPageSelected(p0: Int) {
+
+    }
 
     private var items = ArrayList<LotResponse>()
     private var mOnItemClickListener: OnItemClickListener? = null
+    private var mOnPageChangeListener : ViewPagerEx.OnPageChangeListener? = null
+
+    var requestOptions : RequestOptions =  RequestOptions()
+
+
 
     private var lastPosition = -1
     private var on_attach = true
 
     var onItemClick: ((LotResponse) -> Unit)? = null
+
+
 
     interface OnItemClickListener {
         fun onItemClick(view: View, obj: LotResponse, position: Int)
@@ -37,10 +72,14 @@ class HomeListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) :
 
     init {
         this.items = items
+        requestOptions.centerCrop()
+        requestOptions.placeholder(R.drawable.the_hub)
+
+
     }
 
     inner class OriginalViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        var image = v.card_parking_item_image
+      var imageSlider = v.slider as SliderLayout
         var name = v.parking_name
         var lyt_parent = v.lin_lyt_parent as View
         var street_name = v.street_name
@@ -51,7 +90,6 @@ class HomeListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) :
                 onItemClick?.invoke(items[adapterPosition])
             }
         }
-
 
     }
 
@@ -68,6 +106,41 @@ class HomeListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) :
         if (holder is OriginalViewHolder) {
 
             val p = items[position]
+
+         for (i in 0 until p.parkingLotPhotos.size) {
+
+             val txtSliderView = DefaultSliderView(ctx)
+                // if you want show image only / without description text use DefaultSliderView instead
+
+                // initialize SliderLayout
+             txtSliderView
+                        .image(p.parkingLotPhotos[i].blobUrl)
+                        .setRequestOption(requestOptions)
+                        .setBackgroundColor(Color.WHITE)
+                        .setProgressBarVisible(true)
+                       // .setOnSliderClickListener(true)
+
+                //add your extra information
+             txtSliderView.bundle(Bundle())
+             //txtSliderView.bundle.putString("extra", name)
+                holder.imageSlider.addSlider(txtSliderView)
+            }
+
+            holder.imageSlider.setPresetTransformer(SliderLayout.Transformer.Default)
+            holder.imageSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom)
+            holder.imageSlider.setCustomAnimation(DescriptionAnimation())
+           //
+            if (p.parkingLotPhotos.isEmpty() || p.parkingLotPhotos.size <=1){
+                holder.imageSlider.stopAutoCycle()
+            }else{
+                holder.imageSlider.setDuration(  ((4000 until 7000).random() ).toLong() )
+            }
+
+
+
+
+
+
             holder.name.text = p.name
             holder.street_name.text = p.streetName
             holder.spots_available.text ="Spots: " + p.parkingSpaces.toString()
@@ -80,6 +153,8 @@ class HomeListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) :
                     mOnItemClickListener!!.onItemClick(view, items[position], position)
                 }
             }
+
+
             setAnimation(holder.itemView, position)
         }
     }
@@ -104,5 +179,8 @@ class HomeListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) :
             lastPosition = position
         }
     }
+
+    fun IntRange.random() =
+            Random().nextInt((endInclusive + 1) - start) +  start
 
 }

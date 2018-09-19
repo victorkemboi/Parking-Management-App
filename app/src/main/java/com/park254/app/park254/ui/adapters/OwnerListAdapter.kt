@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Lot
 import com.park254.app.park254.models.LotResponse
@@ -14,7 +15,7 @@ import kotlinx.android.synthetic.main.card_item_parking_lot_info.view.*
 import kotlinx.android.synthetic.main.owner_lot_item.view.*
 import java.util.ArrayList
 
-class OwnerAdapter(private val ctx: Context, items: ArrayList<LotResponse>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class OwnerListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items = ArrayList<LotResponse>()
     private var mOnItemClickListener: OnItemClickListener? = null
@@ -37,6 +38,9 @@ class OwnerAdapter(private val ctx: Context, items: ArrayList<LotResponse>) : Re
     }
 
     inner class OriginalViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+
+
+
         var image = v.card_lot_item_image
         var name = v.parking_lot_name
         var lyt_parent = v.lin_lyt_parent_item as View
@@ -63,17 +67,16 @@ class OwnerAdapter(private val ctx: Context, items: ArrayList<LotResponse>) : Re
         Log.e("onBindViewHolder", "onBindViewHolder : $position")
         if (holder is OriginalViewHolder) {
 
-            val p = items[position]
-            holder.name.text = p.name
-            holder.street_name.text = p.streetName
-
-
-
+            val parkingLotItem = items[position]
+            holder.name.text = parkingLotItem.name
+            holder.street_name.text = parkingLotItem.streetName
             holder.lyt_parent.setOnClickListener { view ->
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener!!.onItemClick(view, items[position], position)
                 }
             }
+
+            Glide.with(ctx).load(parkingLotItem.parkingLotPhotos[0].blobUrl).into(holder.image)
             setAnimation(holder.itemView, position)
         }
     }

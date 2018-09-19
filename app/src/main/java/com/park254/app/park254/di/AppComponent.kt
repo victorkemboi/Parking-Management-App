@@ -7,6 +7,7 @@ import com.park254.app.park254.models.dao.UserDao
 import com.park254.app.park254.network.FirebaseUserIdTokenInterceptor
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.*
+import com.park254.app.park254.ui.adapters.BookingsListAdapter
 import com.park254.app.park254.ui.fragments.LotRegistrationStepOneFragment
 import com.park254.app.park254.ui.fragments.LotRegistrationStepThreeFragment
 import com.park254.app.park254.ui.fragments.LotRegistrationStepTwoFragment
@@ -46,6 +47,8 @@ interface AppComponent{
     fun inject(updateInfoActivity: UpdateInfoActivity)
     fun inject(employeeActivity: EmployeeActivity)
     fun inject(registerEmployeeActivity: RegisterEmployeeActivity)
+    fun inject(bookingsListAdapter: BookingsListAdapter)
+    fun inject(bookingsActivity: BookingsActivity)
 
    fun provideApplication(): App
 

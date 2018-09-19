@@ -7,6 +7,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import java.text.DateFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,14 +41,30 @@ object UtilityClass {
         return dateFormat.format(date)
     }
 
-    fun getDateWithServerTimeStamp(string: String): Date? {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                Locale.getDefault())
-        dateFormat.timeZone = TimeZone.getTimeZone("GMT")  // IMP !!!
-        try {
-            return dateFormat.parse(string)
+    fun getDateWithServerTimeStamp(string: String): Calendar? {
+
+        val cal : Calendar = Calendar.getInstance()
+        val sdf =  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX",Locale.US)
+        sdf.timeZone = TimeZone.getTimeZone("EAT" )
+
+        cal.time = sdf.parse(string)
+
+        return try {
+            cal
         } catch (e: ParseException) {
-            return null
+            null
         }
     }
+
+    fun getMonthForInt(num: Int): String {
+        var month = "Jan"
+        val dfs = DateFormatSymbols()
+        val months = dfs.months
+        if (num in 0..11) {
+            month = months[num-1]
+        }
+        return month
+    }
+
+
 }

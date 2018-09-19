@@ -153,6 +153,11 @@ class HomeActivity : AppCompatActivity(),
 
     fun selectDrawerItem(menuItem: MenuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
+        if (menuItem.itemId == R.id.nav_bookings){
+            menuItem.isChecked = true
+            startActivity(
+                    Intent(this@HomeActivity, BookingsActivity::class.java))
+        }
         var fragment: Fragment? = null
         val fragmentClass: Class<*> = when (menuItem.itemId) {
             R.id.nav_owner -> OwnerFragment::class.java
