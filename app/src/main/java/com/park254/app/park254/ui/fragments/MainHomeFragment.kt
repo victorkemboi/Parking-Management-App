@@ -4,10 +4,16 @@ import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.getSystemService
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -15,6 +21,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.glide.slider.library.Tricks.ViewPagerEx
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.park254.app.park254.App
 
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Lot
@@ -23,6 +32,7 @@ import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.HomeActivity
 import com.park254.app.park254.ui.LotInfoActivity
 import com.park254.app.park254.ui.adapters.HomeListAdapter
+import com.park254.app.park254.utils.Permissons
 import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import com.schibstedspain.leku.LATITUDE
@@ -31,8 +41,10 @@ import com.schibstedspain.leku.LONGITUDE
 import com.schibstedspain.leku.LocationPickerActivity
 import kotlinx.android.synthetic.main.fragment_main_home.*
 import kotlinx.android.synthetic.main.include_cardview_search_bar.*
+import kotlinx.coroutines.experimental.*
 import java.util.*
 import javax.inject.Inject
+import kotlin.coroutines.experimental.CoroutineContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,14 +60,10 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class MainHomeFragment : Fragment()
+class MainHomeFragment : Fragment(), CoroutineScope
 
 {
 
-
-
-
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
@@ -65,6 +73,21 @@ class MainHomeFragment : Fragment()
     @Inject
     lateinit var retrofitApiService: RetrofitApiService
 
+    @Inject
+    lateinit var job: Job
+
+    @Inject
+    lateinit var threadPool : ExecutorCoroutineDispatcher
+
+    private val homeFragmentContext: MainHomeFragment = this
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    override val coroutineContext: CoroutineContext
+        get() =   Dispatchers.Default + job
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +96,9 @@ class MainHomeFragment : Fragment()
             param2 = it.getString(ARG_PARAM2)
         }
 
+        (activity!!.application as App).applicationInjector.inject(this)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
 
 
     }
@@ -93,32 +119,7 @@ class MainHomeFragment : Fragment()
 
         home_packing_lots_recycler_view.setHasFixedSize(false)
 
-        (activity as HomeActivity).retrofitApiService.getParkingLots().observe(this, Observer<ApiResponse<List<LotResponse>>> {
-            response->
-            if (response != null && response.isSuccessful) {
 
-               // Log.d("Resp",response.body.toString())
-                mAdapter = HomeListAdapter(activity!!.applicationContext, response.body as ArrayList<LotResponse>)
-
-                home_packing_lots_recycler_view.adapter = mAdapter
-
-                mAdapter!!.onItemClick = {
-                    lot ->
-                    //  Snackbar.make(booked_card_view, "Item " + requestLot.name + " clicked", Snackbar.LENGTH_SHORT).show()
-
-                    (activity as HomeActivity).viewModel.parsedLot = lot
-                    startActivity(
-                            Intent(this@MainHomeFragment.context, LotInfoActivity::class.java))
-                }
-
-            }else{
-                if (response != null) {
-                    Log.d("Resp",response.body.toString())
-                }
-            }
-
-
-        })
 
 
 
@@ -128,14 +129,9 @@ class MainHomeFragment : Fragment()
             launchSetLocationActivity()
         }
 
-
-    }
-
+        setHomePage()
 
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
     }
 
     override fun onAttach(context: Context) {
@@ -163,7 +159,7 @@ class MainHomeFragment : Fragment()
 
             }
             else if (resultCode == Activity.RESULT_CANCELED) {
-                Log.d("RESULT****", "CANCELLED")
+            //    Log.d("RESULT****", "CANCELLED")
             }
 
         }
@@ -188,6 +184,7 @@ class MainHomeFragment : Fragment()
 
             //perform network requests
         }
+        setHomePage()
 
 
     }
@@ -196,7 +193,6 @@ class MainHomeFragment : Fragment()
         super.onDetach()
         listener = null
     }
-
 
     /**
      * This interface must be implemented by activities that contain this
@@ -234,24 +230,70 @@ class MainHomeFragment : Fragment()
                 }
     }
 
-    fun launchSetLocationActivity(){
-        val locationPickerIntent = LocationPickerActivity.Builder()
-                .withLocation(41.4036299, 2.1743558)
-                .withGeolocApiKey("AIzaSyD3pEPtNFUNirTobNZciq7wDbxD_J0QXtw")
-                .withSearchZone("en-US")
-                .shouldReturnOkOnBackPressed()
-                .withStreetHidden()
-                .withCityHidden()
-                .withZipCodeHidden()
-                .withSatelliteViewHidden()
-                .withGooglePlacesEnabled()
-                .withGoogleTimeZoneEnabled()
-                .withVoiceSearchHidden()
-                .build(activity as HomeActivity)
-
-        startActivityForResult(locationPickerIntent, UtilityClass.MAP_BUTTON_REQUEST_CODE)
+    override fun onDestroyView() {
+        home_packing_lots_recycler_view.adapter = null
+        super.onDestroyView()
     }
 
+    private fun launchSetLocationActivity(){
+
+          /*  if ( ContextCompat.checkSelfPermission( activity!!.parent, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+                fusedLocationClient.lastLocation
+                        .addOnSuccessListener { location: Location? ->
+
+
+                        }}  */
+
+
+    val locationPickerIntent = LocationPickerActivity.Builder()
+            .withLocation(-1.28333 , 36.81667)
+            .withGeolocApiKey("AIzaSyD3pEPtNFUNirTobNZciq7wDbxD_J0QXtw")
+            .withSearchZone("en-US")
+            .shouldReturnOkOnBackPressed()
+            .withStreetHidden()
+            .withCityHidden()
+            .withZipCodeHidden()
+            .withSatelliteViewHidden()
+            .withGooglePlacesEnabled()
+            .withGoogleTimeZoneEnabled()
+            .withVoiceSearchHidden()
+            .build(activity as HomeActivity)
+
+    startActivityForResult(locationPickerIntent, UtilityClass.MAP_BUTTON_REQUEST_CODE)
+
+    }
+
+    private fun setHomePage(){
+        launch {
+            withContext(threadPool){
+                retrofitApiService.getParkingLots().observe(homeFragmentContext, Observer<ApiResponse<List<LotResponse>>> {
+                    response->
+                    if (response != null && response.isSuccessful) {
+
+                        // Log.d("Resp",response.body.toString())
+                        mAdapter = HomeListAdapter(activity as HomeActivity, response.body as ArrayList<LotResponse>)
+
+                        home_packing_lots_recycler_view.adapter = mAdapter
+
+                        mAdapter!!.onItemClick = {
+                            lot ->
+
+                            (activity as HomeActivity).viewModel.parsedLot = lot
+                            startActivity(
+                                    Intent(this@MainHomeFragment.context, LotInfoActivity::class.java))
+                        }
+
+                    }else{
+                        if (response != null) {
+                            // Log.d("Resp",response.body.toString())
+                        }
+                    }
+
+
+                })
+            }
+        }
+    }
 
 
 }

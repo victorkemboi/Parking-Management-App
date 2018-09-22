@@ -125,6 +125,30 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:orientation="horizontal"
+                app:layout_constraintStart_toEndOf="@id/booking_lot_image"
+                app:layout_constraintTop_toBottomOf="@id/check_in_lyt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_large"
+                android:id="@+id/lyt_payment_info">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Paid on: "
+                    android:textColor="@color/colorPrimary"/>
+                <TextView
+                    android:id="@+id/paid_on_txtview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:text="3 Sep 2018"
+                    />
+
+            </LinearLayout>
+
 
         </android.support.constraint.ConstraintLayout>
 

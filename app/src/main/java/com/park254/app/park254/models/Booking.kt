@@ -13,8 +13,8 @@ data class Booking(
         @ColumnInfo(name = "userId")
         var userId: String = "",
 
-        @ColumnInfo(name = "parkingLotId")
-        var parkingLotId: String = "",
+        @ColumnInfo(name = "lotId")
+        var lotId: String = "",
 
         @ColumnInfo(name = "id")
         var id: String = "",

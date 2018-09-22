@@ -28,6 +28,16 @@ class SharedPrefs(context: Context) {
 
         }
 
+    var userId: String?
+        get() = settings.getString("user", "")
+        set(value) {
+
+            val editor = settings.edit()
+            editor.putString("user", value)
+            editor.apply()
+
+        }
+
     var apiVersion: APIVersion
         get() {
             val json_data = settings.getString("api_version", "{}")

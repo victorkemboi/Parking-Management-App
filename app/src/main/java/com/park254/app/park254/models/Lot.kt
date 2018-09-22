@@ -14,7 +14,7 @@ data class Lot(
         @ColumnInfo(name = "latitude")
         var latitude: Double = 0.0,
 
-        @ColumnInfo(name = "ownerId")
+        @ColumnInfo(name = "userId")
         var ownerId: String = "",
 
         @ColumnInfo(name = "joinedOn")

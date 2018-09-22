@@ -8,6 +8,7 @@ import com.park254.app.park254.R
 import com.park254.app.park254.ui.fragments.LotRegistrationStepOneFragment
 import com.park254.app.park254.ui.repo.HomeViewModel
 import com.park254.app.park254.ui.repo.ParkingLotRegistrationViewModel
+import kotlinx.android.synthetic.main.activity_update_info.*
 import javax.inject.Inject
 
 class UpdateInfoActivity : AppCompatActivity(), LotRegistrationStepOneFragment.OnFragmentInteractionListener {
@@ -25,6 +26,9 @@ class UpdateInfoActivity : AppCompatActivity(), LotRegistrationStepOneFragment.O
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_info)
         (application as App).applicationInjector.inject(this)
+
+        initToolbar()
+
         viewModel.requestLot.name = homeViewModel.parsedLot!!.name
         viewModel.requestLot.streetName = homeViewModel.parsedLot!!.streetName
         viewModel.requestLot.email = homeViewModel.parsedLot!!.email
@@ -39,5 +43,17 @@ class UpdateInfoActivity : AppCompatActivity(), LotRegistrationStepOneFragment.O
         fragment = fragmentClass.newInstance() as Fragment
         val fragmentManager = supportFragmentManager
         fragmentManager.beginTransaction().replace(R.id.updateInfoFragment, fragment).commit()
+    }
+
+    private fun initToolbar() {
+        toolbar_update_info.setNavigationIcon(R.drawable.ic_back_arrow)
+        setSupportActionBar(toolbar_update_info)
+        supportActionBar!!.title = "Update Info"
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        toolbar_update_info.setNavigationOnClickListener{
+            finish()
+        }
+
+
     }
 }

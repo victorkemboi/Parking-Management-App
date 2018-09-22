@@ -7,10 +7,8 @@ import com.park254.app.park254.models.dao.UserDao
 import com.park254.app.park254.network.FirebaseUserIdTokenInterceptor
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.*
-import com.park254.app.park254.ui.adapters.BookingsListAdapter
-import com.park254.app.park254.ui.fragments.LotRegistrationStepOneFragment
-import com.park254.app.park254.ui.fragments.LotRegistrationStepThreeFragment
-import com.park254.app.park254.ui.fragments.LotRegistrationStepTwoFragment
+import com.park254.app.park254.ui.adapters.*
+import com.park254.app.park254.ui.fragments.*
 import com.park254.app.park254.ui.repo.*
 import com.park254.app.park254.utils.SharedPrefs
 import dagger.Component
@@ -21,7 +19,7 @@ import retrofit2.Retrofit
 
 @Singleton
 @Component(modules = [(AppModule::class), (RoomModule::class), (NetModule::class),
-   (FirebaseModule::class),(ViewModelModule::class), (AndroidSupportInjectionModule::class),  (DaoModule::class)])
+   (FirebaseModule::class),(ViewModelModule::class), (AndroidSupportInjectionModule::class),  (DaoModule::class), (ThreadModule::class)])
 interface AppComponent{
 
 /*
@@ -49,6 +47,15 @@ interface AppComponent{
     fun inject(registerEmployeeActivity: RegisterEmployeeActivity)
     fun inject(bookingsListAdapter: BookingsListAdapter)
     fun inject(bookingsActivity: BookingsActivity)
+    fun inject(homeListAdapter: HomeListAdapter)
+    fun inject(employeeListAdapter: EmployeeListAdapter)
+    fun inject(ownerListAdapter: OwnerListAdapter)
+    fun inject(splashActivity: SplashActivity)
+    fun inject(mainHomeFragment: MainHomeFragment)
+    fun inject(ownerFragment: OwnerFragment)
+    fun inject(attendantFragment: AttendantFragment)
+    fun inject(paymentsListAdapter:PaymentsListAdapter)
+    fun inject(paymentsActivity: PaymentsActivity)
 
    fun provideApplication(): App
 

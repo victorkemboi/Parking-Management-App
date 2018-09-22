@@ -11,8 +11,8 @@ data class LotResponse(
         @ColumnInfo(name = "latitude")
         var latitude: Double = 0.0,
 
-        @ColumnInfo(name = "ownerId")
-        var ownerId: String = "",
+        @ColumnInfo(name = "userId")
+        var userId: String = "",
 
         @ColumnInfo(name = "joinedOn")
         var joinedOn: String = "",
@@ -46,7 +46,11 @@ data class LotResponse(
         var parkingLotPhotos: ArrayList<Photo> = ArrayList(),
         @Ignore
         @ColumnInfo(name = "parkingRates")
-        var parkingRates: ArrayList<Rate> = ArrayList())
+        var parkingRates: ArrayList<Rate> = ArrayList(),
+
+        @Ignore
+        @ColumnInfo(name = "employees")
+        var employees: ArrayList<Employee> = ArrayList())
 {
     @PrimaryKey(autoGenerate = true)
     var uid: Long? = null

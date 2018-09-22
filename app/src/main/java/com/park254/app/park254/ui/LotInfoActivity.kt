@@ -20,10 +20,15 @@ import javax.inject.Inject
 
 import android.arch.lifecycle.Observer
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import com.bumptech.glide.request.RequestOptions
+import com.glide.slider.library.Animations.DescriptionAnimation
+import com.glide.slider.library.SliderLayout
+import com.glide.slider.library.SliderTypes.DefaultSliderView
 import com.park254.app.park254.models.EstimateRequest
 import com.park254.app.park254.utils.UtilityClass
 
@@ -38,6 +43,8 @@ class LotInfoActivity : AppCompatActivity() {
     @Inject
     lateinit var  retrofitApiService: RetrofitApiService
 
+    var requestOptions : RequestOptions =  RequestOptions()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lot_info)
@@ -45,8 +52,51 @@ class LotInfoActivity : AppCompatActivity() {
         initToolbar()
 
         (application as App).applicationInjector.inject(this)
+        requestOptions.centerCrop()
+        requestOptions.placeholder(R.drawable.the_hub)
 
         if (viewModel.parsedLot !=null){
+
+            for (i in 0 until viewModel.parsedLot!!.parkingLotPhotos.size) {
+
+                val txtSliderView = DefaultSliderView(this)
+                // if you want show image only / without description text use DefaultSliderView instead
+
+                // initialize SliderLayout
+                txtSliderView
+                        .image(viewModel.parsedLot!!.parkingLotPhotos[i].blobUrl)
+                        .setRequestOption(requestOptions)
+                        .setBackgroundColor(Color.WHITE)
+                        .setProgressBarVisible(true)
+                // .setOnSliderClickListener(true)
+
+                //add your extra information
+                txtSliderView.bundle(Bundle())
+                //txtSliderView.bundle.putString("extra", name)
+                slider_lot_image_header.addSlider(txtSliderView)
+            }
+
+            slider_lot_image_header.setPresetTransformer(SliderLayout.Transformer.Default)
+            slider_lot_image_header.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom)
+            slider_lot_image_header.setCustomAnimation(DescriptionAnimation())
+
+            if (viewModel.parsedLot!!.parkingLotPhotos.isEmpty() || viewModel.parsedLot!!.parkingLotPhotos.size <=1){
+                val txtSliderView = DefaultSliderView(this)
+                // if you want show image only / without description text use DefaultSliderView instead
+
+                // initialize SliderLayout
+                txtSliderView
+                        .image(R.drawable.the_hub)
+                        .setRequestOption(requestOptions)
+                        .setBackgroundColor(Color.WHITE)
+                slider_lot_image_header.removeAllSliders()
+                slider_lot_image_header.addSlider(txtSliderView)
+                slider_lot_image_header.stopAutoCycle()
+            }else{
+                slider_lot_image_header.setDuration(  ((6000 until 8000).random() ).toLong() )
+            }
+
+
             Log.d("parsed Lot", viewModel.parsedLot.toString())
             lot_info_name.text = viewModel.parsedLot!!.name
             lot_info_street.text = viewModel.parsedLot!!.streetName
@@ -137,13 +187,14 @@ class LotInfoActivity : AppCompatActivity() {
                 lotInfoViewModel.bookRequest.carRegistration = input_car_registrationg_no.text.toString()
                 lotInfoViewModel.bookRequest.starting = UtilityClass.getStringTimeStampWithDate( lotInfoViewModel.checkInDate.time)
                 lotInfoViewModel.bookRequest.ending = UtilityClass.getStringTimeStampWithDate(lotInfoViewModel.checkOutDate.time)
-                lotInfoViewModel.bookRequest.parkinglotId = viewModel.parsedLot!!.id
+                lotInfoViewModel.bookRequest.lotId = viewModel.parsedLot!!.id
 
                     val estimateRequest = EstimateRequest(
-                            lotInfoViewModel.bookRequest.parkinglotId,
+                            lotInfoViewModel.bookRequest.lotId,
                            lotInfoViewModel.bookRequest.starting  ,
                            lotInfoViewModel.bookRequest.ending)
 
+                    UtilityClass.hideKeyboard(this)
 
                     getBookingEstimate(estimateRequest)
 
@@ -167,6 +218,8 @@ class LotInfoActivity : AppCompatActivity() {
             if (response!=null){
                 if (response.isSuccessful){
                     if (response.body != null){
+                        lyt_total.visibility = View.VISIBLE
+                        txtView_total_amount.text = "KES. " +  response.body
 
                         display_txt_book_status.visibility = View.GONE
 
@@ -191,6 +244,8 @@ class LotInfoActivity : AppCompatActivity() {
                         input_car_registrationg_no.isClickable = false
 
                         btn_change_booking.setOnClickListener {
+                            display_txt_book_status.visibility = View.GONE
+                            lyt_total.visibility = View.GONE
                             fab_book.visibility = View.VISIBLE
                             txt_book_tag.visibility =  View.VISIBLE
                             btn_change_booking.visibility = View.GONE
@@ -309,10 +364,9 @@ class LotInfoActivity : AppCompatActivity() {
             finish()
         }
 
-
     }
 
-    fun validateBookingForm(): Boolean{
+    private fun validateBookingForm(): Boolean{
         if ( input_pick_start_date.text.toString() == ""){
             input_layout_pick_start_date.error = "Please set check-in date!"
             return  false
@@ -348,4 +402,7 @@ class LotInfoActivity : AppCompatActivity() {
         }
         return true
     }
+
+    private fun IntRange.random() =
+            Random().nextInt((endInclusive + 1) - start) +  start
 }

@@ -4,7 +4,7 @@ import android.arch.persistence.room.*
 import com.park254.app.park254.models.tc.DateTypeConverter
 import java.util.*
 
-@Entity(tableName = "userProfile")
+@Entity(tableName = "user")
 @TypeConverters(DateTypeConverter::class)
 data class User(
         @ColumnInfo(name = "addedOn")
@@ -21,7 +21,7 @@ data class User(
         var id: String = "",
 
         @ColumnInfo(name = "name")
-        var userName: String = "",
+        var name: String = "",
 
         @ColumnInfo(name = "email")
         var email: String = "",

@@ -1,9 +1,12 @@
 package com.park254.app.park254.ui
 
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import com.park254.app.park254.App
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Booking
@@ -12,21 +15,39 @@ import com.park254.app.park254.ui.adapters.BookingsListAdapter
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import kotlinx.android.synthetic.main.activity_bookings.*
 import kotlinx.android.synthetic.main.activity_lot_info.*
+import kotlinx.android.synthetic.main.payment_pop_out_lyt.view.*
+import kotlinx.coroutines.experimental.*
 import java.util.ArrayList
 import javax.inject.Inject
+import kotlin.coroutines.experimental.CoroutineContext
 
-class BookingsActivity : AppCompatActivity() {
+class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineScope {
+    override fun onClick(p0: View?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     @Inject
     lateinit var retrofitApiService: RetrofitApiService
+
+    @Inject
+    lateinit var job: Job
+
+    @Inject
+    lateinit var threadPool : ExecutorCoroutineDispatcher
+
     private var mAdapter: BookingsListAdapter? = null
+
+    private val bookingsActivityContext = this
+
+    override val coroutineContext: CoroutineContext
+        get() =   Dispatchers.Default + job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bookings)
-        initToolbar()
-        (application as App).applicationInjector.inject(this)
 
+        (application as App).applicationInjector.inject(this)
+        initToolbar()
         bookings_recyclerview.layoutManager = LinearLayoutManager(this)
 
         bookings_recyclerview.setHasFixedSize(false)
@@ -34,9 +55,20 @@ class BookingsActivity : AppCompatActivity() {
             response->run{
             if (response?.body != null && response.isSuccessful) {
 
-                mAdapter = BookingsListAdapter(this, response.body as ArrayList<Booking>)
+                if(response.body.isNotEmpty()) {
+                    mAdapter = BookingsListAdapter(this, response.body as ArrayList<Booking>)
+                    mAdapter!!.onItemClick = {
+                        booking ->
 
-                bookings_recyclerview.adapter = mAdapter
+                        paymentDialog(booking)
+                    }
+
+                    bookings_recyclerview.adapter = mAdapter
+
+                    bookings_preview.visibility = View.GONE
+                    bookings_recyclerview.visibility = View.VISIBLE
+
+                }
             }
 
         }
@@ -55,4 +87,29 @@ class BookingsActivity : AppCompatActivity() {
 
 
     }
+    private fun paymentDialog(booking:Booking) {
+        val builder = AlertDialog.Builder(bookingsActivityContext)
+        builder.setTitle("Booking Payment")
+
+        val view = layoutInflater.inflate(R.layout.payment_pop_out_lyt, null)
+
+
+        builder.setView(view);
+
+        builder.setPositiveButton("PAY") { dialog, p1 ->
+
+
+            view.pay_info.text = ""
+
+        }
+
+
+        builder.setNegativeButton(android.R.string.cancel) { dialog, p1 ->
+            dialog.cancel()
+        }
+
+        builder.show()
+    }
+
+
 }

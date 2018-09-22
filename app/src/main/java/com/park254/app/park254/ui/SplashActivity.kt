@@ -1,40 +1,76 @@
 package com.park254.app.park254.ui
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.park254.app.park254.App
+import com.park254.app.park254.models.User
+import com.park254.app.park254.network.RetrofitApiService
+import com.park254.app.park254.utils.SharedPrefs
+import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import javax.inject.Inject
 
 
 class SplashActivity : AppCompatActivity() {
 
-    val mAuth = FirebaseAuth.getInstance();
+    @Inject
+    lateinit var settings: SharedPrefs
+    @Inject
+    lateinit var retrofitApiService: RetrofitApiService
+
+    @Inject
+    lateinit var firebaseAuth:FirebaseAuth
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Start ic_home activity
 
-        Log.d("mAuth",mAuth.currentUser.toString())
-        //startActivity(
-            //   Intent(this@SplashActivity, HomeActivity::class.java))
-        // close splash activity
+        (application as App).applicationInjector.inject(this)
         startMain()
         finish()
     }
 
 
-     fun startMain() {
+     private fun startMain() {
 
-        if (mAuth.currentUser != null) {
-            val currentUser = mAuth.currentUser
-            startActivity(
-                    Intent(this@SplashActivity, HomeActivity::class.java))
+        if (firebaseAuth.currentUser != null) {
+
+          firebaseAuth.addAuthStateListener { auth ->run{
+              val mUser = auth.currentUser
+              mUser?.getIdToken(true)?.addOnCompleteListener { task ->
+                  if (task.isSuccessful) {
+                      val idToken = task.result.token
+                      // Log.w("User getToken: ", idToken)
+                      settings.token = idToken
+
+                      startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
+
+
+                  } else {
+                      startLogin()
+                  }
+              } ?: startLogin()
+
+          }
+          }
+
 
         } else {
 
-            startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+            startLogin()
 
         }
+
+
+
+    }
+
+    private fun startLogin(){
+        startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
 
     }
 }

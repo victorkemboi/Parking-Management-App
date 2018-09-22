@@ -17,7 +17,7 @@ data class Registration(
         @ColumnInfo(name = "userId")
         var userId: String = "",
 
-        @ColumnInfo(name = "parkinglotId")
+        @ColumnInfo(name = "lotId")
         var parkinglotId: String = "",
 
         @ColumnInfo(name = "designation")

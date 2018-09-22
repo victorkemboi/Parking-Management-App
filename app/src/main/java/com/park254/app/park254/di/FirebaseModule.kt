@@ -1,5 +1,6 @@
 package com.park254.app.park254.di
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -10,5 +11,8 @@ class FirebaseModule {
     @Singleton
     @Provides
     internal fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+
+
 }
 

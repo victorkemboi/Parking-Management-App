@@ -5,6 +5,6 @@ import java.util.*
 data class BookRequest  constructor(
         var starting : String = "",
         var ending : String = "",
-        var parkinglotId : String = "",
+        var lotId : String = "",
         var carRegistration : String = ""
 )

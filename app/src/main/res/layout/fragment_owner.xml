@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="MY PARKING LOTS"
-                android:textSize="30sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textColor="@color/grey_60"
@@ -58,8 +58,6 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/spacing_large"
-            android:layout_marginEnd="@dimen/spacing_large"
             android:layout_marginTop="@dimen/spacing_large"
             >
             <LinearLayout
@@ -70,6 +68,7 @@
                 android:visibility="gone">
 
             <TextView
+                android:layout_marginStart="@dimen/spacing_middle"
                 android:id="@+id/owner_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

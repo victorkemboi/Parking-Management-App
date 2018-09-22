@@ -24,14 +24,19 @@
     <group
         android:id="@+id/nav_group"
         android:checkableBehavior="none">
+
         <item
             android:id="@+id/nav_bookings"
             android:icon="@drawable/ic_collections_bookings"
             android:title="My Bookings" />
         <item
-            android:id="@+id/nav_help"
-            android:icon="@drawable/ic_help_outline"
-            android:title="Help" />
+            android:id="@+id/nav_payments"
+            android:icon="@drawable/ic_payment"
+            android:title="My Payments" />
+        <item
+            android:id="@+id/nav_log_out"
+            android:icon="@drawable/ic_exit_to_app"
+            android:title="Log Out" />
     </group>
 
 </menu>

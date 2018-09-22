@@ -15,4 +15,6 @@ constructor( ) : ViewModel() {
 
     var parsedLot:LotResponse? = null
 
+
+
 }

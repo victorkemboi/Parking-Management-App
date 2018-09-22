@@ -11,7 +11,7 @@ import java.util.*
 
 @Entity(tableName = "payment")
 @TypeConverters(DateTypeConverter::class)
-data class Payment(
+data class   Payment(
         @ColumnInfo(name = "userId")
         var userId: String = "",
 
@@ -19,13 +19,13 @@ data class Payment(
         var amount: String = "",
 
         @ColumnInfo(name = "receivedOn")
-        var receivedOn: Date = Date(),
+        var receivedOn: String = "",
 
         @ColumnInfo(name = "id")
         var id: String = "",
 
-        @ColumnInfo(name = "sessionId")
-        var sessionId: String = "",
+        @ColumnInfo(name = "paymentReference")
+        var paymentReference: String = "",
 
         @ColumnInfo(name = "paidBy")
         var paidBy: String = "" ,
@@ -33,8 +33,8 @@ data class Payment(
         @ColumnInfo(name = "currency")
         var currency: String = "" ,
 
-        @ColumnInfo(name = "paymentMethod")
-        var paymentMethod: String = "")
+        @ColumnInfo(name = "lotId")
+        var lotId: String = "")
 {
     @PrimaryKey(autoGenerate = true)
     var uid: Long? = null

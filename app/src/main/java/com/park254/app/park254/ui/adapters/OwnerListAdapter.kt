@@ -1,5 +1,6 @@
 package com.park254.app.park254.ui.adapters
 
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -7,13 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.park254.app.park254.App
 import com.park254.app.park254.R
+import com.park254.app.park254.models.AvailableSpaceResponse
 import com.park254.app.park254.models.Lot
 import com.park254.app.park254.models.LotResponse
+import com.park254.app.park254.network.RetrofitApiService
+import com.park254.app.park254.ui.HomeActivity
 import com.park254.app.park254.utils.ItemAnimation
-import kotlinx.android.synthetic.main.card_item_parking_lot_info.view.*
-import kotlinx.android.synthetic.main.owner_lot_item.view.*
+import com.park254.app.park254.utils.UtilityClass
+import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import kotlinx.android.synthetic.main.owned_lot_item.view.*
 import java.util.ArrayList
+import javax.inject.Inject
 
 class OwnerListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -25,6 +32,9 @@ class OwnerListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) 
 
     var onItemClick: ((LotResponse) -> Unit)? = null
 
+    @Inject
+    lateinit var retrofitApiService: RetrofitApiService
+
     interface OnItemClickListener {
         fun onItemClick(view: View, obj: LotResponse, position: Int)
     }
@@ -35,6 +45,7 @@ class OwnerListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) 
 
     init {
         this.items = items
+        (ctx.applicationContext as App).applicationInjector.inject(this)
     }
 
     inner class OriginalViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -45,7 +56,8 @@ class OwnerListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) 
         var name = v.parking_lot_name
         var lyt_parent = v.lin_lyt_parent_item as View
         var street_name = v.lot_item_street_name
-
+        var emp_available = v.emp_available
+        var emp_total = v.emp_total
         init {
             itemView.setOnClickListener {
                 onItemClick?.invoke(items[adapterPosition])
@@ -57,7 +69,7 @@ class OwnerListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val vh: RecyclerView.ViewHolder
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.owner_lot_item, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.owned_lot_item, parent, false)
         vh = OriginalViewHolder(v)
         return vh
     }
@@ -67,7 +79,23 @@ class OwnerListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) 
         Log.e("onBindViewHolder", "onBindViewHolder : $position")
         if (holder is OriginalViewHolder) {
 
+
             val parkingLotItem = items[position]
+
+            retrofitApiService.getAvailableSpacesInaParkingLot(parkingLotItem.id).observe(
+                    ctx as HomeActivity, Observer<ApiResponse<AvailableSpaceResponse>> {
+                response ->run{
+                if (response?.body != null && response.isSuccessful) {
+                    holder.emp_available.text =response.body.available.toString()
+
+
+                }else{
+                    holder.emp_available.text =parkingLotItem.parkingSpaces.toString()
+                }
+            }
+            }
+            )
+            holder.emp_total.text = parkingLotItem.parkingSpaces.toString()
             holder.name.text = parkingLotItem.name
             holder.street_name.text = parkingLotItem.streetName
             holder.lyt_parent.setOnClickListener { view ->
@@ -76,7 +104,10 @@ class OwnerListAdapter(private val ctx: Context, items: ArrayList<LotResponse>) 
                 }
             }
 
-            Glide.with(ctx).load(parkingLotItem.parkingLotPhotos[0].blobUrl).into(holder.image)
+            if(parkingLotItem.parkingLotPhotos.isNotEmpty()){
+                Glide.with(ctx).load(parkingLotItem.parkingLotPhotos[0].blobUrl).into(holder.image)
+            }
+
             setAnimation(holder.itemView, position)
         }
     }

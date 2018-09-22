@@ -1,4 +1,5 @@
 package com.park254.app.park254.ui
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -18,14 +19,17 @@ import com.facebook.FacebookCallback
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.FacebookAuthProvider
 import com.park254.app.park254.App
-import java.util.*
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.auth.GoogleAuthProvider
 import com.park254.app.park254.models.Settings
+import com.park254.app.park254.models.User
+import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.utils.SharedPrefs
+import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import java.util.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -35,6 +39,9 @@ class LoginActivity : AppCompatActivity() {
     @Inject
     lateinit var settings: SharedPrefs
 
+    @Inject
+    lateinit var retrofitApiService: RetrofitApiService
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,12 +49,12 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         (application as App).applicationInjector.inject(this)
 
-        google_sign_in_button.setOnClickListener { googleSignIn() }
+       google_sign_in_button.setOnClickListener { googleSignIn() }
 
 
       facebook_sign_in_button.setOnClickListener { view->
 
-          Log.d("Fb Button","PRESSED")
+          //Log.d("Fb Button","PRESSED")
           LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(viewModel.EMAIL));
       }
 
@@ -55,20 +62,20 @@ class LoginActivity : AppCompatActivity() {
             override fun onSuccess(loginResult: LoginResult) {
                 // App code
 
-                Log.d("Fb Login","SUCCESS")
+               // Log.d("Fb Login","SUCCESS")
 
                 handleFacebookAccessToken(loginResult.accessToken);
             }
 
             override fun onCancel() {
                 // App code
-                Log.w("Fb Login","cancelled")
+               // Log.w("Fb Login","cancelled")
             }
 
             override fun onError(exception: FacebookException) {
                 // App code
 
-                Log.e("Fb Login","FAILED")
+                //Log.e("Fb Login","FAILED")
 
             }
         })
@@ -91,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
                 //if existing user, differentiate according to roles.
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
-                Log.w("Sign In", "Google sign in failed", e)
+                //Log.w("Sign In", "Google sign in failed", e)
                 //display error message, and allow to re-sign in again.
             }
 
@@ -108,43 +115,42 @@ class LoginActivity : AppCompatActivity() {
 
     fun handleFacebookAccessToken(token: AccessToken) {
 
-       // Log.d("FBTokenAccess", "handleFacebookAccessToken:$token")
+
 
         val credential = FacebookAuthProvider.getCredential(token.token)
         viewModel.firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener { task->
                     if(task.isSuccessful){
-                        var  user = viewModel.firebaseAuth.currentUser
-                       if( task.result.additionalUserInfo.isNewUser){
-                           viewModel.firebaseAuth.getAccessToken(true).addOnCompleteListener {
-                               task2 ->
-                               run {
-                                   if (task2.isSuccessful) {
-                                       val tokenSet = task2.result.token
-                                       settings.token = tokenSet
-
-                                       Log.d("Sign In jwt token", tokenSet   )
+                        viewModel.firebaseAuth.getAccessToken(true).addOnCompleteListener {
+                            task2 ->
+                            run {
+                                if (task2.isSuccessful) {
+                                    val userToken = task2.result.token
+                                    settings.token = userToken
 
 
-                                   }
-                               }
-                           }
-                           startActivity(
-                                   Intent(this@LoginActivity, AddUserInfoActivity::class.java))
-                       }else{
-                           startActivity(
-                                   Intent(this@LoginActivity, HomeActivity::class.java))
-                       }
+                                    if( task.result.additionalUserInfo.isNewUser){
+
+                                        startActivity(
+                                                Intent(this@LoginActivity, AddUserInfoActivity::class.java))
+                                    }else{
+                                        saveUserId()
+                                    }
+
+
+                                }
+                            }
+                        }
 
                     }else{
-                        Log.w("Sign In", "signInWithCredential:failed")
+                        //Log.w("Sign In", "signInWithCredential:failed")
                     }
                 }
     }
 
     fun firebaseAuthwithGoogle(account: GoogleSignInAccount){
 
-        Log.d("Sign In", "firebaseAuthWithGoogle:" + account.id)
+      //  Log.d("Sign In", "firebaseAuthWithGoogle:" + account.id)
         //progressdialogstart
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
 
@@ -162,31 +168,53 @@ class LoginActivity : AppCompatActivity() {
                                     val token = task2.result.token
                                     settings.token = token
 
-                                    Log.d("Sign In jwt token", token   )
+                                   // Log.d("Sign In jwt token", token   )
+
+                                    if( task.result.additionalUserInfo.isNewUser){
+
+                                        startActivity(
+                                                Intent(this@LoginActivity, AddUserInfoActivity::class.java))
+
+
+                                    }else{
+                                        saveUserId()
+                                    }
 
 
                                 }
                             }
                         }
-
-
-
-
-                        if( task.result.additionalUserInfo.isNewUser){
-
-                            startActivity(
-                                    Intent(this@LoginActivity, AddUserInfoActivity::class.java))
-                        }else{
-                            startActivity(
-                                    Intent(this@LoginActivity, HomeActivity::class.java))
-                        }
-
-
                     }else{
-                        Log.w("Sign In", "signInWithCredential:failed")
+                       // Log.w("Sign In", "signInWithCredential:failed")
                     }
                 }
     }
 
+    private fun saveUserId(){
+        retrofitApiService.registerUser().observe(this, Observer<ApiResponse<User>> {
+            response->
+            if (response?.body != null) {
+                val user = response.body
 
+                settings.userId = user.id
+                if (user.phoneNumber != ""){
+                    startActivity(
+                            Intent(this@LoginActivity, HomeActivity::class.java))
+                    finish()
+                }else{
+                    startActivity(
+                            Intent(this@LoginActivity, AddUserInfoActivity::class.java))
+                    finish()
+                }
+
+
+            }
+
+
+        })
+    }
+
+    override fun onBackPressed() {
+        finish()
+    }
 }

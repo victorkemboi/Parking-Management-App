@@ -43,8 +43,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Employees"
-                android:textSize="30sp"
+                android:text="EMPLOYEES"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textColor="@color/grey_60"
@@ -62,14 +62,11 @@
         </LinearLayout>
 
         <ScrollView
-
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/spacing_large"
-            android:layout_marginEnd="@dimen/spacing_large"
-            android:layout_marginTop="@dimen/spacing_large"
+            android:layout_marginTop="?attr/actionBarSize"
             >
             <LinearLayout
                 android:orientation="vertical"

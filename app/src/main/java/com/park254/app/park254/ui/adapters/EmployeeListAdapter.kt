@@ -7,11 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.park254.app.park254.App
 import com.park254.app.park254.R
+import com.park254.app.park254.models.Employee
 import com.park254.app.park254.models.User
+import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.utils.ItemAnimation
+import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import kotlinx.android.synthetic.main.item_employee.view.*
 import java.util.ArrayList
+import javax.inject.Inject
 
 class EmployeeListAdapter(private val ctx: Context, items: ArrayList<User>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -23,6 +28,9 @@ class EmployeeListAdapter(private val ctx: Context, items: ArrayList<User>) : Re
 
     var onItemClick: ((User) -> Unit)? = null
 
+    @Inject
+    lateinit var retrofitApiService: RetrofitApiService
+
     interface OnItemClickListener {
         fun onItemClick(view: View, obj: User, position: Int)
     }
@@ -33,6 +41,8 @@ class EmployeeListAdapter(private val ctx: Context, items: ArrayList<User>) : Re
 
     init {
         this.items = items
+
+        (ctx.applicationContext as App).applicationInjector.inject(this)
     }
 
     inner class OriginalViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -65,8 +75,24 @@ class EmployeeListAdapter(private val ctx: Context, items: ArrayList<User>) : Re
         Log.e("onBindViewHolder", "onBindViewHolder : $position")
         if (holder is OriginalViewHolder) {
 
+
+          /*  retrofitApiService.getParkingLotEmployees(viewM).observe(
+                    ctx as BookingsActivity,Observer<ApiResponse<LotResponse>> {
+                response ->run{
+                if (response?.body != null && response.isSuccessful) {
+                    try {
+                        Glide.with(ctx).load(response.body.parkingLotPhotos[0].blobUrl).into(holder.imageView)
+                    }catch ( e: FileNotFoundException){
+
+                    }
+
+                }
+            }
+            }
+            ) */
+
             val p = items[position]
-            holder.name.text = p.userName
+            holder.name.text = p.name
             holder.email.text = p.email
 
             Glide.with(ctx).load(p.photoUrl).into(holder.employee_avatar)

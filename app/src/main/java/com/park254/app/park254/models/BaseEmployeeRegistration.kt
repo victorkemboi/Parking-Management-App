@@ -14,17 +14,17 @@ data class BaseEmployeeRegistration(
         @ColumnInfo(name = "userId")
         var userId: String = "",
 
-        @ColumnInfo(name = "parkinglotId")
-        var parkinglotId: String = "",
+        @ColumnInfo(name = "lotId")
+        var lotId: String = "",
 
         @ColumnInfo(name = "designation")
         var designation: String = "",
 
         @ColumnInfo(name = "commencingOn")
-        var commencingOn: Date = Date(),
+        var commencingOn: String = "",
 
         @ColumnInfo(name = "expiresOn")
-        var expiresOn: Date = Date())
+        var expiresOn: String = "")
 
 {
     @PrimaryKey(autoGenerate = true)

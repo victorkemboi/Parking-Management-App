@@ -42,20 +42,23 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="@dimen/spacing_medium"
-            android:layout_marginTop="@dimen/spacing_medium">
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:paddingStart="@dimen/spacing_medium"
+            android:paddingEnd="@dimen/spacing_medium">
 
             <TextView
                 android:id="@+id/parking_name"
                 android:layout_width="wrap_content"
-                android:layout_height="15dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_small"
                 android:gravity="bottom"
                 android:text="The Hub"
                 android:textStyle="bold"
 
+                app:layout_constraintTop_toBottomOf="@id/spots_available"
                 android:textColor="@color/grey_80"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                 />
 
 
             <TextView
@@ -64,9 +67,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="bottom"
                 android:text="Langata Rd"
+                android:layout_marginStart="@dimen/spacing_middle"
                 android:textAppearance="@android:style/TextAppearance.Material.Body1"
-                app:layout_constraintTop_toBottomOf="@id/parking_name"
-                app:layout_constraintLeft_toLeftOf="@id/parking_name"
+                app:layout_constraintTop_toTopOf="@id/parking_name"
+                app:layout_constraintStart_toEndOf="@id/parking_name"
                 android:textSize="13sp"
                 android:textColor="@color/grey_60"/>
 
@@ -75,14 +79,28 @@
                 android:id="@+id/spots_available"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/spacing_middle"
                 android:gravity="center"
-                android:text="Spots: 38"
+                android:text="6 spots"
+                android:layout_marginTop="@dimen/spacing_small"
                 android:textAppearance="@android:style/TextAppearance.Material.Body1"
-                app:layout_constraintBottom_toBottomOf="@id/street_name"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/street_name"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 android:textSize="13sp"
                 android:textColor="@color/grey_60"/>
+
+            <TextView
+                android:id="@+id/time_updated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="20 MINUTES AGO"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                app:layout_constraintTop_toBottomOf="@id/parking_name"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="10sp"
+                android:textColor="@color/grey_40"/>
 
 
         </android.support.constraint.ConstraintLayout>

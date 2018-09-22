@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.annotation.NonNull
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -17,12 +18,14 @@ import android.widget.Spinner
 import com.google.android.gms.flags.impl.SharedPreferencesFactory
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.iid.FirebaseInstanceId
 import com.park254.app.park254.App
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Park254Database
 import com.park254.app.park254.models.User
+import com.park254.app.park254.models.UserUpdate
 import com.park254.app.park254.models.dao.UserDao
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.repo.LoginViewModel
@@ -30,6 +33,7 @@ import com.park254.app.park254.utils.SharedPrefs
 import com.park254.app.park254.utils.UtilityClass.hideKeyboard
 import com.park254.app.park254.utils.UtilityClass.requestFocus
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import io.reactivex.internal.util.HalfSerializer.onComplete
 import kotlinx.android.synthetic.main.activity_add_user_info.*
 import kotlinx.android.synthetic.main.activity_add_user_info.view.*
 import javax.inject.Inject
@@ -58,7 +62,7 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
 
 
 
-        Log.d("Token in shared pref", settings.token)
+        //Log.d("Token in shared pref", settings.token)
 
 
     }
@@ -77,7 +81,7 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
 
 
 
-    fun finishSignIn(){
+    private fun finishSignIn(){
         if (validateInputIsNotNull()){
             viewModel.phoneNumber = input__phone_number.text.toString()
 
@@ -87,56 +91,33 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
             btn_finish_sign_in.visibility = View.GONE
             lyt_progress_login.visibility = View.VISIBLE
 
-            Log.d("Login", "Start")
-          /*  retrofitApiService.registerUser().observe(
-                    this, Observer<User> { user ->
-                Log.d("Login", "Response 1")
-                if (user != null) {
-                    user.phoneNumber = viewModel.phoneNumber
-                    user.gender = when(viewModel.gender){
-                        1->"Male"
-                        else -> "Female"
-
-                    }
-
-                    Log.d("Login", "Start 2")
-
-                /*    retrofitApiService.updateUser(user).observe(
-                            this, Observer<User> { updatedUser->
-                        run {
-
-                            Log.d("Login", "response 2")
-                            if (updatedUser != null) {
-                                userDao.insertUser(user)
-
-                            }
-
-                        }
-                    }) */
-
-
-
-
-
-                }else{
-                    btn_finish_sign_in.visibility = View.VISIBLE
-                    lyt_progress_login.visibility = View.GONE
-                }
-            }
-            )
-
-            */
-
-
-
             retrofitApiService.registerUser().observe(this, Observer<ApiResponse<User>> {
                 response->
-                if (response != null) {
-                    Log.d("Reg Resp", response.toString())
-                    Log.d("Reg Resp", response.body.toString())
-                    Log.d("Reg Resp error", response.errorMessage.toString())
-                  //  response.body
-                   // Log.d("Fire auth", FirebaseInstanceId.getInstance().token)
+                if (response?.body != null) {
+
+                    settings.userId = response.body.id
+                    val userUpdate = UserUpdate()
+
+                    val gender = when(viewModel.gender){
+                        1-> "Male"
+                        2-> "Female"
+                        else -> ""
+                    }
+                    userUpdate.gender = gender
+                    userUpdate.phoneNumber = viewModel.phoneNumber
+
+                    retrofitApiService.updateUserInfo(userUpdate).observe(
+                            this, Observer {
+                        run{
+                        startActivity(
+                                Intent(this@AddUserInfoActivity, HomeActivity::class.java))
+                        finish()
+                    }
+                    }
+                    )
+
+
+
                 }
 
 
@@ -144,14 +125,12 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
 
 
 
-          //  startActivity(
-               //     Intent(this@AddUserInfoActivity, HomeActivity::class.java))
         }
 
 
     }
 
-    fun validateInputIsNotNull(): Boolean{
+    private fun validateInputIsNotNull(): Boolean{
         if (input__phone_number.text.toString().trim { it <= ' ' }.isEmpty()) run {
             input_layout_phone_number.error = "Enter Phone Number!"
             requestFocus(input__phone_number,window)
@@ -168,9 +147,20 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
 
 
 
+    override fun onBackPressed() {
 
+        val firebaseAuth = FirebaseAuth.getInstance()
+        val  currentUser: FirebaseUser = firebaseAuth.currentUser!!
 
+        currentUser.delete().addOnCompleteListener {
+            task -> run {
+            if (task.isSuccessful) {
+                startActivity(
+                        Intent(this@AddUserInfoActivity, LoginActivity::class.java))
+                finish()
+            }
+        }
+        }
 
-
-
+    }
 }

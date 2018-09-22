@@ -1,6 +1,7 @@
 package com.park254.app.park254
 
 import android.app.Application
+import android.util.Log
 import com.facebook.stetho.Stetho
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -12,6 +13,7 @@ import com.park254.app.park254.utils.UtilityClass
 class App :Application() {
 
     lateinit var applicationInjector: AppComponent
+
 
     override fun onCreate() {
         super.onCreate()
@@ -25,6 +27,9 @@ class App :Application() {
 
 
         applicationInjector.provideApplication()
+
+
+
 
 
 

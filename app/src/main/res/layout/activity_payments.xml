@@ -5,19 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.BookingsActivity"
+    tools:context=".ui.PaymentsActivity"
     android:orientation="vertical">
 
 
     <include layout="@layout/toolbar_2" />
 
 
-        <android.support.constraint.ConstraintLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/bookings_preview"
+            android:id="@+id/payments_preview"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="MY BOOKINGS"
+                    android:text="MY PAYMENTS"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
@@ -39,7 +39,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="You do not have any bookings right now!"
+                android:text="You haven't made any payments yet!"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="@dimen/spacing_large"
@@ -48,20 +48,20 @@
 
         </LinearLayout>
 
-            <ScrollView
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/bookings_recyclerview"
+        <ScrollView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:layout_height="match_parent"
+            >
 
-            </ScrollView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/payments_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+        </ScrollView>
 
     </android.support.constraint.ConstraintLayout>
 

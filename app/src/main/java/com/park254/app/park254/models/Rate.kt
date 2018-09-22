@@ -10,7 +10,7 @@ import java.util.*
 @Entity(tableName = "rate")
 @TypeConverters(DateTypeConverter::class)
 data class Rate(
-        @ColumnInfo(name = "parkingLotId")
+        @ColumnInfo(name = "lotId")
         var parkingLotId: String = "",
 
         @ColumnInfo(name = "minimumTime")

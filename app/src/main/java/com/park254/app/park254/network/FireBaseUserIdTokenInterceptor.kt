@@ -19,12 +19,30 @@ class FirebaseUserIdTokenInterceptor
     constructor(val app: App): Interceptor {
     override
     fun intercept(chain: Interceptor.Chain): Response {
-        val settings: SharedPreferences  = getSharedPreferences(app)
-        val token = settings.getString("Token","")
+       /* FirebaseAuth.AuthStateListener {
+            auth ->run{
+            val mUser = auth.currentUser
+            if (mUser != null) {
+                Log.w("User getToken: user :", mUser.displayName)
+                mUser.getIdToken(true)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val idToken = task.result.token
+                                Log.w("User getToken: ", idToken)
+                                settings.userId = idToken
 
+                            } else {
+
+                            }
+                        }
+            }
+
+        }
+        }
+        */
         val request = chain.request()
         val modifiedRequest = request.newBuilder()
-                    .addHeader("Authorization" , UtilityClass.X_FIREBASE_ID_TOKEN + " $token")
+                    //.addHeader("Authorization" , UtilityClass.X_FIREBASE_ID_TOKEN + " $token")
                     .build()
             return chain.proceed(modifiedRequest)
 

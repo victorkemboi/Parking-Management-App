@@ -71,7 +71,7 @@ class LotRegistrationStepOneFragment : Fragment() {
 
                     // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
                     (activity as ParkingLotRegistrationActivity).viewModel.requestLot.latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                    //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.latitude.toString())
+                   Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.latitude.toString())
                     (activity as ParkingLotRegistrationActivity).viewModel.requestLot.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
                     // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.longitude.toString())
                     (activity as ParkingLotRegistrationActivity).viewModel.addresss = data.getStringExtra(LOCATION_ADDRESS)
@@ -79,7 +79,7 @@ class LotRegistrationStepOneFragment : Fragment() {
 
                 }
                 else if (resultCode == Activity.RESULT_CANCELED) {
-                    Log.d("RESULT****", "CANCELLED")
+                   // Log.d("RESULT****", "CANCELLED")
                 }
 
             }catch (e:ClassCastException){
@@ -87,7 +87,7 @@ class LotRegistrationStepOneFragment : Fragment() {
 
                     // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
                     (activity as UpdateInfoActivity).viewModel.requestLot.latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                    //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.latitude.toString())
+                   Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.latitude.toString())
                     (activity as UpdateInfoActivity).viewModel.requestLot.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
                     // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.longitude.toString())
                     (activity as UpdateInfoActivity).viewModel.addresss = data.getStringExtra(LOCATION_ADDRESS)
@@ -126,9 +126,11 @@ class LotRegistrationStepOneFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+
+
         input_location.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()
-                    .withLocation(41.4036299, 2.1743558)
+                    .withLocation(-1.28333 , 36.81667)
                     .withGeolocApiKey("AIzaSyD3pEPtNFUNirTobNZciq7wDbxD_J0QXtw")
                     .withSearchZone("en-US")
                     .shouldReturnOkOnBackPressed()
@@ -191,7 +193,7 @@ class LotRegistrationStepOneFragment : Fragment() {
         setAddress()
     }
 
-    fun fillViewValues(){
+    private fun fillViewValues(){
 
 
 

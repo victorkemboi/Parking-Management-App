@@ -11,16 +11,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.park254.app.park254.App
 
 import com.park254.app.park254.R
 import com.park254.app.park254.models.LotResponse
+import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.HomeActivity
 import com.park254.app.park254.ui.OwnerLotInfoActivity
 import com.park254.app.park254.ui.ParkingLotRegistrationActivity
 import com.park254.app.park254.ui.adapters.OwnerListAdapter
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import kotlinx.android.synthetic.main.fragment_owner.*
+import kotlinx.coroutines.experimental.*
 import java.util.ArrayList
+import javax.inject.Inject
+import kotlin.coroutines.experimental.CoroutineContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,12 +41,27 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class OwnerFragment : Fragment() {
+class OwnerFragment : Fragment(), CoroutineScope {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
     private var mListAdapter: OwnerListAdapter? = null
+
+    @Inject
+    lateinit var retrofitApiService: RetrofitApiService
+
+    @Inject
+    lateinit var job: Job
+
+    @Inject
+    lateinit var threadPool : ExecutorCoroutineDispatcher
+
+    private val ownerFragmentContext: OwnerFragment = this
+
+    override val coroutineContext: CoroutineContext
+        get() =   Dispatchers.Default + job
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -49,49 +69,45 @@ class OwnerFragment : Fragment() {
 
         owner_packing_lots_recycler_view.setHasFixedSize(false)
 
-        (activity as HomeActivity).retrofitApiService.getOwnedParkingLots().observe(this, Observer<ApiResponse<List<LotResponse>>> {
-            response->
-            if (response != null && response.isSuccessful) {
+        launch {
+            withContext(threadPool) {
+                retrofitApiService.getOwnedParkingLots().observe(ownerFragmentContext, Observer<ApiResponse<List<LotResponse>>> { response ->
+                    if (response != null && response.isSuccessful) {
 
-                //Log.d("Resp",response.body.toString())
-                val items = response.body as ArrayList<LotResponse>
-                if (items.isNotEmpty()){
-                    owner_parking_lots.visibility = View.VISIBLE
-                    owner_preview.visibility = View.GONE
-                    mListAdapter = OwnerListAdapter( activity!!.applicationContext, items )
+                        //Log.d("Resp",response.body.toString())
+                        val items = response.body as ArrayList<LotResponse>
+                        if (items.isNotEmpty()) {
+                            owner_parking_lots.visibility = View.VISIBLE
+                            owner_preview.visibility = View.GONE
+                            mListAdapter = OwnerListAdapter(activity!!, items)
 
-                    owner_packing_lots_recycler_view.adapter = mListAdapter
+                            owner_packing_lots_recycler_view.adapter = mListAdapter
 
 
-                    mListAdapter!!.onItemClick = {
-                        lot ->
-                        (activity as HomeActivity).viewModel.parsedLot = lot
-                        //  Snackbar.make(booked_card_view, "Item " + requestLot.name + " clicked", Snackbar.LENGTH_SHORT).show()
-                        startActivity(
-                                Intent(this@OwnerFragment.context, OwnerLotInfoActivity::class.java))
+                            mListAdapter!!.onItemClick = { lot ->
+                                (activity as HomeActivity).viewModel.parsedLot = lot
+                                //  Snackbar.make(booked_card_view, "Item " + requestLot.name + " clicked", Snackbar.LENGTH_SHORT).show()
+                                startActivity(
+                                        Intent(this@OwnerFragment.context, OwnerLotInfoActivity::class.java))
+                            }
+                        } else {
+
+                        }
+
+
+                    } else {
+                        if (response != null) {
+                            owner_parking_lots.visibility = View.GONE
+                            owner_preview.visibility = View.VISIBLE
+                            Log.d("Resp", response.body.toString())
+                        }
                     }
-                }else{
-
-                }
 
 
+                })
 
-
-
-
-
-
-            }else{
-                if (response != null) {
-                    owner_parking_lots.visibility = View.GONE
-                    owner_preview.visibility = View.VISIBLE
-                    Log.d("Resp",response.body.toString())
-                }
             }
-
-
-        })
-
+        }
 
     }
 
@@ -101,6 +117,7 @@ class OwnerFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        (activity!!.application as App).applicationInjector.inject(this)
 
 
     }
@@ -110,8 +127,6 @@ class OwnerFragment : Fragment() {
         // Inflate the layout for this fragment
 
         val view: View = inflater.inflate(R.layout.fragment_owner, container, false)
-
-
         return view
     }
 
@@ -120,11 +135,6 @@ class OwnerFragment : Fragment() {
 
         btn_add_parking_lot.setOnClickListener { startActivity(
                 Intent(activity, ParkingLotRegistrationActivity::class.java))}
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
     }
 
     override fun onAttach(context: Context) {

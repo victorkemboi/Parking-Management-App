@@ -10,7 +10,10 @@ import android.view.inputmethod.InputMethodManager
 import java.text.DateFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.temporal.ChronoUnit
 import java.util.*
+
+
 
 object UtilityClass {
     val MAP_BUTTON_REQUEST_CODE = 301
@@ -45,7 +48,7 @@ object UtilityClass {
 
         val cal : Calendar = Calendar.getInstance()
         val sdf =  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX",Locale.US)
-        sdf.timeZone = TimeZone.getTimeZone("EAT" )
+        sdf.timeZone = TimeZone.getDefault()
 
         cal.time = sdf.parse(string)
 
@@ -61,10 +64,61 @@ object UtilityClass {
         val dfs = DateFormatSymbols()
         val months = dfs.months
         if (num in 0..11) {
-            month = months[num-1]
+            month = months[num]
         }
         return month
     }
+
+    fun getTimeDifference(string: String): String{
+
+        val timeFromServer = getDateWithServerTimeStamp(string)!!.time!!.time
+
+        val timeNow = Calendar.getInstance(TimeZone.getDefault()).time!!.time
+
+        val timeDifference = timeNow - timeFromServer
+
+
+        // Calculate difference in days
+        val diffDays = timeDifference / (24 * 60 * 60 * 1000)
+        if (diffDays>0){
+            return "$diffDays days ago"
+        }
+
+        // Calculate difference in hours
+        val diffHours = timeDifference / (60 * 60 * 1000)
+        if (diffHours>0){
+            return "$diffHours hours ago"
+        }
+
+        // Calculate difference in minutes
+        val diffMinutes = timeDifference / (60 * 1000)
+        if (diffMinutes>0){
+            return "$diffMinutes minutes ago"
+        }
+
+        // Calculate difference in seconds
+        val diffSeconds = timeDifference / 1000
+        if (diffSeconds>0){
+            return "$diffSeconds seconds ago"
+        }
+
+        return ""
+    }
+
+    fun timeAMorPM(calendar: Calendar): String{
+        if (calendar.get(Calendar.AM_PM )== Calendar.AM){
+            return "AM"
+        }
+        return "PM"
+    }
+
+    fun returnMinutes(int: Int): String{
+        if (int in 0 until 9){
+            return "0$int"
+        }
+            return int.toString()
+    }
+
 
 
 }

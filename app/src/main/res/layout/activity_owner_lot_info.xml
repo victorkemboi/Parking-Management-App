@@ -19,13 +19,13 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
-            <ImageView
-                android:id="@+id/image"
+
+
+            <com.glide.slider.library.SliderLayout
+                android:id="@+id/owner_lot_header_slider_image"
+                app:layout_collapseMode="parallax"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/the_hub"
-                app:layout_collapseMode="parallax" />
+                android:layout_height="match_parent" />
 
 
 
@@ -64,8 +64,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:background="@color/colorPrimary"
+                    android:paddingBottom="@dimen/spacing_medium"
                     >
 
 
@@ -79,28 +80,19 @@
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
                         android:textColor="@android:color/white"
                         android:layout_marginStart="@dimen/spacing_large"/>
-
-                    <android.support.constraint.ConstraintLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/owner_lot_info_street"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="@dimen/spacing_middle">
+                        android:layout_marginTop="@dimen/spacing_middle"
+                        android:layout_marginStart="@dimen/spacing_large"
+                        android:text="Dagoretti Rd"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/owner_lot_info_street"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/spacing_large"
-                            android:text="Dagoretti Rd"
-                            android:textSize="18sp"
-                            android:textColor="@android:color/white"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-
-
-                    </android.support.constraint.ConstraintLayout>
 
                 </LinearLayout>
 
@@ -111,11 +103,8 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/spacing_large" />
-                <View android:background="@color/grey_20"
-                    android:layout_width = "match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="@dimen/spacing_middle"/>
+                    android:layout_height="@dimen/spacing_xlarge" />
+
 
 
             </LinearLayout>

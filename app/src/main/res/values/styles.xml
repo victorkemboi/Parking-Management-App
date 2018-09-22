@@ -11,11 +11,26 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!-- Splash Scre
+    <!-- Custom Styles-->
+
+    <style name="EmptyPreviewHeader" parent="Base.TextAppearance.AppCompat.Headline" >
+        <item name="android:textSize">
+            18sp
+        </item>
+        <item name="android:textStyle">
+            bold
+        </item>
+    </style>
 
 
 
-    en theme. -->
+
+
+
+
+
+    <!-- Custom Styles-->
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

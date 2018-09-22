@@ -94,7 +94,7 @@ class RegisterEmployeeActivity : AppCompatActivity() {
 
 
                                 if (viewModel.user.id != "") {
-                                    viewModel.employee.parkinglotId = homeViewModel.parsedLot!!.id
+                                    viewModel.employee.lotId = homeViewModel.parsedLot!!.id
                                     viewModel.employee.userId = viewModel.user.id
 
                                     retrofitApiService.registerEmployee(viewModel.employee).observe(

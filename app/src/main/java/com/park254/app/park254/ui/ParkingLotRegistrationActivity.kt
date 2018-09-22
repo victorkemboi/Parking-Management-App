@@ -1,5 +1,7 @@
 package com.park254.app.park254.ui
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.net.Uri
@@ -28,34 +30,45 @@ import kotlinx.android.synthetic.main.fragment_lot_registration_step_three.*
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_two.*
 import kotlinx.android.synthetic.main.toolbar_2.*
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.util.Base64
 import com.park254.app.park254.models.Lot
 import com.park254.app.park254.models.LotImage
+import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.models.Rate
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import kotlinx.coroutines.experimental.*
 import java.io.ByteArrayOutputStream
+import kotlin.coroutines.experimental.CoroutineContext
 
 
 class ParkingLotRegistrationActivity : AppCompatActivity() ,
+        CoroutineScope,
         LotRegistrationStepOneFragment.OnFragmentInteractionListener,
         LotRegistrationStepTwoFragment.OnFragmentInteractionListener,
         LotRegistrationStepThreeFragment.OnFragmentInteractionListener
             {
 
-    @Inject
+     @Inject
     lateinit var viewModel: ParkingLotRegistrationViewModel
 
     @Inject
     lateinit var retrofitApiService: RetrofitApiService
 
+    @Inject
+    lateinit var job: Job
 
+    @Inject
+    lateinit var threadPool : ExecutorCoroutineDispatcher
 
+    val context: Context = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parking_lot_registration)
 
         (application as App).applicationInjector.inject(this)
+
         initToolbar()
         initComponent()
 
@@ -64,10 +77,47 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
 
     }
-                override fun onFragmentInteraction(uri: Uri) {
+
+    override fun onFragmentInteraction(uri: Uri) {
                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
 
+    override fun onBackPressed() {
+        if (viewModel.current_step ==1){
+            finish()
+        }else{
+            super.onBackPressed()
+        }
+    }
+
+    override fun onDestroy() {
+        viewModel.MAX_STEP = 3
+
+        viewModel.current_step  = 1
+        viewModel.previous_step = 0
+        viewModel.addresss = ""
+
+        viewModel.requestLot = Lot()
+        viewModel.rate1= Rate()
+        viewModel.rate2 = Rate()
+        viewModel.rate3= Rate()
+        viewModel.rate4= Rate()
+        viewModel.rate5 = Rate()
+
+        viewModel.imageOneUri  = null
+        viewModel.imageTwoUri  = null
+        viewModel.imageThreeUri  = null
+
+        viewModel.imageOneLabel = ""
+        viewModel.imageTwoLabel = ""
+        viewModel.imageThreeLabel = ""
+
+        job.cancel()
+        super.onDestroy()
+    }
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Default + job
 
 
 
@@ -80,7 +130,6 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
     }
-
 
     private fun initComponent() {
 
@@ -169,94 +218,102 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                 }
 
         }else{
-            if (validateImageSelection()){
+            if (validateImageSelection()) {
 
                 lyt_progress.visibility = View.VISIBLE
                 bottom_nav_layt.visibility = View.GONE
 
-                val image1:Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, viewModel.imageOneUri)
+                val image1: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, viewModel.imageOneUri)
                 val image2: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, viewModel.imageTwoUri)
                 val image3: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, viewModel.imageThreeUri)
 
                 val byteArrayOutputStream1 = ByteArrayOutputStream()
                 image1.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream1)
                 val byteArray1 = byteArrayOutputStream1.toByteArray()
-                val  encodedImage1:String = Base64.encodeToString(byteArray1, Base64.DEFAULT)
+                val encodedImage1: String = Base64.encodeToString(byteArray1, Base64.DEFAULT)
 
                 val byteArrayOutputStream2 = ByteArrayOutputStream()
                 image2.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream2)
                 val byteArray2 = byteArrayOutputStream2.toByteArray()
-                val  encodedImage2:String = Base64.encodeToString(byteArray2, Base64.DEFAULT)
+                val encodedImage2: String = Base64.encodeToString(byteArray2, Base64.DEFAULT)
 
                 val byteArrayOutputStream3 = ByteArrayOutputStream()
                 image3.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream3)
                 val byteArray3 = byteArrayOutputStream3.toByteArray()
-                val  encodedImage3:String = Base64.encodeToString(byteArray3, Base64.DEFAULT)
+                val encodedImage3: String = Base64.encodeToString(byteArray3, Base64.DEFAULT)
 
-                val lotImage1 = LotImage(encodedImage1,viewModel.imageOneLabel)
-                val lotImage2 = LotImage(encodedImage2,viewModel.imageTwoLabel)
-                val lotImage3 = LotImage(encodedImage3,viewModel.imageThreeLabel)
-                val lotImages: ArrayList<LotImage> = arrayListOf(lotImage1,lotImage2,lotImage3)
+                val lotImage1 = LotImage(encodedImage1, viewModel.imageOneLabel)
+                val lotImage2 = LotImage(encodedImage2, viewModel.imageTwoLabel)
+                val lotImage3 = LotImage(encodedImage3, viewModel.imageThreeLabel)
+                val lotImages: ArrayList<LotImage> = arrayListOf(lotImage1, lotImage2, lotImage3)
                 viewModel.requestLot.parkingLotPhotos = lotImages
 
                 val ratesList = ArrayList<Rate>()
                 ratesList.add(viewModel.rate1)
-                if (viewModel.rate2.minimumTime != 0){
+                if (viewModel.rate2.minimumTime != 0) {
                     ratesList.add(viewModel.rate2)
                 }
-                if (viewModel.rate3.minimumTime !=0){
+                if (viewModel.rate3.minimumTime != 0) {
                     ratesList.add(viewModel.rate3)
                 }
-                if (viewModel.rate4.minimumTime != 0){
+                if (viewModel.rate4.minimumTime != 0) {
                     ratesList.add(viewModel.rate4)
                 }
                 ratesList.add(viewModel.rate5)
 
                 viewModel.requestLot.parkingRates = ratesList
 
-                Log.d("Parking Lot",viewModel.requestLot.toString())
+                Log.d("Parking Lot", viewModel.requestLot.toString())
 
-                retrofitApiService.registerParkingLot(viewModel.requestLot).observe(this, Observer<ApiResponse<Lot>> {
-                    response->
-                    if (response != null) {
-                        Log.d("Reg Resp", response.toString())
-                        Log.d("Reg Resp error", response.errorMessage.toString())
-                        if (response.errorMessage!=null){
+
+
+                launch {
+                    withContext(threadPool){
+                        retrofitApiService.registerParkingLot(viewModel.requestLot)
+                                .observe(context as ParkingLotRegistrationActivity, Observer<ApiResponse<LotResponse>> { response ->
+                        if (response != null) {
+                            // Log.d("Reg Resp", response.toString())
+                            // Log.d("Reg Resp error", response.errorMessage.toString())
+                            if (response.errorMessage != null) {
+                                bottom_nav_layt.visibility = View.VISIBLE
+                                display_txt_register_status.text = "Failed! Try Again."
+                                display_txt_register_status.setTextColor(resources.getColor(R.color.red_600))
+                                display_txt_register_status.visibility = View.VISIBLE
+                                lyt_progress.visibility = View.GONE
+                                btn_close_registration.visibility = View.GONE
+                            } else {
+
+                                bottom_nav_layt.visibility = View.GONE
+                                display_txt_register_status.text = "Parking Lot Registration Successful."
+                                display_txt_register_status.setTextColor(resources.getColor(R.color.colorPrimaryDark))
+                                display_txt_register_status.visibility = View.VISIBLE
+                                lyt_progress.visibility = View.GONE
+                                btn_close_registration.visibility = View.VISIBLE
+                                btn_close_registration.setOnClickListener {
+                                    finish()
+                                }
+
+                            }
+                        } else {
                             bottom_nav_layt.visibility = View.VISIBLE
                             display_txt_register_status.text = "Failed! Try Again."
                             display_txt_register_status.setTextColor(resources.getColor(R.color.red_600))
                             display_txt_register_status.visibility = View.VISIBLE
                             lyt_progress.visibility = View.GONE
                             btn_close_registration.visibility = View.GONE
-                        }else{
-
-                            bottom_nav_layt.visibility = View.GONE
-                            display_txt_register_status.text = "Parking Lot Registration Successful."
-                            display_txt_register_status.setTextColor(resources.getColor(R.color.colorPrimaryDark))
-                            display_txt_register_status.visibility = View.VISIBLE
-                            lyt_progress.visibility = View.GONE
-                            btn_close_registration.visibility = View.VISIBLE
-                            btn_close_registration.setOnClickListener {
-                                finish()
-                            }
-
                         }
-                    }else{
-                        bottom_nav_layt.visibility = View.VISIBLE
-                        display_txt_register_status.text = "Failed! Try Again."
-                        display_txt_register_status.setTextColor(resources.getColor(R.color.red_600))
-                        display_txt_register_status.visibility = View.VISIBLE
-                        lyt_progress.visibility = View.GONE
-                        btn_close_registration.visibility = View.GONE
+                    })
+                        Log.d("In Coroutines","Kotlin future")
                     }
-                })
+                }
 
             }
         }
 
 
     }
-    fun navigateNextStepper(progress:Int){
+
+    private fun navigateNextStepper(progress:Int){
         var current  = progress
         current++
         viewModel.current_step = current
@@ -272,8 +329,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         progressStepper(viewModel.current_step)
     }
 
-
-    fun progressStepper(current:Int)
+    private fun progressStepper(current:Int)
     {
         Log.d("Fragment","Enter Stepper")
         var fragment: Fragment? = null
@@ -374,7 +430,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         }
     }
 
-    fun validateFirstSetInputs():Boolean {
+    private fun validateFirstSetInputs():Boolean {
 
 
        // Log.d("validateFirtSetInputs",input_parking_lot_name.text.toString())
@@ -420,7 +476,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         return true
     }
 
-    fun validateSecondSetInputs():Boolean {
+    private fun validateSecondSetInputs():Boolean {
 
 
                     //validate first row of parking rates
@@ -535,7 +591,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                     return true
                 }
 
-    fun validateImageSelection():Boolean{
+    private fun validateImageSelection():Boolean{
         if (viewModel.imageOneUri==null  || viewModel.imageTwoUri==null || viewModel.imageThreeUri==null){
             display_txt_register_status.text = "Please add three photos of your parking requestLot."
             display_txt_register_status.setTextColor(resources.getColor(R.color.red_600))
@@ -553,7 +609,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
     }
 
-    fun changeHeader(pos:Int){
+    private fun changeHeader(pos:Int){
         when(pos){
             1->txtRegHeader.text = "Basic Info"
             2->txtRegHeader.text = "Parking Charges"
@@ -562,35 +618,4 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
     }
 
 
-     override fun onBackPressed() {
-        if (viewModel.current_step ==1){
-            finish()
-        }else{
-            super.onBackPressed()
-        }
-        }
-
-        override fun onDestroy() {
-            viewModel.MAX_STEP = 3
-
-            viewModel.current_step  = 1
-            viewModel.previous_step = 0
-            viewModel.addresss = ""
-
-            viewModel.requestLot = Lot()
-            viewModel.rate1= Rate()
-            viewModel.rate2 = Rate()
-            viewModel.rate3= Rate()
-            viewModel.rate4= Rate()
-            viewModel.rate5 = Rate()
-
-            viewModel.imageOneUri  = null
-            viewModel.imageTwoUri  = null
-            viewModel.imageThreeUri  = null
-
-            viewModel.imageOneLabel = ""
-            viewModel.imageTwoLabel = ""
-            viewModel.imageThreeLabel = ""
-            super.onDestroy()
-        }
     }

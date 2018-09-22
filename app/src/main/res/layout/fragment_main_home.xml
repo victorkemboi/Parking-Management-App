@@ -54,8 +54,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_medium"
-                    android:paddingStart="@dimen/spacing_large"
-                    android:paddingEnd="@dimen/spacing_large">
+                    >
                     <TextView
                         android:id="@+id/home_title"
                         android:layout_width="wrap_content"
@@ -65,6 +64,8 @@
                         android:textSize="14sp"
                         android:layout_marginTop="@dimen/spacing_medium"
                         android:layout_marginBottom="@dimen/spacing_small"
+                        android:paddingStart="@dimen/spacing_medium"
+                        android:paddingEnd="@dimen/spacing_medium"
                         />
                     <View android:background="@color/grey_20"
                         android:layout_width = "match_parent"
@@ -76,12 +77,40 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         >
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/home_packing_lots_recycler_view"
+                        <LinearLayout
+                            android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent">
 
-                        />
+                            <LinearLayout
+
+                                android:id="@+id/lyt_progress_home"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_margin="@dimen/spacing_medium"
+                                android:orientation="vertical"
+                                android:visibility="gone"
+                                >
+
+
+                                <com.park254.app.park254.widgets.ViewLoadingDotsBounce
+                                    android:layout_width="50dp"
+                                    android:layout_height="40dp"
+                                    android:background="@color/colorAccentDark2"
+
+                                    />
+
+
+                            </LinearLayout>
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/home_packing_lots_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:scrollbars="vertical"
+                            />
+                    </LinearLayout>
+
                     </ScrollView>
 
 

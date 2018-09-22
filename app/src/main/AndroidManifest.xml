@@ -92,7 +92,10 @@
         <activity android:name=".ui.RegisterEmployeeActivity" />
         <activity android:name=".ui.UpdateInfoActivity" />
         <activity android:name=".ui.EmployeeActivity" />
-        <activity android:name=".ui.BookingsActivity"></activity>
+        <activity
+            android:name=".ui.BookingsActivity"
+            android:parentActivityName=".ui.HomeActivity"></activity>
+        <activity android:name=".ui.PaymentsActivity"></activity>
     </application>
 
 </manifest>
