@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.icu.util.Calendar
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ import com.park254.app.park254.models.Booking
 import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.models.Payment
 import com.park254.app.park254.network.RetrofitApiService
-import com.park254.app.park254.ui.BookingsActivity
 import com.park254.app.park254.ui.PaymentsActivity
 import com.park254.app.park254.utils.ItemAnimation
 import com.park254.app.park254.utils.UtilityClass
@@ -100,23 +98,13 @@ class PaymentsListAdapter(private val ctx: Context, items: ArrayList<Payment>)
            holder.paid_on.text = Calendar.DATE.toString()+  " " + UtilityClass.getMonthForInt(paidDate?.get(Calendar.MONTH)!!).substring(0,3)  +" " + paidDate?.get(Calendar.YEAR).toString()
 
 
-            retrofitApiService.getUserBookings().observe(ctx as PaymentsActivity, Observer<ApiResponse<List<Booking>>>{
+            retrofitApiService.geBookingById(paymentItem.paymentReference).observe(ctx as PaymentsActivity, Observer<ApiResponse<Booking>>{
                 response->run{
                 if (response?.body !=null && response.isSuccessful){
-                    val bookings = response.body
-                    var bookedItem = Booking()
 
-                    for (bookingItem in bookings){
-
-                        if (paymentItem.paymentReference == bookingItem.id){
-                            bookedItem = bookingItem
+                    val bookedItem = response.body
 
 
-
-                        }
-                    }
-
-                    if (bookedItem.id != ""){
 
                         // val bookingDate = UtilityClass.getDateWithServerTimeStamp(bookedItem.bookedOn)
 
@@ -125,14 +113,14 @@ class PaymentsListAdapter(private val ctx: Context, items: ArrayList<Payment>)
 
                         val checkIn = UtilityClass.getDateWithServerTimeStamp(bookedItem.starting)
                         holder.check_in_date.text = checkIn?.get(Calendar.DATE).toString()+ " " + UtilityClass.getMonthForInt(checkIn?.get(Calendar.MONTH)!!)
-                        holder.check_in_time.text = checkIn?.get(Calendar.HOUR).toString()+ " : " + UtilityClass.returnMinutes(checkIn!!.get(Calendar.MINUTE) )+ " " + UtilityClass.timeAMorPM(checkIn)
+                        holder.check_in_time.text = checkIn?.get(Calendar.HOUR).toString()+ " : " + UtilityClass.addZeroForOneToNine(checkIn!!.get(Calendar.MINUTE) )+ " " + UtilityClass.timeAMorPM(checkIn)
 
                         val checkOut = UtilityClass.getDateWithServerTimeStamp(bookedItem.ending)
                         holder.check_out_date.text = checkOut?.get(Calendar.DATE).toString()+ " " + UtilityClass.getMonthForInt(checkOut?.get(Calendar.MONTH)!!)
-                        holder.check_out_time.text = checkOut?.get(Calendar.HOUR).toString()+ ":" + UtilityClass.returnMinutes(checkIn!!.get(Calendar.MINUTE)) +  " " + UtilityClass.timeAMorPM(checkOut)
+                        holder.check_out_time.text = checkOut?.get(Calendar.HOUR).toString()+ ":" + UtilityClass.addZeroForOneToNine(checkIn!!.get(Calendar.MINUTE)) +  " " + UtilityClass.timeAMorPM(checkOut)
 
 
-                    }
+
                 }
             }
             })

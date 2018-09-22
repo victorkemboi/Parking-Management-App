@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import com.park254.app.park254.App
 import com.park254.app.park254.R
@@ -99,9 +100,19 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
         builder.setPositiveButton("PAY") { dialog, p1 ->
 
 
-            view.pay_info.text = ""
+        launch {
+                withContext(threadPool) {
+
+                    retrofitApiService.payForBooking(booking.id).observe(
+                            bookingsActivityContext, Observer<ApiResponse<Void>> {
+                        Log.d("Resp","MPESA")
+                    }
+                    )
+                }
+            }
 
         }
+
 
 
         builder.setNegativeButton(android.R.string.cancel) { dialog, p1 ->

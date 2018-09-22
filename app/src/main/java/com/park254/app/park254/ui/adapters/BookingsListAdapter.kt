@@ -101,11 +101,11 @@ class BookingsListAdapter(private val ctx: Context, items: ArrayList<Booking>)
 
             val checkIn = UtilityClass.getDateWithServerTimeStamp(bookedItem.starting)
             holder.check_in_date.text = checkIn?.get(Calendar.DATE).toString()+ " " + UtilityClass.getMonthForInt(checkIn?.get(Calendar.MONTH)!!)
-            holder.check_in_time.text = checkIn?.get(Calendar.HOUR).toString()+ " : " + UtilityClass.returnMinutes(checkIn!!.get(Calendar.MINUTE) )+ " " + UtilityClass.timeAMorPM(checkIn)
+            holder.check_in_time.text = checkIn?.get(Calendar.HOUR).toString()+ " : " + UtilityClass.addZeroForOneToNine(checkIn!!.get(Calendar.MINUTE) )+ " " + UtilityClass.timeAMorPM(checkIn)
 
             val checkOut = UtilityClass.getDateWithServerTimeStamp(bookedItem.ending)
             holder.check_out_date.text = checkOut?.get(Calendar.DATE).toString()+ " " + UtilityClass.getMonthForInt(checkOut?.get(Calendar.MONTH)!!)
-            holder.check_out_time.text = checkOut?.get(Calendar.HOUR).toString()+ ":" + UtilityClass.returnMinutes(checkIn!!.get(Calendar.MINUTE)) +  " " + UtilityClass.timeAMorPM(checkOut)
+            holder.check_out_time.text = checkOut?.get(Calendar.HOUR).toString()+ ":" + UtilityClass.addZeroForOneToNine(checkIn!!.get(Calendar.MINUTE)) +  " " + UtilityClass.timeAMorPM(checkOut)
 
            retrofitApiService.getParkingLotById(bookedItem.lotId).observe(
                     ctx as BookingsActivity,Observer<ApiResponse<LotResponse>> {

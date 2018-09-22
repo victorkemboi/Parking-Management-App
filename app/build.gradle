@@ -106,4 +106,6 @@ dependencies {
     implementation "com.github.firdausmaulan:GlideSlider:$glide_slider_version"
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.26.1'
+
+    implementation 'com.google.zxing:core:3.2.1'
 }

@@ -59,7 +59,12 @@ interface RetrofitApiService{
     fun updateUserInfo(@Body userUpdate: UserUpdate): LiveData<ApiResponse<User>>
 
     @POST("Mpesa")
-    fun payForBooking(@Body bookingId: String)
+    fun payForBooking(@Body bookingId: String): LiveData<ApiResponse<Void>>
+
+    @GET("Parking/bookings/{id}")
+    fun geBookingById(@Path("id") id:String) :LiveData<ApiResponse<Booking>>
+
+
 
 
 

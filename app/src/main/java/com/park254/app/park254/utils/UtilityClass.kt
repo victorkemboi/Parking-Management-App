@@ -2,15 +2,28 @@ package com.park254.app.park254.utils
 
 import android.app.Activity
 import android.content.Context
-import android.support.v4.content.ContextCompat.getSystemService
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.media.MediaScannerConnection
+import android.os.Environment
+import android.support.design.widget.Snackbar
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.MultiFormatWriter
+import com.google.zxing.WriterException
+import com.google.zxing.common.BitMatrix
+import com.park254.app.park254.R
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.text.DateFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.temporal.ChronoUnit
 import java.util.*
 
 
@@ -112,12 +125,96 @@ object UtilityClass {
         return "PM"
     }
 
-    fun returnMinutes(int: Int): String{
+    fun addZeroForOneToNine(int: Int): String{
         if (int in 0 until 9){
             return "0$int"
         }
             return int.toString()
     }
+
+
+
+    @Throws(WriterException::class)
+    fun encodeDataToQR(Value: String, context: Context): Bitmap? {
+        val QRcodeWidth   = 500
+        val bitMatrix: BitMatrix
+        try {
+            bitMatrix = MultiFormatWriter().encode(
+                    Value,
+                    BarcodeFormat.QR_CODE,
+                    QRcodeWidth, QRcodeWidth, null
+            )
+
+        } catch (e: IllegalArgumentException) {
+
+            return null
+        }
+
+        val bitMatrixWidth = bitMatrix.width
+
+        val bitMatrixHeight = bitMatrix.height
+
+        val pixels = IntArray(bitMatrixWidth * bitMatrixHeight)
+
+        for (y in 0 until bitMatrixHeight) {
+            val offset = y * bitMatrixWidth
+
+            for (x in 0 until bitMatrixWidth) {
+
+                pixels[offset + x] = if (bitMatrix.get(x, y))
+                   context.resources.getColor(R.color.black)
+                else
+                    context.resources.getColor(R.color.white)
+            }
+        }
+        val bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444)
+
+        bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight)
+        return bitmap
+    }
+
+
+    fun saveImage(myBitmap: Bitmap, context: Context): String {
+        val bytes = ByteArrayOutputStream()
+        val IMAGE_DIRECTORY = "/Park254/Media/Payments"
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
+        val photoDirectory = File(
+                Environment.getExternalStorageDirectory().path + IMAGE_DIRECTORY)
+        // have the object build the directory structure, if needed.
+
+        if (!photoDirectory.exists()) {
+            //Log.d("dirrrrrr", "" + photoDirectory.mkdirs())
+            photoDirectory.mkdirs()
+        }
+
+        try {
+            val f = File(photoDirectory, "IMG-" + Calendar.getInstance().get(Calendar.YEAR)+
+                    addZeroForOneToNine(Calendar.getInstance().get(Calendar.MONTH))+
+                    addZeroForOneToNine(Calendar.getInstance().get(Calendar.DATE)) +
+                    "-" +
+                    (1 until 100).random() +".jpg")
+            f.createNewFile()   //give read write permission
+            val fo = FileOutputStream(f)
+            fo.write(bytes.toByteArray())
+            MediaScannerConnection.scanFile(context,
+                    arrayOf(f.getPath()),
+                    arrayOf("image/jpeg"), null)
+            fo.close()
+            //Log.d("TAG", "File Saved::--->" + f.absolutePath)
+
+
+
+            return f.absolutePath
+        } catch (e1: IOException) {
+            e1.printStackTrace()
+        }
+
+        return ""
+
+    }
+
+     fun IntRange.random() =
+            Random().nextInt((endInclusive + 1) - start) +  start
 
 
 

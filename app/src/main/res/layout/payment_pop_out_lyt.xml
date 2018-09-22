@@ -14,7 +14,7 @@
             android:id="@+id/pay_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Press PAY and and wait for M-Pesa pop up!"
+            android:hint="Press PAY and wait for M-Pesa pop up!"
             android:inputType="number"
             />
 
