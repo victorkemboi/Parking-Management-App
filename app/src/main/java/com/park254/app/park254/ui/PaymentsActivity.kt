@@ -1,6 +1,7 @@
 package com.park254.app.park254.ui
 
 import android.Manifest
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.pm.PackageManager
 import android.os.Build
@@ -42,6 +43,7 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope {
     private var mAdapter: PaymentsListAdapter? = null
 
     private val paymentActivityContext = this
+    val activityClass = this as Activity
 
     var paymentStringOnRequestPermission = ""
 
@@ -86,7 +88,7 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            UtilityClass.saveImage(UtilityClass.encodeDataToQR(paymentStringOnRequestPermission,paymentActivityContext)!!,paymentActivityContext)
+            UtilityClass.saveImage(UtilityClass.encodeDataToQR(paymentStringOnRequestPermission,paymentActivityContext)!!,paymentActivityContext,activityClass)
 
         }
     }
@@ -125,7 +127,7 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope {
                     if (Build.VERSION.SDK_INT >= 23) {
                         if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                 == PackageManager.PERMISSION_GRANTED) {
-                            UtilityClass.saveImage(UtilityClass.encodeDataToQR(paymentQRString,paymentActivityContext)!!,paymentActivityContext)
+                            UtilityClass.saveImage(UtilityClass.encodeDataToQR(paymentQRString,paymentActivityContext)!!,paymentActivityContext,activityClass)
 
                         } else {
                             paymentStringOnRequestPermission = paymentQRString
@@ -135,7 +137,7 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope {
                         }
                     }
                     else { //permission is automatically granted on sdk<23 upon installation
-                        UtilityClass.saveImage(UtilityClass.encodeDataToQR(paymentQRString,paymentActivityContext)!!,paymentActivityContext)
+                        UtilityClass.saveImage(UtilityClass.encodeDataToQR(paymentQRString,paymentActivityContext)!!,paymentActivityContext,activityClass)
 
                     }
 

@@ -12,6 +12,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
@@ -174,7 +175,7 @@ object UtilityClass {
     }
 
 
-    fun saveImage(myBitmap: Bitmap, context: Context): String {
+    fun saveImage(myBitmap: Bitmap, context: Context, activity: Activity): String {
         val bytes = ByteArrayOutputStream()
         val IMAGE_DIRECTORY = "/Park254/Media/Payments"
         myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
@@ -188,7 +189,7 @@ object UtilityClass {
         }
 
         try {
-            val f = File(photoDirectory, "IMG-" + Calendar.getInstance().get(Calendar.YEAR)+
+            val f = File(photoDirectory,  "IMG-" + Calendar.getInstance().get(Calendar.YEAR)+
                     addZeroForOneToNine(Calendar.getInstance().get(Calendar.MONTH))+
                     addZeroForOneToNine(Calendar.getInstance().get(Calendar.DATE)) +
                     "-" +
@@ -202,7 +203,7 @@ object UtilityClass {
             fo.close()
             //Log.d("TAG", "File Saved::--->" + f.absolutePath)
 
-
+            Snackbar.make(activity.window.decorView.rootView, "QR Code Saved Successfully.", Snackbar.LENGTH_LONG).show()
 
             return f.absolutePath
         } catch (e1: IOException) {
