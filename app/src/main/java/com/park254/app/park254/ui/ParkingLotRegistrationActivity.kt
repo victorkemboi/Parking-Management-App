@@ -176,7 +176,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                         viewModel.rate1.cost =   input_cost.text.toString().toDouble()
 
                         //save second rate to viewmodel
-                        if (    input_min_time_two.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                        if (
                                 input_max_time_two.text.toString().trim { it <= ' ' }.isNotEmpty() ||
                                 input_cost_two.text.toString().trim { it <= ' ' }.isNotEmpty()
                         ) run {
@@ -187,7 +187,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                         }
 
                         //save third rate to viewmodel
-                        if (    input_min_time_three.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                        if (
                                 input_max_time_three.text.toString().trim { it <= ' ' }.isNotEmpty() ||
                                 input_cost_three.text.toString().trim { it <= ' ' }.isNotEmpty()
                         ) run {
@@ -197,7 +197,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
                         }
                         //save fourth rate to viewmodel
-                        if (    input_min_time_four.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                        if (
                                 input_max_time_four.text.toString().trim { it <= ' ' }.isNotEmpty() ||
                                 input_cost_four.text.toString().trim { it <= ' ' }.isNotEmpty()
                         ) run {
@@ -500,7 +500,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
                     //validate second row of parking rates
 
-                    if (    input_min_time_two.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                    if (
                             input_max_time_two.text.toString().trim { it <= ' ' }.isNotEmpty() ||
                             input_cost_two.text.toString().trim { it <= ' ' }.isNotEmpty()
                     ) run {
@@ -525,7 +525,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
                     }
              //validate third row of parking rates
 
-                if (    input_min_time_three.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                if (
                         input_max_time_three.text.toString().trim { it <= ' ' }.isNotEmpty() ||
                         input_cost_three.text.toString().trim { it <= ' ' }.isNotEmpty()
                 ) run {
@@ -551,7 +551,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
                 //validate fourth row of parking rates
 
-                if (    input_min_time_four.text.toString().trim { it <= ' ' }.isNotEmpty() ||
+                if (
                         input_max_time_four.text.toString().trim { it <= ' ' }.isNotEmpty() ||
                         input_cost_four.text.toString().trim { it <= ' ' }.isNotEmpty()
                 ) run {

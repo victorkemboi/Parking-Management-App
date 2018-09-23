@@ -11,6 +11,7 @@ import android.support.annotation.NonNull
 import kotlinx.android.synthetic.main.activity_login.*
 import com.google.android.gms.common.api.ApiException
 import android.util.Log
+import android.view.View
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.facebook.FacebookException
@@ -49,12 +50,18 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         (application as App).applicationInjector.inject(this)
 
-       google_sign_in_button.setOnClickListener { googleSignIn() }
+       google_sign_in_button.setOnClickListener {
+           lyt_login_btn.visibility = View.GONE
+           lyt_progress_login.visibility = View.VISIBLE
+           googleSignIn()
+       }
 
 
       facebook_sign_in_button.setOnClickListener { view->
 
           //Log.d("Fb Button","PRESSED")
+          lyt_login_btn.visibility = View.GONE
+          lyt_progress_login.visibility = View.VISIBLE
           LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(viewModel.EMAIL));
       }
 
@@ -70,12 +77,17 @@ class LoginActivity : AppCompatActivity() {
             override fun onCancel() {
                 // App code
                // Log.w("Fb Login","cancelled")
+
+                lyt_login_btn.visibility = View.VISIBLE
+                lyt_progress_login.visibility = View.GONE
             }
 
             override fun onError(exception: FacebookException) {
                 // App code
 
                 //Log.e("Fb Login","FAILED")
+                lyt_login_btn.visibility = View.VISIBLE
+                lyt_progress_login.visibility = View.GONE
 
             }
         })
@@ -97,6 +109,8 @@ class LoginActivity : AppCompatActivity() {
                 //if new user, ask for more info
                 //if existing user, differentiate according to roles.
             } catch (e: ApiException) {
+                lyt_login_btn.visibility = View.VISIBLE
+                lyt_progress_login.visibility = View.GONE
                 // Google Sign In failed, update UI appropriately
                 //Log.w("Sign In", "Google sign in failed", e)
                 //display error message, and allow to re-sign in again.

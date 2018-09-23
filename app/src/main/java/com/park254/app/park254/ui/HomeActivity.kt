@@ -77,7 +77,7 @@ class HomeActivity : AppCompatActivity(),
 
 
 
-        initToolBar()
+        initToolBar("Home")
 
 
 
@@ -113,11 +113,11 @@ class HomeActivity : AppCompatActivity(),
         // TODO Implement
     }
 
-    private fun initToolBar(){
+     fun initToolBar(title:String){
         toolbar2.setNavigationIcon(R.drawable.ic_back_arrow)
         setSupportActionBar(toolbar2)
 
-        supportActionBar!!.title = "Home"
+        supportActionBar!!.title = title
         supportActionBar?.apply { setDisplayHomeAsUpEnabled(false)
             setHomeAsUpIndicator(R.drawable.ic_menu)}
 
@@ -163,6 +163,7 @@ class HomeActivity : AppCompatActivity(),
 
             // Initialize a new instance of
             val builder = AlertDialog.Builder(this@HomeActivity)
+            val titleInActionBar= supportActionBar!!.title
 
             // Set the alert dialog title
             builder.setTitle("Log Out")
@@ -185,7 +186,7 @@ class HomeActivity : AppCompatActivity(),
             builder.setNegativeButton("No"){dialog,which ->
 
                 activity_main
-                initToolBar()
+                initToolBar(titleInActionBar as String)
                 initNavigationMenu()
             }
             // Finally, make the alert dialog using builder
@@ -224,6 +225,17 @@ class HomeActivity : AppCompatActivity(),
 
 
     }
+    fun getActiveFragment(): String{
+        val fragments = supportFragmentManager.fragments
+        if(fragments.isNotEmpty()) {
+          val activeFragment = fragments[fragments.size-1]
+        }
+
+        return  ""
+    }
+
+
+
 
 
 

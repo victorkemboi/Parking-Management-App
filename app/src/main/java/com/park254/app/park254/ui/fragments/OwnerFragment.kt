@@ -137,6 +137,7 @@ class OwnerFragment : Fragment(), CoroutineScope {
                 Intent(activity, ParkingLotRegistrationActivity::class.java))}
     }
 
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {

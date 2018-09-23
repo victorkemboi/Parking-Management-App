@@ -101,6 +101,8 @@ class MainHomeFragment : Fragment(), CoroutineScope
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
 
 
+     //   (activity as HomeActivity).initToolBar("Home")
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -184,6 +186,7 @@ class MainHomeFragment : Fragment(), CoroutineScope
 
             //perform network requests
         }
+
         setHomePage()
 
 

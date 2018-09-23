@@ -115,11 +115,13 @@ class AttendantFragment : Fragment(), CoroutineScope {
 
     }
 
+
     private fun setAttendant(){
         launch {
             withContext(threadPool) {
                 lyt_progress_attendant.visibility = View.VISIBLE
                 lyt_not_an_attendant.visibility = View.GONE
+
                 retrofitApiService.getEmployeeByUserId(settings.userId!!).observe(attendantFragmentContext, Observer<ApiResponse<Employee>> { response ->
                     run {
                         if (response != null) {
@@ -241,6 +243,10 @@ class AttendantFragment : Fragment(), CoroutineScope {
                     }
                 }
                 )
+                if(attendant_lyt.visibility!=View.VISIBLE){
+                    lyt_progress_attendant.visibility = View.GONE
+                    lyt_not_an_attendant.visibility = View.VISIBLE
+                }
             }
         }
     }

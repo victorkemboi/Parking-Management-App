@@ -76,7 +76,7 @@ class EmployeeActivity : AppCompatActivity() {
     }
 
 
-     fun initToolbar() {
+     private fun initToolbar() {
          toolbar_emp.setNavigationIcon(R.drawable.ic_back_arrow)
         setSupportActionBar(toolbar_emp)
         supportActionBar!!.title =  "Employees"

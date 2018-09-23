@@ -106,6 +106,10 @@
                                 android:hint="Min Time"
                                 android:maxLines="1"
                                 android:textSize="15sp"
+                                android:text="0"
+                                android:clickable="false"
+                                android:focusable="false"
+                                android:enabled="false"
                                 android:backgroundTint="@color/grey_40"/>
                         </android.support.design.widget.TextInputLayout>
 
@@ -183,6 +187,9 @@
                                 android:hint="Min Time"
                                 android:maxLines="1"
                                 android:textSize="15sp"
+                                android:clickable="false"
+                                android:focusable="false"
+                                android:enabled="false"
                                 android:backgroundTint="@color/grey_40"/>
                         </android.support.design.widget.TextInputLayout>
 
@@ -260,6 +267,9 @@
                                 android:hint="Min Time"
                                 android:maxLines="1"
                                 android:textSize="15sp"
+                                android:clickable="false"
+                                android:focusable="false"
+                                android:enabled="false"
                                 android:backgroundTint="@color/grey_40"/>
                         </android.support.design.widget.TextInputLayout>
 
@@ -271,6 +281,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:textColorHint="@color/grey_40"
+
                             >
                             <android.support.v7.widget.AppCompatEditText
                                 android:layout_gravity="center"
@@ -335,6 +346,9 @@
                                 android:inputType="number"
                                 android:hint="Min Time"
                                 android:maxLines="1"
+                                android:clickable="false"
+                                android:focusable="false"
+                                android:enabled="false"
                                 android:textSize="15sp"
                                 android:backgroundTint="@color/grey_40"/>
                         </android.support.design.widget.TextInputLayout>
@@ -416,6 +430,9 @@
                                 android:gravity="start"
                                 android:maxLines="1"
                                 android:textSize="15sp"
+                                android:clickable="false"
+                                android:focusable="false"
+                                android:enabled="false"
                                 android:backgroundTint="@color/grey_40"/>
                         </android.support.design.widget.TextInputLayout>
 

@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +47,76 @@ class LotRegistrationStepTwoFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_lot_registration_step_two, container, false)
+
+
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        input_max_time.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {}
+
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+                input_min_time_two.text = input_max_time.text
+                input_min_time_five.text = input_max_time.text
+            }
+        })
+
+
+        input_max_time_two.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {}
+
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+                input_min_time_three.text = input_max_time_two.text
+
+                input_min_time_five.text = input_max_time_two.text
+            }
+        })
+
+        input_max_time_three.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {}
+
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+                input_min_time_four.text = input_max_time_three.text
+
+                input_min_time_five.text = input_max_time_three.text
+            }
+        })
+
+        input_max_time_four.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {}
+
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+                input_min_time_five.text = input_max_time_four.text
+            }
+        })
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -108,8 +180,9 @@ class LotRegistrationStepTwoFragment : Fragment() {
         fillViewValues()
     }
 
-    fun fillViewValues() {
+    private fun fillViewValues() {
 
+        //first rate
 
         if ((activity as ParkingLotRegistrationActivity).viewModel.rate1.minimumTime != 0) {
             input_min_time.setText((activity as ParkingLotRegistrationActivity).viewModel.rate1.minimumTime.toString())
@@ -118,8 +191,48 @@ class LotRegistrationStepTwoFragment : Fragment() {
             input_max_time.setText((activity as ParkingLotRegistrationActivity).viewModel.rate1.maximumTime.toString())
         }
         if ((activity as ParkingLotRegistrationActivity).viewModel.rate1.cost != 0.0) {
-            input_max_time.setText((activity as ParkingLotRegistrationActivity).viewModel.rate1.cost.toString())
+            input_cost.setText((activity as ParkingLotRegistrationActivity).viewModel.rate1.cost.toString())
         }
+
+        //second rate
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate2.minimumTime != 0) {
+            input_min_time_two.setText((activity as ParkingLotRegistrationActivity).viewModel.rate2.minimumTime.toString())
+        }
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate2.maximumTime != 0) {
+            input_max_time_two.setText((activity as ParkingLotRegistrationActivity).viewModel.rate2.maximumTime.toString())
+        }
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate2.cost != 0.0) {
+            input_cost_two.setText((activity as ParkingLotRegistrationActivity).viewModel.rate2.cost.toString())
+        }
+
+        //third rate
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate3.minimumTime != 0) {
+            input_min_time_three.setText((activity as ParkingLotRegistrationActivity).viewModel.rate3.minimumTime.toString())
+        }
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate3.maximumTime != 0) {
+            input_max_time_three.setText((activity as ParkingLotRegistrationActivity).viewModel.rate3.maximumTime.toString())
+        }
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate3.cost != 0.0) {
+            input_cost_three.setText((activity as ParkingLotRegistrationActivity).viewModel.rate3.cost.toString())
+        }
+
+        //fourth rate
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate4.minimumTime != 0) {
+            input_min_time_four.setText((activity as ParkingLotRegistrationActivity).viewModel.rate4.minimumTime.toString())
+        }
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate4.maximumTime != 0) {
+            input_max_time_four.setText((activity as ParkingLotRegistrationActivity).viewModel.rate4.maximumTime.toString())
+        }
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate4.cost != 0.0) {
+            input_cost_four.setText((activity as ParkingLotRegistrationActivity).viewModel.rate4.cost.toString())
+        }
+
+        //fifth rate
+        if ((activity as ParkingLotRegistrationActivity).viewModel.rate5.cost != 0.0) {
+            input_cost_five.setText((activity as ParkingLotRegistrationActivity).viewModel.rate5.cost.toString())
+        }
+
+
     }
 
 }
