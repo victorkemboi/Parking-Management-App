@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -41,7 +42,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class OwnerFragment : Fragment(), CoroutineScope {
+class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshListener {
+
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -65,12 +68,32 @@ class OwnerFragment : Fragment(), CoroutineScope {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        owner_swipe_container.setOnRefreshListener(this);
+        owner_swipe_container.setColorSchemeColors(
+                resources.getColor( android.R.color.holo_green_dark),
+                resources.getColor(android.R.color.holo_red_dark)  ,
+                resources.getColor(android.R.color.holo_blue_dark)   ,
+                resources.getColor(android.R.color.holo_orange_dark)   )
+
+
+        btn_add_parking_lot.setOnClickListener { startActivity(
+                Intent(activity, ParkingLotRegistrationActivity::class.java))}
+        setOwner()
+
+    }
+
+
+    private fun setOwner(){
         owner_packing_lots_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
 
         owner_packing_lots_recycler_view.setHasFixedSize(false)
 
+        if (!owner_swipe_container.isRefreshing){
+            owner_swipe_container.isRefreshing = true
+        }
         launch {
             withContext(threadPool) {
+
                 retrofitApiService.getOwnedParkingLots().observe(ownerFragmentContext, Observer<ApiResponse<List<LotResponse>>> { response ->
                     if (response != null && response.isSuccessful) {
 
@@ -86,7 +109,6 @@ class OwnerFragment : Fragment(), CoroutineScope {
 
                             mListAdapter!!.onItemClick = { lot ->
                                 (activity as HomeActivity).viewModel.parsedLot = lot
-                                //  Snackbar.make(booked_card_view, "Item " + requestLot.name + " clicked", Snackbar.LENGTH_SHORT).show()
                                 startActivity(
                                         Intent(this@OwnerFragment.context, OwnerLotInfoActivity::class.java))
                             }
@@ -99,7 +121,14 @@ class OwnerFragment : Fragment(), CoroutineScope {
                         if (response != null) {
                             owner_parking_lots.visibility = View.GONE
                             owner_preview.visibility = View.VISIBLE
-                            Log.d("Resp", response.body.toString())
+                          //  Log.d("Resp", response.body.toString())
+                        }
+                    }
+
+
+                    this@OwnerFragment.run {
+                        if (owner_swipe_container.isRefreshing){
+                            owner_swipe_container.isRefreshing = false
                         }
                     }
 
@@ -126,15 +155,14 @@ class OwnerFragment : Fragment(), CoroutineScope {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
 
-        val view: View = inflater.inflate(R.layout.fragment_owner, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_owner, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        btn_add_parking_lot.setOnClickListener { startActivity(
-                Intent(activity, ParkingLotRegistrationActivity::class.java))}
+
+    override fun onRefresh() {
+
+        setOwner()
     }
 
 

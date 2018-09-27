@@ -3,6 +3,7 @@ package com.park254.app.park254.ui
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -22,7 +23,9 @@ import java.util.ArrayList
 import javax.inject.Inject
 import kotlin.coroutines.experimental.CoroutineContext
 
-class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineScope {
+class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineScope, SwipeRefreshLayout.OnRefreshListener {
+
+
     override fun onClick(p0: View?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -49,34 +52,25 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
 
         (application as App).applicationInjector.inject(this)
         initToolbar()
-        bookings_recyclerview.layoutManager = LinearLayoutManager(this)
 
-        bookings_recyclerview.setHasFixedSize(false)
-        retrofitApiService.getUserBookings().observe(this, Observer<ApiResponse<List<Booking>>> {
-            response->run{
-            if (response?.body != null && response.isSuccessful) {
+        bookings_swipe_container.setOnRefreshListener(this);
+        bookings_swipe_container.setColorSchemeColors(
+                resources.getColor( android.R.color.holo_green_dark),
+                resources.getColor(android.R.color.holo_red_dark)  ,
+                resources.getColor(android.R.color.holo_blue_dark)   ,
+                resources.getColor(android.R.color.holo_orange_dark)   )
 
-                if(response.body.isNotEmpty()) {
-                    mAdapter = BookingsListAdapter(this, response.body as ArrayList<Booking>)
-                    mAdapter!!.onItemClick = {
-                        booking ->
 
-                        paymentDialog(booking)
-                    }
-
-                    bookings_recyclerview.adapter = mAdapter
-
-                    bookings_preview.visibility = View.GONE
-                    bookings_recyclerview.visibility = View.VISIBLE
-
-                }
-            }
-
-        }
-        })
-
+        setBookings()
 
     }
+
+    override fun onRefresh() {
+
+        setBookings()
+    }
+
+
     private fun initToolbar() {
         toolbar2.setNavigationIcon(R.drawable.ic_back_arrow)
         setSupportActionBar(toolbar2)
@@ -87,6 +81,48 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
         }
 
 
+    }
+
+    private fun setBookings(){
+        bookings_recyclerview.layoutManager = LinearLayoutManager(this)
+
+        bookings_recyclerview.setHasFixedSize(false)
+
+        if (!bookings_swipe_container.isRefreshing){
+            bookings_swipe_container.isRefreshing = true
+        }
+
+        launch {
+            withContext(threadPool) {
+                retrofitApiService.getUserBookings().observe(bookingsActivityContext, Observer<ApiResponse<List<Booking>>> { response ->
+                    run {
+                        if (response?.body != null && response.isSuccessful) {
+
+                            if (response.body.isNotEmpty()) {
+                                mAdapter = BookingsListAdapter(bookingsActivityContext, response.body as ArrayList<Booking>)
+                                mAdapter!!.onItemClick = { booking ->
+
+                                    paymentDialog(booking)
+                                }
+
+                                bookings_recyclerview.adapter = mAdapter
+
+                                bookings_preview.visibility = View.GONE
+                                bookings_recyclerview.visibility = View.VISIBLE
+
+                            }
+                        }
+
+                        this@BookingsActivity.run {
+                            if (bookings_swipe_container.isRefreshing){
+                                bookings_swipe_container.isRefreshing = false
+                            }
+                        }
+
+                    }
+                })
+            }
+        }
     }
     private fun paymentDialog(booking:Booking) {
         val builder = AlertDialog.Builder(bookingsActivityContext)

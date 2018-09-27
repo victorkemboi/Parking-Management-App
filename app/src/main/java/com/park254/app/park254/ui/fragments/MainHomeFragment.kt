@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.ContextCompat.getSystemService
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -60,9 +61,10 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class MainHomeFragment : Fragment(), CoroutineScope
+class MainHomeFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshListener
 
 {
+
 
     private var param1: String? = null
     private var param2: String? = null
@@ -108,6 +110,7 @@ class MainHomeFragment : Fragment(), CoroutineScope
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_main_home, container, false)
 
 
@@ -117,14 +120,14 @@ class MainHomeFragment : Fragment(), CoroutineScope
         super.onActivityCreated(savedInstanceState)
 
 
-        home_packing_lots_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
-
-        home_packing_lots_recycler_view.setHasFixedSize(false)
 
 
-
-
-
+        home_swipe_container.setOnRefreshListener(this);
+        home_swipe_container.setColorSchemeColors(
+                resources.getColor( android.R.color.holo_green_dark),
+                resources.getColor(android.R.color.holo_red_dark)  ,
+                resources.getColor(android.R.color.holo_blue_dark)   ,
+                resources.getColor(android.R.color.holo_orange_dark)   )
 
         btn_search_location.setOnClickListener{launchSetLocationActivity()}
         search_bar.setOnClickListener{
@@ -134,6 +137,10 @@ class MainHomeFragment : Fragment(), CoroutineScope
         setHomePage()
 
 
+    }
+    override fun onRefresh() {
+
+        setHomePage()
     }
 
     override fun onAttach(context: Context) {
@@ -267,11 +274,19 @@ class MainHomeFragment : Fragment(), CoroutineScope
     }
 
     private fun setHomePage(){
+
+        if (!home_swipe_container.isRefreshing){
+            home_swipe_container.isRefreshing = true
+        }
         launch {
             withContext(threadPool){
+
                 retrofitApiService.getParkingLots().observe(homeFragmentContext, Observer<ApiResponse<List<LotResponse>>> {
                     response->
                     if (response != null && response.isSuccessful) {
+                        home_packing_lots_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
+
+                        home_packing_lots_recycler_view.setHasFixedSize(false)
 
                         // Log.d("Resp",response.body.toString())
                         mAdapter = HomeListAdapter(activity as HomeActivity, response.body as ArrayList<LotResponse>)
@@ -289,6 +304,12 @@ class MainHomeFragment : Fragment(), CoroutineScope
                     }else{
                         if (response != null) {
                             // Log.d("Resp",response.body.toString())
+                        }
+                    }
+
+                    this@MainHomeFragment.run {
+                        if (home_swipe_container.isRefreshing){
+                            home_swipe_container.isRefreshing = false
                         }
                     }
 

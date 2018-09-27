@@ -1,87 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/home_swipe_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context=".ui.fragments.MainHomeFragment">
+<android.support.v4.widget.NestedScrollView
 
-    <!-- TODO: Update blank fragment layout -->
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+    >
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <!-- dummy content list of new -->
+        <include
+            layout="@layout/include_cardview_search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_medium"
+            app:layout_collapseMode="pin" />
 
 
+        <android.support.v7.widget.CardView
+
+            android:id="@+id/booked_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:layout_marginBottom="@dimen/spacing_medium"
+            android:visibility="visible"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="2dp">
 
 
-
-            <android.support.v4.widget.NestedScrollView
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                <include
-                    android:layout_marginTop="@dimen/spacing_medium"
-                    app:layout_collapseMode="pin"
-                    android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_medium">
+
+                <TextView
+                    android:id="@+id/home_title"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    layout="@layout/include_cardview_search_bar" />
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:layout_marginBottom="@dimen/spacing_small"
+                    android:paddingStart="@dimen/spacing_medium"
+                    android:paddingEnd="@dimen/spacing_medium"
+                    android:text="Recommended"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
-
-            <android.support.v7.widget.CardView
-
-                android:id="@+id/booked_card_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/spacing_medium"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:visibility="visible"
-                app:cardCornerRadius="2dp"
-                app:cardElevation="2dp">
-
-
-                <LinearLayout
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_medium"
-                    >
-                    <TextView
-                        android:id="@+id/home_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Recommended"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:layout_marginTop="@dimen/spacing_medium"
-                        android:layout_marginBottom="@dimen/spacing_small"
-                        android:paddingStart="@dimen/spacing_medium"
-                        android:paddingEnd="@dimen/spacing_medium"
-                        />
-                    <View android:background="@color/grey_20"
-                        android:layout_width = "match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="@dimen/spacing_middle"/>
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/spacing_middle"
+                    android:background="@color/grey_20" />
+
+
 
 
                     <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
-                        <LinearLayout
-                            android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="wrap_content">
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
                             <LinearLayout
 
                                 android:id="@+id/lyt_progress_home"
@@ -90,8 +86,7 @@
                                 android:layout_gravity="center_horizontal"
                                 android:layout_margin="@dimen/spacing_medium"
                                 android:orientation="vertical"
-                                android:visibility="gone"
-                                >
+                                android:visibility="gone">
 
 
                                 <com.park254.app.park254.widgets.ViewLoadingDotsBounce
@@ -103,27 +98,30 @@
 
 
                             </LinearLayout>
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/home_packing_lots_recycler_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:scrollbars="vertical"
-                            />
-                    </LinearLayout>
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/home_packing_lots_recycler_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:scrollbars="vertical"/>
+
+                        </LinearLayout>
+
+
+
 
                     </ScrollView>
 
 
-                </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
 
-                </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-        </android.support.v4.widget.NestedScrollView>
-
+    </LinearLayout>
 
 
-    </android.support.constraint.ConstraintLayout>
 
-</FrameLayout>
+</android.support.v4.widget.NestedScrollView>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>

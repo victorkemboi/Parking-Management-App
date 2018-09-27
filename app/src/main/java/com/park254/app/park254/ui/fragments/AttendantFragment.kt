@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
 import android.text.InputType
 import android.util.Log
@@ -55,7 +56,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class AttendantFragment : Fragment(), CoroutineScope {
+class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshListener {
+
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -111,16 +114,38 @@ class AttendantFragment : Fragment(), CoroutineScope {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        attendant_swipe_container.setOnRefreshListener(this);
+        attendant_swipe_container.setColorSchemeColors(
+                resources.getColor( android.R.color.holo_green_dark),
+                resources.getColor(android.R.color.holo_red_dark)  ,
+                resources.getColor(android.R.color.holo_blue_dark)   ,
+                resources.getColor(android.R.color.holo_orange_dark)   )
+
         setAttendant()
+
+
+
+
 
     }
 
+    override fun onRefresh() {
+
+        setAttendant()
+    }
 
     private fun setAttendant(){
+
+            if (!attendant_swipe_container.isRefreshing){
+                attendant_swipe_container.isRefreshing = true
+            }
+
         launch {
             withContext(threadPool) {
                 lyt_progress_attendant.visibility = View.VISIBLE
                 lyt_not_an_attendant.visibility = View.GONE
+
+
 
                 retrofitApiService.getEmployeeByUserId(settings.userId!!).observe(attendantFragmentContext, Observer<ApiResponse<Employee>> { response ->
                     run {
@@ -162,6 +187,8 @@ class AttendantFragment : Fragment(), CoroutineScope {
                                                                 }
                                                                 )
 
+                                                                slider_attendant_lot_image.removeAllSliders()
+
 
                                                                 for (i in 0 until parkingLot.parkingLotPhotos.size) {
 
@@ -174,9 +201,7 @@ class AttendantFragment : Fragment(), CoroutineScope {
                                                                             .setRequestOption(requestOptions)
                                                                             .setBackgroundColor(Color.WHITE)
                                                                             .setProgressBarVisible(true)
-                                                                    // .setOnSliderClickListener(true)
 
-                                                                    //add your extra information
                                                                     txtSliderView.bundle(Bundle())
                                                                     //txtSliderView.bundle.putString("extra", name)
                                                                     slider_attendant_lot_image.addSlider(txtSliderView)
@@ -185,6 +210,7 @@ class AttendantFragment : Fragment(), CoroutineScope {
                                                                 slider_attendant_lot_image.setPresetTransformer(SliderLayout.Transformer.Default)
                                                                 slider_attendant_lot_image.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom)
                                                                 slider_attendant_lot_image.setCustomAnimation(DescriptionAnimation())
+
 
                                                                 if (parkingLot.parkingLotPhotos.isEmpty() ||parkingLot.parkingLotPhotos.size <=1){
                                                                     val txtSliderView = DefaultSliderView(attendantFragmentContext.context)
@@ -232,7 +258,6 @@ class AttendantFragment : Fragment(), CoroutineScope {
                                             }
                                             )
 
-
                                 }
                             } else {
                                 notAnAttendant()
@@ -247,6 +272,13 @@ class AttendantFragment : Fragment(), CoroutineScope {
                     lyt_progress_attendant.visibility = View.GONE
                     lyt_not_an_attendant.visibility = View.VISIBLE
                 }
+
+                this@AttendantFragment.run {
+                    if (attendant_swipe_container.isRefreshing){
+                        attendant_swipe_container.isRefreshing = false
+                    }
+                }
+
             }
         }
     }
@@ -255,6 +287,7 @@ class AttendantFragment : Fragment(), CoroutineScope {
         showCreateDialog()
 
     }
+
     private fun showCreateDialog() {
         val context = this
         val builder = AlertDialog.Builder(this.context!!)
@@ -282,8 +315,12 @@ class AttendantFragment : Fragment(), CoroutineScope {
                 availableSpaceUpdate.available = space
                 availableSpaceUpdate.lotId = lot.id
 
+                if (!attendant_swipe_container.isRefreshing){
+                    attendant_swipe_container.isRefreshing = true
+                }
                 launch {
                     withContext(threadPool) {
+
                         retrofitApiService.updateAvailableSpaces(availableSpaceUpdate)
                                 .observe(attendantFragmentContext,
                                         Observer<ApiResponse<AvailableSpaceResponse>> { response ->
@@ -296,6 +333,13 @@ class AttendantFragment : Fragment(), CoroutineScope {
                                                     attendant_last_update_time.text = UtilityClass.getTimeDifference(availableSpaces.reportedAt)
 
                                                 }
+                                                this@AttendantFragment.run {
+                                                    if (attendant_swipe_container.isRefreshing){
+                                                        attendant_swipe_container.isRefreshing = false
+                                                    }
+                                                }
+
+
                                             }
                                         })
                     }
@@ -320,8 +364,14 @@ class AttendantFragment : Fragment(), CoroutineScope {
 
     private  fun refreshSpaces(){
 
+            if (!attendant_swipe_container.isRefreshing){
+                attendant_swipe_container.isRefreshing = true
+            }
+
         launch {
             withContext(threadPool) {
+
+
                 retrofitApiService.getEmployeeByUserId(settings.userId!!).observe(attendantFragmentContext, Observer<ApiResponse<Employee>> { response ->
                     run {
                         if (response != null) {
@@ -367,6 +417,13 @@ class AttendantFragment : Fragment(), CoroutineScope {
 
                                                         }
                                                     }
+
+                                                    this@AttendantFragment.run {
+                                                        if (attendant_swipe_container.isRefreshing){
+                                                            attendant_swipe_container.isRefreshing = false
+                                                        }
+                                                    }
+
                                                 }
                                             }
                                             )
@@ -385,9 +442,6 @@ class AttendantFragment : Fragment(), CoroutineScope {
     private fun notAnAttendant(){
         lyt_progress_attendant.visibility = View.GONE
         lyt_not_an_attendant.visibility = View.VISIBLE
-    }
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
     }
 
     override fun onAttach(context: Context) {
