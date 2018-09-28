@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
@@ -26,11 +27,14 @@ import android.support.v7.app.AlertDialog
 import android.util.Log
 import com.google.gson.Gson
 import com.park254.app.park254.utils.UtilityClass
+import kotlinx.android.synthetic.main.activity_bookings.*
 import kotlinx.coroutines.experimental.*
 import kotlin.coroutines.experimental.CoroutineContext
 
 
-class PaymentsActivity : AppCompatActivity(),  CoroutineScope {
+class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayout.OnRefreshListener  {
+
+
 
     @Inject
     lateinit var retrofitApiService: RetrofitApiService
@@ -57,32 +61,17 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope {
         (application as App).applicationInjector.inject(this)
         initToolbar()
 
+        payments_swipe_container.setOnRefreshListener(this);
+        payments_swipe_container.setColorSchemeColors(
+                resources.getColor( android.R.color.holo_green_dark),
+                resources.getColor(android.R.color.holo_red_dark)  ,
+                resources.getColor(android.R.color.holo_blue_dark)   ,
+                resources.getColor(android.R.color.holo_orange_dark)   )
 
-        payments_recyclerview.layoutManager = LinearLayoutManager(this)
+        setPayments()
 
-        payments_recyclerview.setHasFixedSize(false)
-        retrofitApiService.getUserPayments().observe(this, Observer<ApiResponse<List<Payment>>> {
-            response->run{
-            if (response?.body != null && response.isSuccessful) {
 
-                if(response.body.isNotEmpty()) {
-                    mAdapter = PaymentsListAdapter(this, response.body as ArrayList<Payment>)
-                    mAdapter!!.onItemClick = {
 
-                        payment->
-                        generateQrCodeDialog(payment)
-                    }
-
-                    payments_recyclerview.adapter = mAdapter
-
-                    payments_preview.visibility = View.GONE
-                    payments_recyclerview.visibility = View.VISIBLE
-
-                }
-            }
-
-        }
-        })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -93,6 +82,11 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope {
         }
     }
 
+    override fun onRefresh() {
+
+        setPayments()
+    }
+
     private fun initToolbar() {
         toolbar2.setNavigationIcon(R.drawable.ic_back_arrow)
         setSupportActionBar(toolbar2)
@@ -101,6 +95,49 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope {
         toolbar2.setNavigationOnClickListener{
             finish()
         }
+
+    }
+
+    private fun setPayments(){
+        if (!payments_swipe_container.isRefreshing){
+            payments_swipe_container.isRefreshing = true
+        }
+        payments_recyclerview.layoutManager = LinearLayoutManager(this)
+        payments_recyclerview.setHasFixedSize(false)
+        launch {
+            withContext(threadPool) {
+                retrofitApiService.getUserPayments().observe(this@PaymentsActivity, Observer<ApiResponse<List<Payment>>> {
+                    response->run{
+                    if (response?.body != null && response.isSuccessful) {
+
+                        if(response.body.isNotEmpty()) {
+                            mAdapter = PaymentsListAdapter(this@PaymentsActivity, response.body as ArrayList<Payment>)
+                            mAdapter!!.onItemClick = {
+
+                                payment->
+                                generateQrCodeDialog(payment)
+                            }
+
+                            payments_recyclerview.adapter = mAdapter
+
+                            payments_preview.visibility = View.GONE
+                            payments_recyclerview.visibility = View.VISIBLE
+
+                        }
+                    }
+
+                }
+                    this@PaymentsActivity.run {
+                        if (payments_swipe_container.isRefreshing){
+                            payments_swipe_container.isRefreshing = false
+                        }
+                    }
+
+                })
+            }
+        }
+
+
 
 
     }
@@ -114,14 +151,14 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope {
 
         builder.setView(view);
 
-        builder.setPositiveButton("PAY") { dialog, p1 ->
+        builder.setPositiveButton("OK") { dialog, p1 ->
 
 
             launch {
                 withContext(threadPool) {
                     val paymentQRString = Gson().toJson(payment)
 
-                    Log.d("create qr","start")
+                    //Log.d("create qr","start")
 
 
                     if (Build.VERSION.SDK_INT >= 23) {
@@ -140,8 +177,7 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope {
                         UtilityClass.saveImage(UtilityClass.encodeDataToQR(paymentQRString,paymentActivityContext)!!,paymentActivityContext,activityClass)
 
                     }
-
-                    Log.d("create qr","finished")
+                    //Log.d("create qr","finished")
                 }
             }
 

@@ -56,12 +56,16 @@
                 />
         </LinearLayout>
 
-        <ScrollView
-
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nested_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:scrollbars="none"
+            android:scrollingCache="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="@dimen/spacing_large"
             >
             <LinearLayout
@@ -93,7 +97,7 @@
                 />
 
         </LinearLayout>
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
 
 

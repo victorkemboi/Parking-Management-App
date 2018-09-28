@@ -84,13 +84,15 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
     }
 
     private fun setBookings(){
-        bookings_recyclerview.layoutManager = LinearLayoutManager(this)
-
-        bookings_recyclerview.setHasFixedSize(false)
 
         if (!bookings_swipe_container.isRefreshing){
             bookings_swipe_container.isRefreshing = true
         }
+        bookings_recyclerview.layoutManager = LinearLayoutManager(this)
+
+        bookings_recyclerview.setHasFixedSize(false)
+
+
 
         launch {
             withContext(threadPool) {

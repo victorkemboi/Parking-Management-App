@@ -144,9 +144,6 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
             withContext(threadPool) {
                 lyt_progress_attendant.visibility = View.VISIBLE
                 lyt_not_an_attendant.visibility = View.GONE
-
-
-
                 retrofitApiService.getEmployeeByUserId(settings.userId!!).observe(attendantFragmentContext, Observer<ApiResponse<Employee>> { response ->
                     run {
                         if (response != null) {
