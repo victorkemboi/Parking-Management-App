@@ -53,7 +53,7 @@ class LotInfoActivity : AppCompatActivity() {
 
         (application as App).applicationInjector.inject(this)
         requestOptions.centerCrop()
-        requestOptions.placeholder(R.drawable.the_hub)
+        requestOptions.placeholder(R.drawable.parking_lot_image_preview)
 
         if (viewModel.parsedLot !=null){
 
@@ -86,7 +86,7 @@ class LotInfoActivity : AppCompatActivity() {
 
                 // initialize SliderLayout
                 txtSliderView
-                        .image(R.drawable.the_hub)
+                        .image(R.drawable.parking_lot_image_preview)
                         .setRequestOption(requestOptions)
                         .setBackgroundColor(Color.WHITE)
                 slider_lot_image_header.removeAllSliders()

@@ -7,8 +7,6 @@ import android.arch.persistence.room.TypeConverters
 import com.park254.app.park254.models.tc.DateTypeConverter
 import java.util.*
 
-
-
 @Entity(tableName = "payment")
 @TypeConverters(DateTypeConverter::class)
 data class   Payment(

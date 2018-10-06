@@ -345,7 +345,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
         val fragmentClass: Class<*> = when(current){
             1->LotRegistrationStepOneFragment::class.java
-            2->LotRegistrationStepTwoFragment::class.java
+            2-> LotRegistrationStepTwoFragment::class.java
            else->LotRegistrationStepThreeFragment::class.java
         }
 

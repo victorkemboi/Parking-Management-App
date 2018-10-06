@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/lyt_progress_qr_code"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:layout_margin="@dimen/spacing_medium"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+<com.park254.app.park254.widgets.ViewLoadingDotsBounce
+        android:layout_gravity="left"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:background="@color/colorAccentDark2"
+
+        />
+
+</LinearLayout>

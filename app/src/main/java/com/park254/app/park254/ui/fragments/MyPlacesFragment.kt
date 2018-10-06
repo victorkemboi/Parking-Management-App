@@ -1,47 +1,27 @@
 package com.park254.app.park254.ui.fragments
 
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.getSystemService
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.glide.slider.library.Tricks.ViewPagerEx
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.park254.app.park254.App
-
 import com.park254.app.park254.R
-import com.park254.app.park254.models.Lot
 import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.HomeActivity
 import com.park254.app.park254.ui.LotInfoActivity
 import com.park254.app.park254.ui.adapters.HomeListAdapter
-import com.park254.app.park254.utils.Permissons
-import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
-import com.schibstedspain.leku.LATITUDE
-import com.schibstedspain.leku.LOCATION_ADDRESS
-import com.schibstedspain.leku.LONGITUDE
-import com.schibstedspain.leku.LocationPickerActivity
 import kotlinx.android.synthetic.main.fragment_main_home.*
-import kotlinx.android.synthetic.main.include_cardview_search_bar.*
 import kotlinx.coroutines.experimental.*
 import java.util.*
 import javax.inject.Inject
@@ -55,13 +35,13 @@ private const val ARG_PARAM2 = "param2"
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [MainHomeFragment.OnFragmentInteractionListener] interface
+ * [MyPlacesFragment.OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [MainHomeFragment.newInstance] factory method to
+ * Use the [MyPlacesFragment.newInstance] factory method to
  * create an instance of this fragment.
  *
  */
-class MainHomeFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshListener
+class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshListener
 
 {
 
@@ -81,7 +61,7 @@ class MainHomeFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
     @Inject
     lateinit var threadPool : ExecutorCoroutineDispatcher
 
-    private val homeFragmentContext: MainHomeFragment = this
+    private val homeFragmentContext: MyPlacesFragment = this
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -103,7 +83,7 @@ class MainHomeFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
 
 
-     //   (activity as HomeActivity).initToolBar("Home")
+
 
     }
 
@@ -122,17 +102,13 @@ class MainHomeFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
 
 
 
-        home_swipe_container.setOnRefreshListener(this);
+        home_swipe_container.setOnRefreshListener(this)
         home_swipe_container.setColorSchemeColors(
                 resources.getColor( android.R.color.holo_green_dark),
                 resources.getColor(android.R.color.holo_red_dark)  ,
                 resources.getColor(android.R.color.holo_blue_dark)   ,
                 resources.getColor(android.R.color.holo_orange_dark)   )
 
-        btn_search_location.setOnClickListener{launchSetLocationActivity()}
-        search_bar.setOnClickListener{
-            launchSetLocationActivity()
-        }
 
         setHomePage()
 
@@ -152,28 +128,7 @@ class MainHomeFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == UtilityClass.MAP_BUTTON_REQUEST_CODE) {
 
-
-            if (resultCode == Activity.RESULT_OK && data != null) {
-
-                // Log.d("RESULT****", data.getDoubleExtra(LATITUDE, 0.0).toString())
-                (activity as HomeActivity). viewModel.latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                //Log.d("LATITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.latitude.toString())
-                (activity as HomeActivity).viewModel.longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-                // Log.d("LONGITUDE****", (activity as ParkingLotRegistrationActivity).viewModel.requestLot.longitude.toString())
-                (activity as HomeActivity).viewModel.address = data.getStringExtra(LOCATION_ADDRESS)
-                //Log.d("ADDRESS****", address.toString())
-
-            }
-            else if (resultCode == Activity.RESULT_CANCELED) {
-            //    Log.d("RESULT****", "CANCELLED")
-            }
-
-        }
-
-    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -189,7 +144,7 @@ class MainHomeFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
 
         if ((activity as HomeActivity).viewModel.address != "" && (activity as HomeActivity).viewModel.latitude !=0.0 && (activity as HomeActivity).viewModel.longitude!=0.0){
 
-            txt_view_home_location.text = (activity as HomeActivity).viewModel.address
+            //txt_view_home_location.setText((activity as HomeActivity).viewModel.address)
 
             //perform network requests
         }
@@ -227,12 +182,12 @@ class MainHomeFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment MainHomeFragment.
+         * @return A new instance of fragment MyPlacesFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-                MainHomeFragment().apply {
+                MyPlacesFragment().apply {
                     arguments = Bundle().apply {
                         putString(ARG_PARAM1, param1)
                         putString(ARG_PARAM2, param2)
@@ -245,33 +200,7 @@ class MainHomeFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
         super.onDestroyView()
     }
 
-    private fun launchSetLocationActivity(){
 
-          /*  if ( ContextCompat.checkSelfPermission( activity!!.parent, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-                fusedLocationClient.lastLocation
-                        .addOnSuccessListener { location: Location? ->
-
-
-                        }}  */
-
-
-    val locationPickerIntent = LocationPickerActivity.Builder()
-            .withLocation(-1.28333 , 36.81667)
-            .withGeolocApiKey("AIzaSyD3pEPtNFUNirTobNZciq7wDbxD_J0QXtw")
-            .withSearchZone("en-US")
-            .shouldReturnOkOnBackPressed()
-            .withStreetHidden()
-            .withCityHidden()
-            .withZipCodeHidden()
-            .withSatelliteViewHidden()
-            .withGooglePlacesEnabled()
-            .withGoogleTimeZoneEnabled()
-            .withVoiceSearchHidden()
-            .build(activity as HomeActivity)
-
-    startActivityForResult(locationPickerIntent, UtilityClass.MAP_BUTTON_REQUEST_CODE)
-
-    }
 
     private fun setHomePage(){
 
@@ -298,7 +227,7 @@ class MainHomeFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
 
                             (activity as HomeActivity).viewModel.parsedLot = lot
                             startActivity(
-                                    Intent(this@MainHomeFragment.context, LotInfoActivity::class.java))
+                                    Intent(this@MyPlacesFragment.context, LotInfoActivity::class.java))
                         }
 
                     }else{
@@ -307,7 +236,7 @@ class MainHomeFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
                         }
                     }
 
-                    this@MainHomeFragment.run {
+                    this@MyPlacesFragment.run {
                         if (home_swipe_container.isRefreshing){
                             home_swipe_container.isRefreshing = false
                         }

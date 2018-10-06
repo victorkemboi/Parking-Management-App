@@ -12,13 +12,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <uses-feature
-        android:name="android.hardware.location.network"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.location.gps"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.location.network" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
 
     <application
         android:name=".App"
@@ -96,8 +91,16 @@
         <activity android:name=".ui.EmployeeActivity" />
         <activity
             android:name=".ui.BookingsActivity"
-            android:parentActivityName=".ui.HomeActivity"></activity>
-        <activity android:name=".ui.PaymentsActivity"></activity>
+            android:parentActivityName=".ui.HomeActivity" />
+        <activity android:name=".ui.PaymentsActivity" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="3a5493669d6e7ef5ac00de777320a4d9ecbd3861" />
+
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="portrait"
+            tools:replace="screenOrientation" />
     </application>
 
 </manifest>

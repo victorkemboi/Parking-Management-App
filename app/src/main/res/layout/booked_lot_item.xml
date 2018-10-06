@@ -28,7 +28,7 @@
                 android:id="@+id/booking_lot_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/the_hub"
+                android:src="@drawable/parking_lot_image_preview"
                 android:scaleType="centerCrop"/>
             <TextView
                 app:layout_constraintTop_toTopOf="parent"

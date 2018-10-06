@@ -26,6 +26,10 @@
         android:checkableBehavior="none">
 
         <item
+            android:id="@+id/nav_my_places"
+            android:icon="@drawable/ic_place"
+            android:title="My Places" />
+        <item
             android:id="@+id/nav_bookings"
             android:icon="@drawable/ic_collections_bookings"
             android:title="My Bookings" />

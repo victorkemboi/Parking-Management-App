@@ -95,7 +95,7 @@ class PaymentsListAdapter(private val ctx: Context, items: ArrayList<Payment>)
 
            val paidDate = UtilityClass.getDateWithServerTimeStamp(paymentItem.receivedOn)
 
-           holder.paid_on.text = Calendar.DATE.toString()+  " " + UtilityClass.getMonthForInt(paidDate?.get(Calendar.MONTH)!!).substring(0,3)  +" " + paidDate?.get(Calendar.YEAR).toString()
+           holder.paid_on.text = Calendar.DATE.toString()+  " " + UtilityClass.getMonthForInt(paidDate?.get(Calendar.MONTH)!!).substring(0,3)  +" " + paidDate.get(Calendar.YEAR).toString()
 
 
             retrofitApiService.geBookingById(paymentItem.paymentReference).observe(ctx as PaymentsActivity, Observer<ApiResponse<Booking>>{
@@ -113,11 +113,11 @@ class PaymentsListAdapter(private val ctx: Context, items: ArrayList<Payment>)
 
                         val checkIn = UtilityClass.getDateWithServerTimeStamp(bookedItem.starting)
                         holder.check_in_date.text = checkIn?.get(Calendar.DATE).toString()+ " " + UtilityClass.getMonthForInt(checkIn?.get(Calendar.MONTH)!!)
-                        holder.check_in_time.text = checkIn?.get(Calendar.HOUR).toString()+ " : " + UtilityClass.addZeroForOneToNine(checkIn!!.get(Calendar.MINUTE) )+ " " + UtilityClass.timeAMorPM(checkIn)
+                        holder.check_in_time.text = checkIn.get(Calendar.HOUR).toString()+ " : " + UtilityClass.addZeroForOneToNine(checkIn.get(Calendar.MINUTE) )+ " " + UtilityClass.timeAMorPM(checkIn)
 
                         val checkOut = UtilityClass.getDateWithServerTimeStamp(bookedItem.ending)
                         holder.check_out_date.text = checkOut?.get(Calendar.DATE).toString()+ " " + UtilityClass.getMonthForInt(checkOut?.get(Calendar.MONTH)!!)
-                        holder.check_out_time.text = checkOut?.get(Calendar.HOUR).toString()+ ":" + UtilityClass.addZeroForOneToNine(checkIn!!.get(Calendar.MINUTE)) +  " " + UtilityClass.timeAMorPM(checkOut)
+                        holder.check_out_time.text = checkOut.get(Calendar.HOUR).toString()+ ":" + UtilityClass.addZeroForOneToNine(checkIn.get(Calendar.MINUTE)) +  " " + UtilityClass.timeAMorPM(checkOut)
 
 
 
@@ -130,7 +130,7 @@ class PaymentsListAdapter(private val ctx: Context, items: ArrayList<Payment>)
 
 
             retrofitApiService.getParkingLotById(paymentItem.lotId).observe(
-                    ctx as PaymentsActivity, Observer<ApiResponse<LotResponse>> {
+                    ctx, Observer<ApiResponse<LotResponse>> {
                 response ->run{
                 if (response?.body != null && response.isSuccessful) {
                     if(response.body.parkingLotPhotos.isNotEmpty()) {

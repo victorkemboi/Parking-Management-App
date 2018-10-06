@@ -73,6 +73,36 @@
 
         </ScrollView>
 
+
+        <android.support.constraint.ConstraintLayout
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/lyt_progress_qr_code"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/spacing_medium"
+            android:orientation="vertical"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:background="#80e6e6e6"
+            android:visibility="gone"
+            >
+
+            <com.park254.app.park254.widgets.ViewLoadingDotsBounce
+               app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:background="@color/colorAccentDark2"
+
+                />
+
+        </android.support.constraint.ConstraintLayout>
+
     </android.support.constraint.ConstraintLayout>
 
 

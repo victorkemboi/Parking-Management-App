@@ -2,8 +2,11 @@ package com.park254.app.park254.ui
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.arch.lifecycle.Observer
+import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
@@ -25,8 +28,15 @@ import java.util.ArrayList
 import javax.inject.Inject
 import android.support.v7.app.AlertDialog
 import android.util.Log
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
+import com.park254.app.park254.ui.repo.PaymentsViewModel
 import com.park254.app.park254.utils.UtilityClass
+import com.park254.app.park254.widgets.ViewLoadingDotsBounce
 import kotlinx.android.synthetic.main.activity_bookings.*
 import kotlinx.coroutines.experimental.*
 import kotlin.coroutines.experimental.CoroutineContext
@@ -42,12 +52,14 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
     lateinit var job: Job
 
     @Inject
+    lateinit var viewModel: PaymentsViewModel
+
+    @Inject
     lateinit var threadPool : ExecutorCoroutineDispatcher
 
     private var mAdapter: PaymentsListAdapter? = null
 
     private val paymentActivityContext = this
-    val activityClass = this as Activity
 
     var paymentStringOnRequestPermission = ""
 
@@ -61,7 +73,7 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
         (application as App).applicationInjector.inject(this)
         initToolbar()
 
-        payments_swipe_container.setOnRefreshListener(this);
+        payments_swipe_container.setOnRefreshListener(this)
         payments_swipe_container.setColorSchemeColors(
                 resources.getColor( android.R.color.holo_green_dark),
                 resources.getColor(android.R.color.holo_red_dark)  ,
@@ -77,8 +89,24 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            UtilityClass.saveImage(UtilityClass.encodeDataToQR(paymentStringOnRequestPermission,paymentActivityContext)!!,paymentActivityContext,activityClass)
 
+            val qrBitMap =UtilityClass.encodeDataToQR(paymentStringOnRequestPermission,paymentActivityContext)!!
+
+            val qrBuilder = AlertDialog.Builder(paymentActivityContext)
+            qrBuilder.setTitle("QR Code")
+
+            val qrView = layoutInflater.inflate(R.layout.display_qr_code_layout, null)
+            val qrImgView =  qrView.findViewById<ImageView>(R.id.qr_code_image)
+
+            Glide.with(paymentActivityContext).load(qrBitMap).into(qrImgView)
+
+            qrBuilder.setView(qrView)
+
+            qrBuilder.setPositiveButton("Exit") { dialog, p1 ->
+                dialog.dismiss()
+            }
+
+            qrBuilder.show()
         }
     }
 
@@ -104,6 +132,7 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
         }
         payments_recyclerview.layoutManager = LinearLayoutManager(this)
         payments_recyclerview.setHasFixedSize(false)
+
         launch {
             withContext(threadPool) {
                 retrofitApiService.getUserPayments().observe(this@PaymentsActivity, Observer<ApiResponse<List<Payment>>> {
@@ -115,7 +144,11 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
                             mAdapter!!.onItemClick = {
 
                                 payment->
-                                generateQrCodeDialog(payment)
+
+                                    lyt_progress_qr_code.visibility = View.VISIBLE
+
+                                    generateQrCodeDialog(payment)
+
                             }
 
                             payments_recyclerview.adapter = mAdapter
@@ -137,60 +170,45 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
             }
         }
 
-
-
-
     }
 
     private fun generateQrCodeDialog(payment: Payment) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Generate QR Code")
 
-        val view = layoutInflater.inflate(R.layout.create_qrcode_pop_out, null)
+        val paymentBitmap: Bitmap?
+        val tempQRCode = viewModel.qrCodesHashMap[payment]
+        if (tempQRCode == null){
+            Log.w("Dialog: ","start process photo")
+            val paymentQRString = Gson().toJson(payment)
+            paymentBitmap = UtilityClass.encodeDataToQR(paymentQRString,paymentActivityContext)!!
+            viewModel.qrCodesHashMap[payment] = paymentBitmap
+        }else{
+            paymentBitmap = viewModel.qrCodesHashMap[payment]
+        }
 
+        runOnUiThread{
+            val builder = AlertDialog.Builder(paymentActivityContext)
+            builder.setTitle("Payment Verification")
 
-        builder.setView(view);
+            val view = layoutInflater.inflate(R.layout.qr_code_dialog_layout, null)
 
-        builder.setPositiveButton("OK") { dialog, p1 ->
+            val qrImgView = view.findViewById<ImageView>(R.id.qr_code_image)
 
+            qrImgView.setImageBitmap(paymentBitmap)
 
-            launch {
-                withContext(threadPool) {
-                    val paymentQRString = Gson().toJson(payment)
+            builder.setNeutralButton("Close"){
+                dialog,i ->
+                dialog.dismiss()
 
-                    //Log.d("create qr","start")
-
-
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                == PackageManager.PERMISSION_GRANTED) {
-                            UtilityClass.saveImage(UtilityClass.encodeDataToQR(paymentQRString,paymentActivityContext)!!,paymentActivityContext,activityClass)
-
-                        } else {
-                            paymentStringOnRequestPermission = paymentQRString
-
-                            ActivityCompat.requestPermissions(paymentActivityContext, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 101)
-
-                        }
-                    }
-                    else { //permission is automatically granted on sdk<23 upon installation
-                        UtilityClass.saveImage(UtilityClass.encodeDataToQR(paymentQRString,paymentActivityContext)!!,paymentActivityContext,activityClass)
-
-                    }
-                    //Log.d("create qr","finished")
-                }
+                lyt_progress_qr_code.visibility = View.GONE
             }
 
+            builder.setView(view)
+
+            builder.show()
         }
 
-
-
-        builder.setNegativeButton(android.R.string.cancel) { dialog, p1 ->
-            dialog.cancel()
         }
 
-        builder.show()
     }
 
 
-}

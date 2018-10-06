@@ -2,25 +2,22 @@ package com.park254.app.park254.ui.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Context
+import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import com.park254.app.park254.R
-import kotlinx.android.synthetic.main.activity_parking_lot_registration.*
-import kotlinx.android.synthetic.main.fragment_lot_registration_step_three.*
-import android.content.Intent
-import android.database.Cursor
-import com.bumptech.glide.Glide
-import com.park254.app.park254.ui.ParkingLotRegistrationActivity
-import com.park254.app.park254.utils.AppGlideModule
-import com.park254.app.park254.utils.UtilityClass
-import android.provider.OpenableColumns
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.park254.app.park254.R
+import com.park254.app.park254.ui.ParkingLotRegistrationActivity
+import com.park254.app.park254.utils.UtilityClass
+import kotlinx.android.synthetic.main.fragment_lot_registration_step_three.*
 import java.io.File
 
 
@@ -233,7 +230,7 @@ class LotRegistrationStepThreeFragment : Fragment() {
 
     fun clearImageInfo(txtView:TextView, imageView: ImageView){
         txtView.text  = "Select Image"
-        imageView.setImageResource(android.R.color.transparent);
+        imageView.setImageResource(android.R.color.transparent)
     }
 
     companion object {

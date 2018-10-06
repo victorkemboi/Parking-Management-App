@@ -9,10 +9,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.park254.app.park254.R
 import com.park254.app.park254.ui.ParkingLotRegistrationActivity
-import kotlinx.android.synthetic.main.activity_parking_lot_registration.*
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_two.*
 
 // TODO: Rename parameter arguments, choose names that match

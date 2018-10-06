@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.media.Image
 import android.media.MediaScannerConnection
 import android.os.Environment
+import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.util.Log
 import android.view.View
@@ -34,9 +36,15 @@ object UtilityClass {
     val OPEN_DOCUMENT_FIRST_PHOTO_CODE = 302
     val OPEN_DOCUMENT_SECOND_PHOTO_CODE = 303
     val OPEN_DOCUMENT_THIRD_PHOTO_CODE = 304
-    val X_FIREBASE_ID_TOKEN = "Bearer"
+    val MAP_VIEW_BUNDLE_KEY = "305"
+    val REQUEST_LOCATION_PERMISSION_FOR_ENABLE_MY_LOCATION = 306
+    val REQUEST_LOCATION_PERMISSION_FOR_GET_DEVICE_LOCATION = 307
+    val REQUEST_CHECK_SETTINGS = 308
+    val HASH_MAP_UNIQUE_KEY = "wgwrvwrgerge43647423rgfrg34t35635"
+    val DEFAULT_ZOOM = (12).toFloat()
     const val BASE_URL: String = "https://park254.azurewebsites.net/v1/"
     const val DATABASE_NAME = "park254DB"
+    const val BARCODE_READER_REQUEST_CODE = 309
     fun requestFocus(view: View, window: Window) {
         if (view.requestFocus()) {
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
@@ -92,29 +100,65 @@ object UtilityClass {
         val timeDifference = timeNow - timeFromServer
 
 
-        // Calculate difference in days
-        val diffDays = timeDifference / (24 * 60 * 60 * 1000)
-        if (diffDays>0){
-            return "$diffDays days ago"
+        // Calculate difference in weeks
+        val diffWeeks = timeDifference / (7 * 24 * 60 * 60 * 1000)
+        if (diffWeeks>0){
+            if (diffWeeks == (1).toLong()){
+                return "$diffWeeks week ago"
+            }
+            return "$diffWeeks weeks ago"
         }
+
 
         // Calculate difference in hours
         val diffHours = timeDifference / (60 * 60 * 1000)
         if (diffHours>0){
+            if (diffHours == (1).toLong()){
+                return "$diffHours hour ago"
+            }
             return "$diffHours hours ago"
         }
+
+
 
         // Calculate difference in minutes
         val diffMinutes = timeDifference / (60 * 1000)
         if (diffMinutes>0){
+            if (diffMinutes == (1).toLong()){
+                return "$diffMinutes minute ago"
+            }
             return "$diffMinutes minutes ago"
         }
 
         // Calculate difference in seconds
         val diffSeconds = timeDifference / 1000
         if (diffSeconds>0){
+
+
+
+            if (diffSeconds == (1).toLong()){
+                return "$diffSeconds second ago"
+            }
             return "$diffSeconds seconds ago"
         }
+
+
+
+
+
+
+        // Calculate difference in days
+        val diffDays = timeDifference / (24 * 60 * 60 * 1000)
+        if (diffDays>0){
+            if (diffDays == (1).toLong()){
+                return "$diffDays day ago"
+            }
+            return "$diffDays days ago"
+        }
+
+
+
+
 
         return ""
     }
@@ -198,7 +242,7 @@ object UtilityClass {
             val fo = FileOutputStream(f)
             fo.write(bytes.toByteArray())
             MediaScannerConnection.scanFile(context,
-                    arrayOf(f.getPath()),
+                    arrayOf(f.path),
                     arrayOf("image/jpeg"), null)
             fo.close()
             //Log.d("TAG", "File Saved::--->" + f.absolutePath)
@@ -214,10 +258,20 @@ object UtilityClass {
 
     }
 
+
      fun IntRange.random() =
             Random().nextInt((endInclusive + 1) - start) +  start
 
 
+    class Run {
+        companion object {
+            fun after(delay: Long, process: () -> Unit) {
+                Handler().postDelayed({
+                    process()
+                }, delay)
+            }
+        }
+    }
 
 
 }

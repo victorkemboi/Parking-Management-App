@@ -8,12 +8,10 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.park254.app.park254.App
-
 import com.park254.app.park254.R
 import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.network.RetrofitApiService
@@ -24,7 +22,7 @@ import com.park254.app.park254.ui.adapters.OwnerListAdapter
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import kotlinx.android.synthetic.main.fragment_owner.*
 import kotlinx.coroutines.experimental.*
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 import kotlin.coroutines.experimental.CoroutineContext
 
@@ -65,10 +63,33 @@ class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshLi
     override val coroutineContext: CoroutineContext
         get() =   Dispatchers.Default + job
 
+
+
+
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+        (activity!!.application as App).applicationInjector.inject(this)
+
+
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+
+        return inflater.inflate(R.layout.fragment_owner, container, false)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        owner_swipe_container.setOnRefreshListener(this);
+        owner_swipe_container.setOnRefreshListener(this)
         owner_swipe_container.setColorSchemeColors(
                 resources.getColor( android.R.color.holo_green_dark),
                 resources.getColor(android.R.color.holo_red_dark)  ,
@@ -80,6 +101,13 @@ class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshLi
                 Intent(activity, ParkingLotRegistrationActivity::class.java))}
         setOwner()
 
+    }
+
+
+
+    override fun onRefresh() {
+
+        setOwner()
     }
 
 
@@ -121,7 +149,7 @@ class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshLi
                         if (response != null) {
                             owner_parking_lots.visibility = View.GONE
                             owner_preview.visibility = View.VISIBLE
-                          //  Log.d("Resp", response.body.toString())
+                            //  Log.d("Resp", response.body.toString())
                         }
                     }
 
@@ -138,31 +166,6 @@ class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshLi
             }
         }
 
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-        (activity!!.application as App).applicationInjector.inject(this)
-
-
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-
-        return inflater.inflate(R.layout.fragment_owner, container, false)
-    }
-
-
-
-    override fun onRefresh() {
-
-        setOwner()
     }
 
 

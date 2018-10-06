@@ -53,7 +53,7 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
         (application as App).applicationInjector.inject(this)
         initToolbar()
 
-        bookings_swipe_container.setOnRefreshListener(this);
+        bookings_swipe_container.setOnRefreshListener(this)
         bookings_swipe_container.setColorSchemeColors(
                 resources.getColor( android.R.color.holo_green_dark),
                 resources.getColor(android.R.color.holo_red_dark)  ,
@@ -133,7 +133,7 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
         val view = layoutInflater.inflate(R.layout.payment_pop_out_lyt, null)
 
 
-        builder.setView(view);
+        builder.setView(view)
 
         builder.setPositiveButton("PAY") { dialog, p1 ->
 

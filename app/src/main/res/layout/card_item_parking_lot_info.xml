@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/the_hub"
+            app:srcCompat="@drawable/parking_lot_image_preview"
 
             />
             -->

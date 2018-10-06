@@ -11,10 +11,10 @@ import com.park254.app.park254.models.User
 interface UserDao {
 
     @Insert
-    abstract fun insertUser(user: User)
+    fun insertUser(user: User)
 
     @Update
-    abstract fun updateUser(user: User)
+    fun updateUser(user: User)
 
 
 }

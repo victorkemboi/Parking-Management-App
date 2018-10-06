@@ -31,7 +31,7 @@ class SplashActivity : AppCompatActivity() {
 
         (application as App).applicationInjector.inject(this)
         startMain()
-        finish()
+
     }
 
 
@@ -49,6 +49,7 @@ class SplashActivity : AppCompatActivity() {
 
                       startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
 
+                      finish()
 
                   } else {
                       startLogin()
@@ -72,5 +73,6 @@ class SplashActivity : AppCompatActivity() {
     private fun startLogin(){
         startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
 
+        finish()
     }
 }

@@ -33,7 +33,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="foregroundImage" value="D:\icon.png" />
+                                      <entry key="foregroundImage" value="C:\Users\vicki\Desktop\splash_logo.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -64,7 +64,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/D:/Soft/android-studio-ide-182.4928781-windows/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_exit_to_app_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/D:/Soft/android-studio-ide-182.4928781-windows/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/maps/ic_place_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -74,9 +74,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="ffffff" />
                             <entry key="opacityPercent" value="84" />
-                            <entry key="outputName" value="ic_exit_to_app" />
+                            <entry key="outputName" value="ic_place" />
                             <entry key="sourceFile" value="C:\Users\vicki" />
                           </map>
                         </option>

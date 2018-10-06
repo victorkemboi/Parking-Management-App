@@ -44,7 +44,7 @@ constructor( val firebaseAuth:FirebaseAuth) : ViewModel() {
                  .requestEmail()
                  .build()
          //buildAGoogleSignInClient
-         mGoogleSignInClient = GoogleSignIn.getClient(app.applicationContext, gso);
+         mGoogleSignInClient = GoogleSignIn.getClient(app.applicationContext, gso)
      }
 
 

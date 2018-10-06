@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/spacing_large"
+    android:orientation="vertical">
+    <ImageView
+        android:id="@+id/qr_code_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/spacing_mlarge"
+        android:src="@drawable/parking_lot_image_preview"
+        />
+
+
+
+    <TextView
+        android:layout_marginTop="@dimen/spacing_medium"
+        app:layout_constraintTop_toBottomOf="@id/qr_code_image"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="12dp"
+        android:id="@+id/qr_code_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Press Close to Exit!"
+        />
+
+</android.support.constraint.ConstraintLayout>

@@ -2,26 +2,18 @@ package com.park254.app.park254.di
 
 import javax.inject.Singleton
 import dagger.Provides
-import android.app.Application
-import android.preference.PreferenceManager
-import android.content.SharedPreferences
-import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.park254.app.park254.App
-import com.park254.app.park254.models.Settings
-import com.park254.app.park254.network.FirebaseUserIdTokenInterceptor
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.utils.SharedPrefs
 import com.park254.app.park254.utils.livedata_adapter.LiveDataCallAdapterFactory
 import dagger.Module
-import okhttp3.Interceptor
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
-import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 @Module
 class NetModule// Constructor needs one parameter to instantiate.
@@ -66,6 +58,8 @@ class NetModule// Constructor needs one parameter to instantiate.
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
         client.addInterceptor(interceptor)
+        client.connectTimeout(30, TimeUnit.SECONDS)
+        client.readTimeout(30, TimeUnit.SECONDS)
         //client.cache(cache)
         return client.build()
     }

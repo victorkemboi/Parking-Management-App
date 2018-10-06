@@ -10,6 +10,7 @@ import java.util.*
 @Entity(tableName = "booking")
 @TypeConverters(DateTypeConverter::class)
 data class Booking(
+
         @ColumnInfo(name = "userId")
         var userId: String = "",
 

@@ -62,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
           //Log.d("Fb Button","PRESSED")
           lyt_login_btn.visibility = View.GONE
           lyt_progress_login.visibility = View.VISIBLE
-          LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(viewModel.EMAIL));
+          LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(viewModel.EMAIL))
       }
 
         LoginManager.getInstance().registerCallback(viewModel.callbackManager, object : FacebookCallback<LoginResult> {
@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
 
                // Log.d("Fb Login","SUCCESS")
 
-                handleFacebookAccessToken(loginResult.accessToken);
+                handleFacebookAccessToken(loginResult.accessToken)
             }
 
             override fun onCancel() {
@@ -162,7 +162,7 @@ class LoginActivity : AppCompatActivity() {
                 }
     }
 
-    fun firebaseAuthwithGoogle(account: GoogleSignInAccount){
+    private fun firebaseAuthwithGoogle(account: GoogleSignInAccount){
 
       //  Log.d("Sign In", "firebaseAuthWithGoogle:" + account.id)
         //progressdialogstart
@@ -200,6 +200,9 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }else{
                        // Log.w("Sign In", "signInWithCredential:failed")
+
+                        lyt_login_btn.visibility = View.VISIBLE
+                        lyt_progress_login.visibility = View.GONE
                     }
                 }
     }

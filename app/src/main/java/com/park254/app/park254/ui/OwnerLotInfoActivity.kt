@@ -28,7 +28,7 @@ class OwnerLotInfoActivity : AppCompatActivity() {
         initToolbar()
 
         requestOptions.centerCrop()
-        requestOptions.placeholder(R.drawable.the_hub)
+        requestOptions.placeholder(R.drawable.parking_lot_image_preview)
         if(viewModel.parsedLot !=null){
             owner_lot_info_name.text = viewModel.parsedLot!!.name
             owner_lot_info_street.text = viewModel.parsedLot!!.streetName
@@ -64,7 +64,7 @@ class OwnerLotInfoActivity : AppCompatActivity() {
 
                 // initialize SliderLayout
                 txtSliderView
-                        .image(R.drawable.the_hub)
+                        .image(R.drawable.parking_lot_image_preview)
                         .setRequestOption(requestOptions)
                         .setBackgroundColor(Color.WHITE)
                 owner_lot_header_slider_image.removeAllSliders()

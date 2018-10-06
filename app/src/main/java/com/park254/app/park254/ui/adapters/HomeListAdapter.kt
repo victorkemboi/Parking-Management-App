@@ -1,31 +1,24 @@
 package com.park254.app.park254.ui.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import com.bumptech.glide.request.RequestOptions
 import com.park254.app.park254.R
-import com.park254.app.park254.models.Lot
 import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.utils.ItemAnimation
 import kotlinx.android.synthetic.main.card_item_parking_lot_info.view.*
 import android.os.Bundle
-import com.bumptech.glide.Glide
 import com.glide.slider.library.SliderLayout
 import com.glide.slider.library.SliderTypes.DefaultSliderView
 import com.glide.slider.library.Animations.DescriptionAnimation
 import com.glide.slider.library.Tricks.ViewPagerEx
 import com.park254.app.park254.App
 import com.park254.app.park254.network.RetrofitApiService
-import com.park254.app.park254.ui.fragments.MainHomeFragment
 import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import java.util.*
@@ -83,7 +76,7 @@ class HomeListAdapter(private val ctx: Context, items: ArrayList<LotResponse>)
         (ctx.applicationContext as App).applicationInjector.inject(this)
         this.items = items
         requestOptions.centerCrop()
-        requestOptions.placeholder(R.drawable.the_hub)
+        requestOptions.placeholder(R.drawable.parking_lot_image_preview)
 
 
     }
@@ -166,7 +159,7 @@ class HomeListAdapter(private val ctx: Context, items: ArrayList<LotResponse>)
 
                 // initialize SliderLayout
                 txtSliderView
-                        .image(R.drawable.the_hub)
+                        .image(R.drawable.parking_lot_image_preview)
                         .setRequestOption(requestOptions)
                         .setBackgroundColor(Color.WHITE)
                 holder.imageSlider.removeAllSliders()

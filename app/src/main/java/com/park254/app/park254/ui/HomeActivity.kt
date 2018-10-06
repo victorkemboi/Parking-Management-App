@@ -1,59 +1,40 @@
 package com.park254.app.park254.ui
 
-import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
-import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.annotation.NonNull
+import android.support.design.R.styleable.NavigationView
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.google.android.gms.flags.impl.SharedPreferencesFactory
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GetTokenResult
-import com.google.firebase.internal.FirebaseAppHelper.addIdTokenListener
-import com.google.firebase.internal.FirebaseAppHelper.getToken
 import com.park254.app.park254.App
 import com.park254.app.park254.R
-import com.park254.app.park254.models.Lot
-import com.park254.app.park254.models.User
-import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.fragments.AttendantFragment
-import com.park254.app.park254.ui.fragments.MainHomeFragment
+import com.park254.app.park254.ui.fragments.HomeFragment
+import com.park254.app.park254.ui.fragments.MyPlacesFragment
 import com.park254.app.park254.ui.fragments.OwnerFragment
 import com.park254.app.park254.ui.repo.HomeViewModel
-import com.park254.app.park254.utils.SharedPrefs
-import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import com.park254.app.park254.utils.UtilityClass.REQUEST_CHECK_SETTINGS
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.toolbar_2.*
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.Job
 import javax.inject.Inject
-import kotlin.coroutines.experimental.CoroutineContext
 
 class HomeActivity : AppCompatActivity(),
-        MainHomeFragment.OnFragmentInteractionListener,
+        MyPlacesFragment.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener,
         OwnerFragment.OnFragmentInteractionListener,
         AttendantFragment.OnFragmentInteractionListener,
+        HomeFragment.OnFragmentInteractionListener,
          View.OnClickListener{
 
 
@@ -75,23 +56,17 @@ class HomeActivity : AppCompatActivity(),
        // initToolbar()
         (application as App).applicationInjector.inject(this)
 
-
-
         initToolBar("Home")
-
-
 
         initNavigationMenu()
 
+        val fragmentClass: Class<*> =   HomeFragment::class.java
 
-
-        val fragmentClass: Class<*> =   MainHomeFragment::class.java
-      val fragment = fragmentClass.newInstance() as Fragment
+        viewModel.homeMapFragment = fragmentClass.newInstance() as Fragment
         val fragmentManager = supportFragmentManager
-        fragmentManager.beginTransaction().replace(R.id.mainHomeContentFrameLayout, fragment).commit()
-
-
+        fragmentManager.beginTransaction().replace(R.id.mainHomeContentFrameLayout, viewModel.homeMapFragment!!).commit()
         //Log.d("User:", FirebaseAuth.getInstance().currentUser.toString())
+
         val headerView  = nav_view.getHeaderView(0)
         val navUsername   = headerView.findViewById(R.id.user_name) as TextView
         navUsername.text = FirebaseAuth.getInstance().currentUser!!.displayName
@@ -100,22 +75,23 @@ class HomeActivity : AppCompatActivity(),
         val userAvatar = headerView.findViewById<ImageView>(R.id.avatar)
         Glide.with(this).load(FirebaseAuth.getInstance().currentUser!!.photoUrl).into(userAvatar)
 
+    }
 
-
-
-
-
-
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CHECK_SETTINGS){
+            viewModel.homeMapFragment?.onActivityResult(requestCode, resultCode, data)
+        }else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     override fun onFragmentInteraction(uri: Uri) {
         // TODO Implement
     }
 
-     fun initToolBar(title:String){
+     private fun initToolBar(title:String){
         toolbar2.setNavigationIcon(R.drawable.ic_back_arrow)
-        setSupportActionBar(toolbar2)
+       setSupportActionBar(toolbar2)
 
         supportActionBar!!.title = title
         supportActionBar?.apply { setDisplayHomeAsUpEnabled(false)
@@ -197,19 +173,27 @@ class HomeActivity : AppCompatActivity(),
 
         }
 
+        //TODO:  fragment variables in view model
+
         var fragment: Fragment? = null
         val fragmentClass: Class<*> = when (menuItem.itemId) {
             R.id.nav_owner -> OwnerFragment::class.java
             R.id.nav_attendant -> AttendantFragment::class.java
+            R.id.nav_my_places -> MyPlacesFragment::class.java
 
-            else -> MainHomeFragment::class.java
+            else -> HomeFragment::class.java
         }
 
-        try {
-            fragment = fragmentClass.newInstance() as Fragment
-        } catch (e: Exception) {
-            e.printStackTrace()
+        if (menuItem.itemId == R.id.nav_home){
+            fragment= viewModel.homeMapFragment
+        }else{
+            try {
+                fragment = fragmentClass.newInstance() as Fragment
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+
 
         // Insert the fragment by replacing any existing fragment
         val fragmentManager = supportFragmentManager

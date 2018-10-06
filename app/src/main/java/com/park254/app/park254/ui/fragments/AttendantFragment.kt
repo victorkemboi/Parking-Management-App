@@ -2,35 +2,32 @@ package com.park254.app.park254.ui.fragments
 
 import android.arch.lifecycle.Observer
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.glide.slider.library.Animations.DescriptionAnimation
 import com.glide.slider.library.SliderLayout
 import com.glide.slider.library.SliderTypes.DefaultSliderView
-import com.google.android.gms.common.api.Api
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
+import com.google.zxing.integration.android.IntentIntegrator
+import com.journeyapps.barcodescanner.CaptureActivity
 import com.park254.app.park254.App
-
 import com.park254.app.park254.R
-import com.park254.app.park254.models.AvailableSpaceResponse
-import com.park254.app.park254.models.AvailableSpaceUpdate
-import com.park254.app.park254.models.Employee
-import com.park254.app.park254.models.LotResponse
+import com.park254.app.park254.models.*
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.HomeActivity
-import com.park254.app.park254.ui.repo.AttendantViewModel
 import com.park254.app.park254.utils.SharedPrefs
 import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
@@ -87,21 +84,17 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
     override val coroutineContext: CoroutineContext
         get() =   Dispatchers.Default + job
 
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
 
-
         }
 
         (activity!!.application as App).applicationInjector.inject(this)
         requestOptions.centerCrop()
-        requestOptions.placeholder(R.drawable.the_hub)
+        requestOptions.placeholder(R.drawable.parking_lot_image_preview)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -114,7 +107,7 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        attendant_swipe_container.setOnRefreshListener(this);
+        attendant_swipe_container.setOnRefreshListener(this)
         attendant_swipe_container.setColorSchemeColors(
                 resources.getColor( android.R.color.holo_green_dark),
                 resources.getColor(android.R.color.holo_red_dark)  ,
@@ -215,7 +208,7 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
 
                                                                     // initialize SliderLayout
                                                                     txtSliderView
-                                                                            .image(R.drawable.the_hub)
+                                                                            .image(R.drawable.parking_lot_image_preview)
                                                                             .setRequestOption(requestOptions)
                                                                             .setBackgroundColor(Color.WHITE)
                                                                     slider_attendant_lot_image.removeAllSliders()
@@ -241,6 +234,25 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
 
                                                                 attendant_update_btn.setOnClickListener{
                                                                     updateAvailableSpace()
+                                                                }
+
+                                                                attendant_verify_btn.setOnClickListener {
+                                                               //  val intent = Intent(attendantFragmentContext.context, BarcodeCaptureActivity::class.java)
+                                                               //   startActivityForResult(intent, BARCODE_READER_REQUEST_CODE)
+
+
+                                                                 val scanIntegrator =  IntentIntegrator.forSupportFragment(this@AttendantFragment)
+                                                                    scanIntegrator.setPrompt("Scan")
+                                                                    scanIntegrator.setBeepEnabled(true)
+                                                                    //The following line if you want QR code
+                                                                    scanIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
+                                                                    scanIntegrator.captureActivity = CaptureActivity::class.java
+                                                                    scanIntegrator.setOrientationLocked(true)
+                                                                    scanIntegrator.setBarcodeImageEnabled(true)
+                                                                    scanIntegrator.initiateScan()
+
+
+
                                                                 }
 
 
@@ -270,7 +282,7 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
                     lyt_not_an_attendant.visibility = View.VISIBLE
                 }
 
-                this@AttendantFragment.run {
+                (activity as HomeActivity).runOnUiThread {
                     if (attendant_swipe_container.isRefreshing){
                         attendant_swipe_container.isRefreshing = false
                     }
@@ -280,20 +292,61 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+          val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+
+        if(result != null) {
+
+                if (result.contents != null) {
+
+                    //Scanned successfully
+
+                    val payment = Gson().fromJson(result.contents,Payment::class.java)
+
+                    if (payment.amount != ""){
+                        Snackbar.make((activity as HomeActivity).window.decorView.rootView,
+                                "QR Scanned: Amount is  " + payment.amount, Snackbar.LENGTH_LONG)
+                        Log.d("QR Results:", "result content success"  + result.contents)
+                    }else{
+                        Snackbar.make((activity as HomeActivity).window.decorView.rootView,
+                                "Not a payment QR! " , Snackbar.LENGTH_LONG)
+
+                        Log.d("QR Results:", "result content not payment" + result.contents)
+                    }
+
+
+                } else {
+
+                    Snackbar.make((activity as HomeActivity).window.decorView.rootView,
+                            "QR Scan failed, try again!", Snackbar.LENGTH_LONG)
+
+                    //cancel
+                    Log.d("QR Results:", "result content null")
+
+                }
+
+            } else {
+
+                Log.d("QR Results:", "result null")
+                super.onActivityResult(requestCode, resultCode, data)
+
+            }
+    }
+
     private fun updateAvailableSpace(){
         showCreateDialog()
 
     }
 
     private fun showCreateDialog() {
-        val context = this
         val builder = AlertDialog.Builder(this.context!!)
         builder.setTitle("Update")
 
         val view = layoutInflater.inflate(R.layout.attendant_update_layout, null)
 
 
-        builder.setView(view);
+        builder.setView(view)
 
         // set up the ok button
         builder.setPositiveButton("UPDATE") { dialog, p1 ->

@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -116,8 +117,8 @@ public class ViewLoadingDotsBounce extends LinearLayout {
         animator = new ObjectAnimator[OBJECT_SIZE];
         for (int i = 0; i < OBJECT_SIZE; i++) {
             img[i].setTranslationY(getHeight() / POST_DIV);
-            PropertyValuesHolder Y = PropertyValuesHolder.ofFloat(img[i].TRANSLATION_Y, -getHeight() / POST_DIV);
-            PropertyValuesHolder X = PropertyValuesHolder.ofFloat(img[i].TRANSLATION_X, 0);
+            PropertyValuesHolder Y = PropertyValuesHolder.ofFloat(TRANSLATION_Y, -getHeight() / POST_DIV);
+            PropertyValuesHolder X = PropertyValuesHolder.ofFloat(TRANSLATION_X, 0);
             animator[i] = ObjectAnimator.ofPropertyValuesHolder(img[i], X, Y);
             animator[i].setRepeatCount(-1);
             animator[i].setRepeatMode(ValueAnimator.REVERSE);

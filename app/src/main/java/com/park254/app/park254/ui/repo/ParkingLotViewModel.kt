@@ -6,8 +6,4 @@ import javax.inject.Inject
 
 
 class ParkingLotViewModel @Inject
-constructor( ) : ViewModel() {
-
-
-
-}
+constructor( ) : ViewModel()

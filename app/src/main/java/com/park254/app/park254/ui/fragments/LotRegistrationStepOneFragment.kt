@@ -2,23 +2,25 @@ package com.park254.app.park254.ui.fragments
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.park254.app.park254.R
-import com.park254.app.park254.ui.repo.ParkingLotRegistrationViewModel
-import com.park254.app.park254.utils.UtilityClass
-import kotlinx.android.synthetic.main.fragment_lot_registration_step_one.*
-import javax.inject.Inject
-import android.content.Intent
-import android.util.Log
 import com.park254.app.park254.ui.ParkingLotRegistrationActivity
 import com.park254.app.park254.ui.UpdateInfoActivity
-import com.schibstedspain.leku.*
+import com.park254.app.park254.ui.repo.ParkingLotRegistrationViewModel
+import com.park254.app.park254.utils.UtilityClass
+import com.schibstedspain.leku.LATITUDE
+import com.schibstedspain.leku.LOCATION_ADDRESS
+import com.schibstedspain.leku.LONGITUDE
+import com.schibstedspain.leku.LocationPickerActivity
+import kotlinx.android.synthetic.main.fragment_lot_registration_step_one.*
+import javax.inject.Inject
 
 
 // TODO: Rename parameter arguments, choose names that match

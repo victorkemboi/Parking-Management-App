@@ -9,11 +9,7 @@ interface RetrofitApiService{
     /**
      *
      */
-    @POST("Profiles")
-    fun registerUser():  LiveData<ApiResponse<User>>
 
-    @POST("Registration/lot")
-    fun registerParkingLot(@Body lot: Lot): LiveData<ApiResponse<LotResponse>>
 
     @GET("Registration/owned")
     fun getOwnedParkingLots() :  LiveData<ApiResponse<List<LotResponse>>>
@@ -33,6 +29,26 @@ interface RetrofitApiService{
     @GET("Profiles/email")
     fun getUserByEmail(@Query("q")  email:String ) :  LiveData<ApiResponse<User>>
 
+    @GET("Parking/{id}/free")
+    fun getAvailableSpacesInaParkingLot(@Path("id") id:String) :LiveData<ApiResponse<AvailableSpaceResponse>>
+
+    @GET("Management/{employeeId}")
+    fun getEmployeeByUserId(@Path("employeeId") id:String) :LiveData<ApiResponse<Employee>>
+
+    @GET("Management")
+    fun getParkingLotEmployees(@Query("lotId")  id:String ) :  LiveData<ApiResponse<ArrayList<User>>>
+
+    @GET("Parking/bookings/{id}")
+    fun geBookingById(@Path("id") id:String) :LiveData<ApiResponse<Booking>>
+
+
+
+    @POST("Profiles/update")
+    fun updateUserInfo(@Body userUpdate: UserUpdate): LiveData<ApiResponse<User>>
+
+    @POST("Mpesa")
+    fun payForBooking(@Body bookingId: String): LiveData<ApiResponse<Void>>
+
     @POST("Management")
     fun registerEmployee(@Body baseEmployeeRegistration: BaseEmployeeRegistration): LiveData<ApiResponse<Employee>>
 
@@ -45,24 +61,16 @@ interface RetrofitApiService{
     @POST("Parking/estimate")
     fun getBookingEstimation(@Body estimateRequest: EstimateRequest): LiveData<ApiResponse<Double>>
 
-    @GET("Parking/{id}/free")
-    fun getAvailableSpacesInaParkingLot(@Path("id") id:String) :LiveData<ApiResponse<AvailableSpaceResponse>>
+    @POST("Profiles")
+    fun registerUser():  LiveData<ApiResponse<User>>
 
-    @GET("Management/{employeeId}")
-    fun getEmployeeByUserId(@Path("employeeId") id:String) :LiveData<ApiResponse<Employee>>
+    @POST("Registration/lot")
+    fun registerParkingLot(@Body lot: Lot): LiveData<ApiResponse<LotResponse>>
 
-    @GET("Management")
-    fun getParkingLotEmployees(@Query("lotId")  id:String ) :  LiveData<ApiResponse<ArrayList<User>>>
+    @POST("Parking")
+    fun getNearByParkingLots(@Body nearByParkingLotRequest: NearByParkingLotRequest):  LiveData<ApiResponse<List<LotResponse>>>
 
 
-    @POST("Profiles/update")
-    fun updateUserInfo(@Body userUpdate: UserUpdate): LiveData<ApiResponse<User>>
-
-    @POST("Mpesa")
-    fun payForBooking(@Body bookingId: String): LiveData<ApiResponse<Void>>
-
-    @GET("Parking/bookings/{id}")
-    fun geBookingById(@Path("id") id:String) :LiveData<ApiResponse<Booking>>
 
 
 
