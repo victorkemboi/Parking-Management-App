@@ -420,7 +420,7 @@
                                 app:backgroundTint="@android:color/white"
                                 app:elevation="1dp"
                                 app:fabSize="normal"
-                                app:rippleColor="@color/colorPrimaryDark"
+                                app:rippleColor="@color/colorAccentDark2"
                                 app:srcCompat="@drawable/ic_verify"
                                 android:id="@+id/attendant_verify_btn"/>
 
@@ -453,6 +453,8 @@
 
 
         </android.support.design.widget.CoordinatorLayout>
+
+
 
 
     </android.support.constraint.ConstraintLayout>

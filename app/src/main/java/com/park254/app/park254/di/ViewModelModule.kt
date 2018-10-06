@@ -53,4 +53,9 @@ class ViewModelModule {
     internal fun providesPaymentsViewModel(job: Job, retrofitApiService: RetrofitApiService, threadPool : ExecutorCoroutineDispatcher): PaymentsViewModel =
             PaymentsViewModel(retrofitApiService,job,threadPool)
 
+    @Singleton
+    @Provides
+    internal fun providesPaymentVerificationViewModel(job: Job, retrofitApiService: RetrofitApiService, threadPool : ExecutorCoroutineDispatcher): PaymentVerificationViewModel =
+            PaymentVerificationViewModel(retrofitApiService,job,threadPool)
+
 }

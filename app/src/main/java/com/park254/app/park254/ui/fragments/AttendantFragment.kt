@@ -6,8 +6,11 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.support.annotation.ColorInt
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
 import android.util.Log
@@ -21,6 +24,7 @@ import com.glide.slider.library.SliderLayout
 import com.glide.slider.library.SliderTypes.DefaultSliderView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
 import com.park254.app.park254.App
@@ -28,6 +32,8 @@ import com.park254.app.park254.R
 import com.park254.app.park254.models.*
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.HomeActivity
+import com.park254.app.park254.ui.PaymentVerificationActivity
+import com.park254.app.park254.ui.repo.PaymentVerificationViewModel
 import com.park254.app.park254.utils.SharedPrefs
 import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
@@ -53,7 +59,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshListener {
+class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshListener, AppBarLayout.OnOffsetChangedListener {
 
 
     // TODO: Rename and change types of parameters
@@ -72,6 +78,9 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
 
     @Inject
     lateinit var settings : SharedPrefs
+
+    @Inject
+    lateinit var paymentVerificationViewModel: PaymentVerificationViewModel
 
     private val attendantFragmentContext: AttendantFragment = this
 
@@ -126,6 +135,11 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
 
         setAttendant()
     }
+
+    override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
+        attendant_swipe_container.isEnabled = p1==0
+    }
+
 
     private fun setAttendant(){
 
@@ -302,15 +316,19 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
 
                     //Scanned successfully
 
-                    val payment = Gson().fromJson(result.contents,Payment::class.java)
+                    try {
+                        val payment = Gson().fromJson(result.contents,Payment::class.java)
 
-                    if (payment.amount != ""){
+                        if (payment.amount != ""){
+                            paymentVerificationViewModel.payment = payment
+                            startActivity(
+                                    Intent(this@AttendantFragment.activity, PaymentVerificationActivity::class.java))
+                            Log.d("QR Results:", "result content success"  + result.contents)
+                        }
+
+                    }catch (e: JsonSyntaxException){
                         Snackbar.make((activity as HomeActivity).window.decorView.rootView,
-                                "QR Scanned: Amount is  " + payment.amount, Snackbar.LENGTH_LONG)
-                        Log.d("QR Results:", "result content success"  + result.contents)
-                    }else{
-                        Snackbar.make((activity as HomeActivity).window.decorView.rootView,
-                                "Not a payment QR! " , Snackbar.LENGTH_LONG)
+                                "Invalid payment!", Snackbar.LENGTH_LONG).withColor(R.color.red_600).show()
 
                         Log.d("QR Results:", "result content not payment" + result.contents)
                     }
@@ -319,7 +337,7 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
                 } else {
 
                     Snackbar.make((activity as HomeActivity).window.decorView.rootView,
-                            "QR Scan failed, try again!", Snackbar.LENGTH_LONG)
+                            "QR code scanning unsuccessful!", Snackbar.LENGTH_LONG).withColor(R.color.red_600).show()
 
                     //cancel
                     Log.d("QR Results:", "result content null")
@@ -494,6 +512,9 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
         lyt_not_an_attendant.visibility = View.VISIBLE
     }
 
+
+    //Extra method ovverides
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
@@ -545,4 +566,9 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
     }
     private fun IntRange.random() =
             Random().nextInt((endInclusive + 1) - start) +  start
+
+    private fun Snackbar.withColor(@ColorInt colorInt: Int): Snackbar{
+        this.view.setBackgroundColor(ContextCompat.getColor(this.context, colorInt))
+        return this
+    }
 }

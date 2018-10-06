@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.support.v4.widget.SwipeRefreshLayout
@@ -145,9 +146,13 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
 
                                 payment->
 
-                                    lyt_progress_qr_code.visibility = View.VISIBLE
+                                lyt_progress_qr_code.visibility = View.VISIBLE
+
+                                Handler().postDelayed({
 
                                     generateQrCodeDialog(payment)
+                                }, 1000)
+
 
                             }
 
@@ -185,7 +190,7 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
             paymentBitmap = viewModel.qrCodesHashMap[payment]
         }
 
-        runOnUiThread{
+
             val builder = AlertDialog.Builder(paymentActivityContext)
             builder.setTitle("Payment Verification")
 
@@ -205,7 +210,7 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
             builder.setView(view)
 
             builder.show()
-        }
+
 
         }
 

@@ -86,7 +86,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
 
     // Class methods
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity!!.application as App).applicationInjector.inject(this)
@@ -125,6 +124,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
             }
         }
+
         viewModel.locationSnackbar =  Snackbar.make((activity as HomeActivity).window.decorView.rootView,
                 "Please turn on location for improved experience!", Snackbar.LENGTH_INDEFINITE).withColor(R.color.red_600)
 

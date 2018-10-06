@@ -43,6 +43,9 @@ interface AppComponent{
     fun inject(attendantFragment: AttendantFragment)
     fun inject(paymentsListAdapter:PaymentsListAdapter)
     fun inject(paymentsActivity: PaymentsActivity)
+    fun inject(paymentVerificationViewModel: PaymentVerificationViewModel)
+    fun inject(paymentVerificationActivity: PaymentVerificationActivity)
+    fun inject(paymentVerificationSuccessFragment: PaymentVerificationSuccessFragment)
 
    fun provideApplication(): App
 
