@@ -11,6 +11,7 @@ import java.util.*
 @Entity(tableName = "base_employee_registration")
 @TypeConverters(DateTypeConverter::class)
 data class BaseEmployeeRegistration(
+
         @ColumnInfo(name = "userId")
         var userId: String = "",
 
@@ -18,7 +19,7 @@ data class BaseEmployeeRegistration(
         var lotId: String = "",
 
         @ColumnInfo(name = "designation")
-        var designation: String = "",
+        var designation: String = "attendant",
 
         @ColumnInfo(name = "commencingOn")
         var commencingOn: String = "",

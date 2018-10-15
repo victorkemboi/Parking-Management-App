@@ -43,7 +43,7 @@ class LotInfoActivity : AppCompatActivity() {
     @Inject
     lateinit var  retrofitApiService: RetrofitApiService
 
-    var requestOptions : RequestOptions =  RequestOptions()
+    private var requestOptions : RequestOptions =  RequestOptions()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,7 +97,7 @@ class LotInfoActivity : AppCompatActivity() {
             }
 
 
-            Log.d("parsed Lot", viewModel.parsedLot.toString())
+            Log.w("parsed Lot", viewModel.parsedLot.toString())
             lot_info_name.text = viewModel.parsedLot!!.name
             lot_info_street.text = viewModel.parsedLot!!.streetName
 

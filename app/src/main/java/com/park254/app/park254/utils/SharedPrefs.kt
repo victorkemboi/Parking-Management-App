@@ -11,7 +11,7 @@ class SharedPrefs(context: Context) {
     internal var settings: SharedPreferences = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
 
     var serverURL: String?
-        get() = settings.getString("url",UtilityClass.BASE_URL)
+        get() = settings.getString("url", UtilityClass.BASE_URL)
         set(url) {
             val editor = settings.edit()
             editor.putString("url", url)
@@ -49,8 +49,6 @@ class SharedPrefs(context: Context) {
             editor.putString("api_version", apiversion_json)
             editor.apply()
         }
-
-
 
 
     /**

@@ -84,6 +84,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
     override val coroutineContext: CoroutineContext
         get() =   Dispatchers.Default + job
 
+    lateinit var mGpsSwitchStateReceiver : BroadcastReceiver
+
 
     // Class methods
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,7 +96,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
             param2 = it.getString(ARG_PARAM2)
         }
 
-        (activity as HomeActivity).viewModel.setParkingLotsLocationList(this)
+       // (activity as HomeActivity).viewModel.setParkingLotsLocationList(this)
 
         viewModel.mFusedLocationProviderClient = LocationServices
                 .getFusedLocationProviderClient(activity as HomeActivity)
@@ -128,7 +130,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         viewModel.locationSnackbar =  Snackbar.make((activity as HomeActivity).window.decorView.rootView,
                 "Please turn on location for improved experience!", Snackbar.LENGTH_INDEFINITE).withColor(R.color.red_600)
 
-        viewModel.mGpsSwitchStateReceiver = object : BroadcastReceiver() {
+        mGpsSwitchStateReceiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, intent: Intent?) {
                 Log.d("mGps Receiver:","On receive")
                 if (intent != null) {
@@ -138,9 +140,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
                         Log.d("mGps Receiver:","On receive, intent not null, provider changed")
                         if(isLocationEnabled() && isLocationAccuracyModeHigh()){
                          //   requestLocation()
+
+                            if(viewModel.deviceLocationMarker!=null){
+                                viewModel.deviceLocationMarker?.remove()
+                            }
                             getDeviceLocation()
+
                             viewModel.locationSnackbar.dismiss()
                         }else{
+                            if(viewModel.deviceLocationMarker!=null){
+                                viewModel.deviceLocationMarker?.remove()
+                            }
                             viewModel.routePolyline = null
                             viewModel.locationSnackbar.show()
 
@@ -399,7 +409,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
                                Log.d("Location:","getDeviceLocation task not null")
                                // Set the map's camera position to the current location of the device.
                                val location = task.result
-
 
                                viewModel.deviceLocation.postValue(
                                        com.google.maps.model.LatLng(location.latitude,
@@ -688,16 +697,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
     override fun onPause() {
 
+        super.onPause()
         if (mapView !=null){
             mapView!!.onPause()
         }
 
         viewModel.mFusedLocationProviderClient.removeLocationUpdates(viewModel.locationCallback)
-        LocalBroadcastManager.getInstance(context!!).unregisterReceiver(viewModel.mGpsSwitchStateReceiver)
+        context!!.unregisterReceiver(mGpsSwitchStateReceiver)
         viewModel.deviceLocationMarker = null
 
 
-        super.onPause()
+
     }
 
     override fun onLowMemory() {
@@ -719,13 +729,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
     override fun onResume() {
 
+        super.onResume()
+        context!!.registerReceiver(mGpsSwitchStateReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION))
         if (mapView !=null){
             mapView!!.onResume()
         }
         //LocalBroadcastManager.getInstance(context!!).registerReceiver(viewModel.mGpsSwitchStateReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION))
-        context!!.registerReceiver(viewModel.mGpsSwitchStateReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION))
 
-        super.onResume()
+
+
     }
 
     override fun onStop() {

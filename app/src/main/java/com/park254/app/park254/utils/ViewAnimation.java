@@ -9,7 +9,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
-public class ViewAnimation {
+class ViewAnimation {
 
     public static void expand(final View v, final AnimListener animListener) {
         Animation a = expandAction(v);
@@ -129,7 +129,7 @@ public class ViewAnimation {
         ViewAnimation.fadeIn(v, null);
     }
 
-    public static void fadeIn(final View v, final AnimListener animListener) {
+    private static void fadeIn(final View v, final AnimListener animListener) {
         v.setVisibility(View.GONE);
         v.setAlpha(0.0f);
         // Prepare the View for the animation
@@ -150,7 +150,7 @@ public class ViewAnimation {
         ViewAnimation.fadeOut(v, null);
     }
 
-    public static void fadeOut(final View v, final AnimListener animListener) {
+    private static void fadeOut(final View v, final AnimListener animListener) {
         v.setAlpha(1.0f);
         // Prepare the View for the animation
         v.animate()
@@ -174,10 +174,6 @@ public class ViewAnimation {
                 .setDuration(200)
                 .translationY(0)
                 .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                    }
                 })
                 .alpha(1f)
                 .start();
@@ -209,17 +205,13 @@ public class ViewAnimation {
     public static boolean rotateFab(final View v, boolean rotate) {
         v.animate().setDuration(200)
                 .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                    }
                 })
                 .rotation(rotate ? 135f : 0f);
         return rotate;
     }
 
 
-    public interface AnimListener {
+    interface AnimListener {
         void onFinish();
     }
 
@@ -238,7 +230,7 @@ public class ViewAnimation {
         ViewAnimation.showScale(v, null);
     }
 
-    public static void showScale(final View v, final AnimListener animListener) {
+    private static void showScale(final View v, final AnimListener animListener) {
         v.animate()
                 .scaleY(1)
                 .scaleX(1)

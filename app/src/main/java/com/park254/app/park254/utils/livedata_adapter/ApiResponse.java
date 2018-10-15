@@ -22,13 +22,13 @@ public class ApiResponse<T> {
             .compile("<([^>]*)>[\\s]*;[\\s]*rel=\"([a-zA-Z0-9]+)\"");
     private static final Pattern PAGE_PATTERN = Pattern.compile("page=(\\d)+");
     private static final String NEXT_LINK = "next";
-    public final int code;
     @Nullable
     public final T body;
     @Nullable
     public final String errorMessage;
+    private final int code;
     @NonNull
-    public final Map<String, String> links;
+    private final Map<String, String> links;
 
     public ApiResponse(Throwable error) {
         code = 500;
@@ -48,7 +48,7 @@ public class ApiResponse<T> {
                 try {
                     message = response.errorBody().string();
                 } catch (IOException ignored) {
-                   // Timber.e(ignored, "error while parsing response");
+                    // Timber.e(ignored, "error while parsing response");
                 }
             }
             if (message == null || message.trim().length() == 0) {

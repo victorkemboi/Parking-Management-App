@@ -436,7 +436,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
        // Log.d("validateFirtSetInputs",input_parking_lot_name.text.toString())
         if (input_parking_lot_name.text.toString().trim { it <= ' ' }.isEmpty()) run {
 
-            input_layout_parking_lot_name.error = "Enter parking requestLot name!"
+            input_layout_parking_lot_name.error = "Enter parking lot name!"
             UtilityClass.requestFocus(input_parking_lot_name, window)
             return false
         }
@@ -593,7 +593,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
     private fun validateImageSelection():Boolean{
         if (viewModel.imageOneUri==null  || viewModel.imageTwoUri==null || viewModel.imageThreeUri==null){
-            display_txt_register_status.text = "Please add three photos of your parking requestLot."
+            display_txt_register_status.text = "Please add three photos of your parking lot."
             display_txt_register_status.setTextColor(resources.getColor(R.color.red_600))
             display_txt_register_status.visibility = View.VISIBLE
 

@@ -1,44 +1,28 @@
 package com.park254.app.park254.ui
 
 import android.arch.lifecycle.Observer
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.annotation.NonNull
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
-import com.google.android.gms.flags.impl.SharedPreferencesFactory
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GetTokenResult
-import com.google.firebase.iid.FirebaseInstanceId
 import com.park254.app.park254.App
 import com.park254.app.park254.R
-import com.park254.app.park254.models.Park254Database
 import com.park254.app.park254.models.User
 import com.park254.app.park254.models.UserUpdate
-import com.park254.app.park254.models.dao.UserDao
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.repo.LoginViewModel
 import com.park254.app.park254.utils.SharedPrefs
 import com.park254.app.park254.utils.UtilityClass.hideKeyboard
 import com.park254.app.park254.utils.UtilityClass.requestFocus
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
-import io.reactivex.internal.util.HalfSerializer.onComplete
 import kotlinx.android.synthetic.main.activity_add_user_info.*
-import kotlinx.android.synthetic.main.activity_add_user_info.view.*
 import javax.inject.Inject
 
-class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener {
+class AddUserInfoActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     @Inject
     lateinit var viewModel: LoginViewModel
 
@@ -56,10 +40,9 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
 
         sp_gender!!.onItemSelectedListener = this
 
-       val items  = arrayOf("Select Gender.","Male", "Female")
+        val items = arrayOf("Select Gender.", "Male", "Female")
 
-        sp_gender.adapter = ArrayAdapter<String>(this,R.layout.spinner_item,items)
-
+        sp_gender.adapter = ArrayAdapter<String>(this, R.layout.spinner_item, items)
 
 
         //Log.d("Token in shared pref", settings.token)
@@ -80,9 +63,8 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
     }
 
 
-
-    private fun finishSignIn(){
-        if (validateInputIsNotNull()){
+    private fun finishSignIn() {
+        if (validateInputIsNotNull()) {
             viewModel.phoneNumber = input__phone_number.text.toString()
 
             //viewModel.api  patch user
@@ -91,16 +73,15 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
             btn_finish_sign_in.visibility = View.GONE
             lyt_progress_login.visibility = View.VISIBLE
 
-            retrofitApiService.registerUser().observe(this, Observer<ApiResponse<User>> {
-                response->
+            retrofitApiService.registerUser().observe(this, Observer<ApiResponse<User>> { response ->
                 if (response?.body != null) {
 
                     settings.userId = response.body.id
                     val userUpdate = UserUpdate()
 
-                    val gender = when(viewModel.gender){
-                        1-> "Male"
-                        2-> "Female"
+                    val gender = when (viewModel.gender) {
+                        1 -> "Male"
+                        2 -> "Female"
                         else -> ""
                     }
                     userUpdate.gender = gender
@@ -108,14 +89,13 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
 
                     retrofitApiService.updateUserInfo(userUpdate).observe(
                             this, Observer {
-                        run{
-                        startActivity(
-                                Intent(this@AddUserInfoActivity, HomeActivity::class.java))
-                        finish()
-                    }
+                        run {
+                            startActivity(
+                                    Intent(this@AddUserInfoActivity, HomeActivity::class.java))
+                            finish()
+                        }
                     }
                     )
-
 
 
                 }
@@ -124,21 +104,20 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
             })
 
 
-
         }
 
 
     }
 
-    private fun validateInputIsNotNull(): Boolean{
+    private fun validateInputIsNotNull(): Boolean {
         if (input__phone_number.text.toString().trim { it <= ' ' }.isEmpty()) run {
             input_layout_phone_number.error = "Enter Phone Number!"
-            requestFocus(input__phone_number,window)
+            requestFocus(input__phone_number, window)
             return false
         }
-        else if (viewModel.gender == 0){
+        else if (viewModel.gender == 0) {
             input_layout_gender.error = "Select Gender!"
-            requestFocus(sp_gender,window)
+            requestFocus(sp_gender, window)
             return false
         }
 
@@ -146,20 +125,19 @@ class AddUserInfoActivity : AppCompatActivity(),AdapterView.OnItemSelectedListen
     }
 
 
-
     override fun onBackPressed() {
 
         val firebaseAuth = FirebaseAuth.getInstance()
-        val  currentUser: FirebaseUser = firebaseAuth.currentUser!!
+        val currentUser: FirebaseUser = firebaseAuth.currentUser!!
 
-        currentUser.delete().addOnCompleteListener {
-            task -> run {
-            if (task.isSuccessful) {
-                startActivity(
-                        Intent(this@AddUserInfoActivity, LoginActivity::class.java))
-                finish()
+        currentUser.delete().addOnCompleteListener { task ->
+            run {
+                if (task.isSuccessful) {
+                    startActivity(
+                            Intent(this@AddUserInfoActivity, LoginActivity::class.java))
+                    finish()
+                }
             }
-        }
         }
 
     }

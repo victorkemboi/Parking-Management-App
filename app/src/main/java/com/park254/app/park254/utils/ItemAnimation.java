@@ -6,13 +6,12 @@ import android.view.View;
 
 public class ItemAnimation {
 
-    /* animation type */
-    public static final int BOTTOM_UP = 1;
-    public static final int FADE_IN = 2;
-    public static final int LEFT_RIGHT = 3;
-    public static final int RIGHT_LEFT = 4;
     public static final int NONE = 0;
-
+    /* animation type */
+    private static final int BOTTOM_UP = 1;
+    private static final int FADE_IN = 2;
+    private static final int LEFT_RIGHT = 3;
+    private static final int RIGHT_LEFT = 4;
     /* animation duration */
     private static final long DURATION_IN_BOTTOM_UP = 150;
     private static final long DURATION_IN_FADE_ID = 500;

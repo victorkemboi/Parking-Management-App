@@ -1,36 +1,29 @@
 package com.park254.app.park254.ui
 import android.arch.lifecycle.Observer
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.park254.app.park254.R
-import com.park254.app.park254.ui.repo.LoginViewModel
-import javax.inject.Inject
-import android.content.Intent
-import android.support.annotation.NonNull
-import kotlinx.android.synthetic.main.activity_login.*
-import com.google.android.gms.common.api.ApiException
-import android.util.Log
 import android.view.View
 import com.facebook.AccessToken
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.facebook.FacebookException
-import com.facebook.login.LoginResult
 import com.facebook.FacebookCallback
+import com.facebook.FacebookException
 import com.facebook.login.LoginManager
-import com.google.firebase.auth.FacebookAuthProvider
-import com.park254.app.park254.App
+import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GetTokenResult
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.GoogleAuthProvider
-import com.park254.app.park254.models.Settings
+import com.park254.app.park254.App
+import com.park254.app.park254.R
 import com.park254.app.park254.models.User
 import com.park254.app.park254.network.RetrofitApiService
+import com.park254.app.park254.ui.repo.LoginViewModel
 import com.park254.app.park254.utils.SharedPrefs
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
+import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
 

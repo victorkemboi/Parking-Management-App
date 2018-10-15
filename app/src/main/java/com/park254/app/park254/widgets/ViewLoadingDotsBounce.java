@@ -11,7 +11,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,20 +20,20 @@ import android.widget.LinearLayout;
  * EXAMPLE :
  * android:layout_width="50dp"
  * android:layout_height="30dp"
- *
+ * <p>
  * To change dot color you can use :
  * android:background="@color/exampleColor"
  */
 
 public class ViewLoadingDotsBounce extends LinearLayout {
 
-    private Context context;
-    private ImageView[] img;
-    private GradientDrawable circle = new GradientDrawable();
     private static final int OBJECT_SIZE = 3;
     private static final int POST_DIV = 6;
     private static final int DURATION = 500;
-    private ObjectAnimator animator[];
+    private final GradientDrawable circle = new GradientDrawable();
+    private Context context;
+    private ImageView[] img;
+    private boolean onLayoutReach = false;
 
     public ViewLoadingDotsBounce(Context context) {
         super(context);
@@ -79,13 +78,12 @@ public class ViewLoadingDotsBounce extends LinearLayout {
             rel[i].setGravity(Gravity.CENTER);
             rel[i].setLayoutParams(layoutParams2);
             img[i] = new ImageView(context);
-            img[i].setBackgroundDrawable(circle);
+            img[i].setBackground(circle);
+
             rel[i].addView(img[i]);
             addView(rel[i]);
         }
     }
-
-    boolean onLayoutReach = false;
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -100,21 +98,8 @@ public class ViewLoadingDotsBounce extends LinearLayout {
         }
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-     /*   for (int i = 0; i < OBJECT_SIZE; i++) {
-            if (animator[i].isRunning()) {
-                animator[i].removeAllListeners();
-                animator[i].end();
-                animator[i].cancel();
-            }
-        }
-        */
-    }
-
     private void animateView() {
-        animator = new ObjectAnimator[OBJECT_SIZE];
+        ObjectAnimator[] animator = new ObjectAnimator[OBJECT_SIZE];
         for (int i = 0; i < OBJECT_SIZE; i++) {
             img[i].setTranslationY(getHeight() / POST_DIV);
             PropertyValuesHolder Y = PropertyValuesHolder.ofFloat(TRANSLATION_Y, -getHeight() / POST_DIV);

@@ -3,18 +3,14 @@ package com.park254.app.park254.utils
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Color
-import android.media.Image
 import android.media.MediaScannerConnection
 import android.os.Environment
 import android.os.Handler
 import android.support.design.widget.Snackbar
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
@@ -30,18 +26,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-
 object UtilityClass {
-    val MAP_BUTTON_REQUEST_CODE = 301
-    val OPEN_DOCUMENT_FIRST_PHOTO_CODE = 302
-    val OPEN_DOCUMENT_SECOND_PHOTO_CODE = 303
-    val OPEN_DOCUMENT_THIRD_PHOTO_CODE = 304
-    val MAP_VIEW_BUNDLE_KEY = "305"
-    val REQUEST_LOCATION_PERMISSION_FOR_ENABLE_MY_LOCATION = 306
-    val REQUEST_LOCATION_PERMISSION_FOR_GET_DEVICE_LOCATION = 307
-    val REQUEST_CHECK_SETTINGS = 308
-    val HASH_MAP_UNIQUE_KEY = "wgwrvwrgerge43647423rgfrg34t35635"
-    val DEFAULT_ZOOM = (12).toFloat()
+    const val MAP_BUTTON_REQUEST_CODE = 301
+    const val OPEN_DOCUMENT_FIRST_PHOTO_CODE = 302
+    const val OPEN_DOCUMENT_SECOND_PHOTO_CODE = 303
+    const val OPEN_DOCUMENT_THIRD_PHOTO_CODE = 304
+    const val MAP_VIEW_BUNDLE_KEY = "305"
+    const val REQUEST_LOCATION_PERMISSION_FOR_ENABLE_MY_LOCATION = 306
+    const val REQUEST_LOCATION_PERMISSION_FOR_GET_DEVICE_LOCATION = 307
+    const val REQUEST_CHECK_SETTINGS = 308
+    const val HASH_MAP_UNIQUE_KEY = "wgwrvwrgerge43647423rgfrg34t35635"
+    const val DEFAULT_ZOOM = (12).toFloat()
     const val BASE_URL: String = "https://park254.azurewebsites.net/v1/"
     const val DATABASE_NAME = "park254DB"
     const val BARCODE_READER_REQUEST_CODE = 309
@@ -59,7 +54,7 @@ object UtilityClass {
         }
     }
 
-    fun getStringTimeStampWithDate(date:Date): String {
+    fun getStringTimeStampWithDate(date: Date): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
                 Locale.getDefault())
         dateFormat.timeZone = TimeZone.getTimeZone("GMT")
@@ -68,8 +63,8 @@ object UtilityClass {
 
     fun getDateWithServerTimeStamp(string: String): Calendar? {
 
-        val cal : Calendar = Calendar.getInstance()
-        val sdf =  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX",Locale.US)
+        val cal: Calendar = Calendar.getInstance()
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ", Locale.US)
         sdf.timeZone = TimeZone.getDefault()
 
         cal.time = sdf.parse(string)
@@ -91,7 +86,7 @@ object UtilityClass {
         return month
     }
 
-    fun getTimeDifference(string: String): String{
+    fun getTimeDifference(string: String): String {
 
         val timeFromServer = getDateWithServerTimeStamp(string)!!.time!!.time
 
@@ -102,8 +97,8 @@ object UtilityClass {
 
         // Calculate difference in weeks
         val diffWeeks = timeDifference / (7 * 24 * 60 * 60 * 1000)
-        if (diffWeeks>0){
-            if (diffWeeks == (1).toLong()){
+        if (diffWeeks > 0) {
+            if (diffWeeks == (1).toLong()) {
                 return "$diffWeeks week ago"
             }
             return "$diffWeeks weeks ago"
@@ -112,19 +107,18 @@ object UtilityClass {
 
         // Calculate difference in hours
         val diffHours = timeDifference / (60 * 60 * 1000)
-        if (diffHours>0){
-            if (diffHours == (1).toLong()){
+        if (diffHours > 0) {
+            if (diffHours == (1).toLong()) {
                 return "$diffHours hour ago"
             }
             return "$diffHours hours ago"
         }
 
 
-
         // Calculate difference in minutes
         val diffMinutes = timeDifference / (60 * 1000)
-        if (diffMinutes>0){
-            if (diffMinutes == (1).toLong()){
+        if (diffMinutes > 0) {
+            if (diffMinutes == (1).toLong()) {
                 return "$diffMinutes minute ago"
             }
             return "$diffMinutes minutes ago"
@@ -132,25 +126,20 @@ object UtilityClass {
 
         // Calculate difference in seconds
         val diffSeconds = timeDifference / 1000
-        if (diffSeconds>0){
+        if (diffSeconds > 0) {
 
 
-
-            if (diffSeconds == (1).toLong()){
+            if (diffSeconds == (1).toLong()) {
                 return "$diffSeconds second ago"
             }
             return "$diffSeconds seconds ago"
         }
 
 
-
-
-
-
         // Calculate difference in days
         val diffDays = timeDifference / (24 * 60 * 60 * 1000)
-        if (diffDays>0){
-            if (diffDays == (1).toLong()){
+        if (diffDays > 0) {
+            if (diffDays == (1).toLong()) {
                 return "$diffDays day ago"
             }
             return "$diffDays days ago"
@@ -163,25 +152,24 @@ object UtilityClass {
         return ""
     }
 
-    fun timeAMorPM(calendar: Calendar): String{
-        if (calendar.get(Calendar.AM_PM )== Calendar.AM){
+    fun timeAMorPM(calendar: Calendar): String {
+        if (calendar.get(Calendar.AM_PM) == Calendar.AM) {
             return "AM"
         }
         return "PM"
     }
 
-    fun addZeroForOneToNine(int: Int): String{
-        if (int in 0 until 9){
+    fun addZeroForOneToNine(int: Int): String {
+        if (int in 0 until 9) {
             return "0$int"
         }
-            return int.toString()
+        return int.toString()
     }
-
 
 
     @Throws(WriterException::class)
     fun encodeDataToQR(Value: String, context: Context): Bitmap? {
-        val QRcodeWidth   = 500
+        val QRcodeWidth = 500
         val bitMatrix: BitMatrix
         try {
             bitMatrix = MultiFormatWriter().encode(
@@ -207,7 +195,7 @@ object UtilityClass {
             for (x in 0 until bitMatrixWidth) {
 
                 pixels[offset + x] = if (bitMatrix.get(x, y))
-                   context.resources.getColor(R.color.black)
+                    context.resources.getColor(R.color.black)
                 else
                     context.resources.getColor(R.color.white)
             }
@@ -233,11 +221,11 @@ object UtilityClass {
         }
 
         try {
-            val f = File(photoDirectory,  "IMG-" + Calendar.getInstance().get(Calendar.YEAR)+
-                    addZeroForOneToNine(Calendar.getInstance().get(Calendar.MONTH))+
+            val f = File(photoDirectory, "IMG-" + Calendar.getInstance().get(Calendar.YEAR) +
+                    addZeroForOneToNine(Calendar.getInstance().get(Calendar.MONTH)) +
                     addZeroForOneToNine(Calendar.getInstance().get(Calendar.DATE)) +
                     "-" +
-                    (1 until 100).random() +".jpg")
+                    (1 until 100).random() + ".jpg")
             f.createNewFile()   //give read write permission
             val fo = FileOutputStream(f)
             fo.write(bytes.toByteArray())
@@ -259,19 +247,8 @@ object UtilityClass {
     }
 
 
-     fun IntRange.random() =
-            Random().nextInt((endInclusive + 1) - start) +  start
-
-
-    class Run {
-        companion object {
-            fun after(delay: Long, process: () -> Unit) {
-                Handler().postDelayed({
-                    process()
-                }, delay)
-            }
-        }
-    }
+    private fun IntRange.random() =
+            Random().nextInt((endInclusive + 1) - start) + start
 
 
 }

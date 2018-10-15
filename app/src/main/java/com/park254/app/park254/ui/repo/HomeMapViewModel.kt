@@ -62,7 +62,7 @@ constructor(
                 .apiKey(context.getString(R.string.directions_apikey))
                 .build()
     }
-     lateinit var mGpsSwitchStateReceiver : BroadcastReceiver
+    // lateinit var mGpsSwitchStateReceiver : BroadcastReceiver
 
     lateinit var locationSnackbar :Snackbar
 

@@ -154,7 +154,7 @@ class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshLi
                     }
 
 
-                    this@OwnerFragment.run {
+                    (activity as HomeActivity).runOnUiThread {
                         if (owner_swipe_container.isRefreshing){
                             owner_swipe_container.isRefreshing = false
                         }

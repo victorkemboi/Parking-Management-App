@@ -35,24 +35,8 @@ constructor(
 
     var parsedLot:LotResponse? = null
 
-    var parkingLots:MutableLiveData<ArrayList<LotResponse>> = MutableLiveData()
 
     var homeMapFragment : Fragment? = null
 
-    fun setParkingLotsLocationList(activity: HomeFragment){
 
-        launch {
-            withContext(threadPool){
-                retrofitApiService.getParkingLots().observe(activity, Observer<ApiResponse<List<LotResponse>>>{
-                    response->run{
-                    if (response != null && response.isSuccessful) {
-                        parkingLots.postValue(response.body as ArrayList<LotResponse>)
-                }
-                }
-            })
-        }
-    }
-
-
-}
 }

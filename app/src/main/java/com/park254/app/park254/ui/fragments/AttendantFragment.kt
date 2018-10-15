@@ -149,8 +149,12 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
 
         launch {
             withContext(threadPool) {
-                lyt_progress_attendant.visibility = View.VISIBLE
-                lyt_not_an_attendant.visibility = View.GONE
+
+                (activity as HomeActivity).runOnUiThread {
+                    lyt_progress_attendant.visibility = View.VISIBLE
+                    lyt_not_an_attendant.visibility = View.GONE
+                }
+
                 retrofitApiService.getEmployeeByUserId(settings.userId!!).observe(attendantFragmentContext, Observer<ApiResponse<Employee>> { response ->
                     run {
                         if (response != null) {
@@ -291,12 +295,13 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
                     }
                 }
                 )
-                if(attendant_lyt.visibility!=View.VISIBLE){
-                    lyt_progress_attendant.visibility = View.GONE
-                    lyt_not_an_attendant.visibility = View.VISIBLE
-                }
+
 
                 (activity as HomeActivity).runOnUiThread {
+                    if(attendant_lyt.visibility!=View.VISIBLE){
+                        lyt_progress_attendant.visibility = View.GONE
+                        lyt_not_an_attendant.visibility = View.VISIBLE
+                    }
                     if (attendant_swipe_container.isRefreshing){
                         attendant_swipe_container.isRefreshing = false
                     }

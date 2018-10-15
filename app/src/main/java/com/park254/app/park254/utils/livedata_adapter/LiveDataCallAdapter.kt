@@ -18,7 +18,6 @@ package com.park254.app.park254.utils.livedata_adapter
 
 
 import android.arch.lifecycle.LiveData
-import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Callback

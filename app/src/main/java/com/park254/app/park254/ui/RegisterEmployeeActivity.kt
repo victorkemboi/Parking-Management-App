@@ -30,7 +30,6 @@ class RegisterEmployeeActivity : AppCompatActivity() {
     @Inject
     lateinit var homeViewModel: HomeViewModel
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_employee)
@@ -44,8 +43,7 @@ class RegisterEmployeeActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun employeeRegistration(){
+    private fun employeeRegistration(){
         btn_add_lot_employee.visibility = View.GONE
         lyt_progress_employee.visibility = View.VISIBLE
         retrofitApiService.getUserByEmail(txt_input_employee_email.text.toString()).observe(this, Observer<ApiResponse<User>> {
@@ -97,6 +95,7 @@ class RegisterEmployeeActivity : AppCompatActivity() {
                                     viewModel.employee.lotId = homeViewModel.parsedLot!!.id
                                     viewModel.employee.userId = viewModel.user.id
 
+
                                     retrofitApiService.registerEmployee(viewModel.employee).observe(
                                             this, Observer<ApiResponse<Employee>> { response ->
                                         run {
@@ -127,7 +126,6 @@ class RegisterEmployeeActivity : AppCompatActivity() {
 
                             }
 
-
                         }
                         lyt_progress_employee.visibility = View.GONE
 
@@ -148,7 +146,6 @@ class RegisterEmployeeActivity : AppCompatActivity() {
                         lyt_progress_employee.visibility = View.GONE
                         btn_add_lot_employee.visibility = View.VISIBLE
                     }
-
 
                 }else{
 

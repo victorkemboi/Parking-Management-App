@@ -2,14 +2,13 @@ package com.park254.app.park254.ui
 
 import android.content.Intent
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.R.styleable.NavigationView
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
@@ -35,14 +34,14 @@ class HomeActivity : AppCompatActivity(),
         OwnerFragment.OnFragmentInteractionListener,
         AttendantFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
-         View.OnClickListener{
+        View.OnClickListener {
 
 
     @Inject
-    lateinit var viewModel:HomeViewModel
+    lateinit var viewModel: HomeViewModel
 
     override fun onClick(p0: View?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -53,22 +52,22 @@ class HomeActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-       // initToolbar()
+        // initToolbar()
         (application as App).applicationInjector.inject(this)
 
         initToolBar("Home")
 
         initNavigationMenu()
 
-        val fragmentClass: Class<*> =   HomeFragment::class.java
+        val fragmentClass: Class<*> = HomeFragment::class.java
 
         viewModel.homeMapFragment = fragmentClass.newInstance() as Fragment
         val fragmentManager = supportFragmentManager
         fragmentManager.beginTransaction().replace(R.id.mainHomeContentFrameLayout, viewModel.homeMapFragment!!).commit()
         //Log.d("User:", FirebaseAuth.getInstance().currentUser.toString())
 
-        val headerView  = nav_view.getHeaderView(0)
-        val navUsername   = headerView.findViewById(R.id.user_name) as TextView
+        val headerView = nav_view.getHeaderView(0)
+        val navUsername = headerView.findViewById(R.id.user_name) as TextView
         navUsername.text = FirebaseAuth.getInstance().currentUser!!.displayName
         val navEmail = headerView.findViewById<TextView>(R.id.email)
         navEmail.text = FirebaseAuth.getInstance().currentUser!!.email
@@ -78,9 +77,9 @@ class HomeActivity : AppCompatActivity(),
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CHECK_SETTINGS){
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
             viewModel.homeMapFragment?.onActivityResult(requestCode, resultCode, data)
-        }else {
+        } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
@@ -89,21 +88,22 @@ class HomeActivity : AppCompatActivity(),
         // TODO Implement
     }
 
-     private fun initToolBar(title:String){
+    private fun initToolBar(title: String) {
         toolbar2.setNavigationIcon(R.drawable.ic_back_arrow)
-       setSupportActionBar(toolbar2)
+        setSupportActionBar(toolbar2)
 
         supportActionBar!!.title = title
-        supportActionBar?.apply { setDisplayHomeAsUpEnabled(false)
-            setHomeAsUpIndicator(R.drawable.ic_menu)}
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(false)
+            setHomeAsUpIndicator(R.drawable.ic_menu)
+        }
 
     }
 
     private fun initNavigationMenu() {
 
 
-        val drawerToggle = object : ActionBarDrawerToggle(this, drawer_layout, toolbar2, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        {
+        val drawerToggle = object : ActionBarDrawerToggle(this, drawer_layout, toolbar2, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
         }
         drawerToggle.isDrawerIndicatorEnabled = true
@@ -117,29 +117,28 @@ class HomeActivity : AppCompatActivity(),
         }
 
 
-
     }
 
     private fun selectDrawerItem(menuItem: MenuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
-        if (menuItem.itemId == R.id.nav_bookings){
+        if (menuItem.itemId == R.id.nav_bookings) {
             menuItem.isChecked = true
             startActivity(
                     Intent(this@HomeActivity, BookingsActivity::class.java))
         }
-        if (menuItem.itemId == R.id.nav_payments){
+        if (menuItem.itemId == R.id.nav_payments) {
 
             menuItem.isChecked = true
             startActivity(
                     Intent(this@HomeActivity, PaymentsActivity::class.java))
 
         }
-        if(menuItem.itemId ==R.id.nav_log_out){
+        if (menuItem.itemId == R.id.nav_log_out) {
 
 
             // Initialize a new instance of
             val builder = AlertDialog.Builder(this@HomeActivity)
-            val titleInActionBar= supportActionBar!!.title
+            val titleInActionBar = supportActionBar!!.title
 
             // Set the alert dialog title
             builder.setTitle("Log Out")
@@ -148,7 +147,7 @@ class HomeActivity : AppCompatActivity(),
             builder.setMessage("Are you want to log out?")
 
             // Set a positive button and its click listener on alert dialog
-            builder.setPositiveButton("YES"){dialog, which ->
+            builder.setPositiveButton("YES") { dialog, which ->
                 // Do something when user press the positive button
 
                 FirebaseAuth.getInstance().signOut()
@@ -159,7 +158,7 @@ class HomeActivity : AppCompatActivity(),
             }
 
             // Display a negative button on alert dialog
-            builder.setNegativeButton("No"){dialog,which ->
+            builder.setNegativeButton("No") { dialog, which ->
 
                 activity_main
                 initToolBar(titleInActionBar as String)
@@ -184,9 +183,9 @@ class HomeActivity : AppCompatActivity(),
             else -> HomeFragment::class.java
         }
 
-        if (menuItem.itemId == R.id.nav_home){
-            fragment= viewModel.homeMapFragment
-        }else{
+        if (menuItem.itemId == R.id.nav_home) {
+            fragment = viewModel.homeMapFragment
+        } else {
             try {
                 fragment = fragmentClass.newInstance() as Fragment
             } catch (e: Exception) {
@@ -209,18 +208,6 @@ class HomeActivity : AppCompatActivity(),
 
 
     }
-    fun getActiveFragment(): String{
-        val fragments = supportFragmentManager.fragments
-        if(fragments.isNotEmpty()) {
-          val activeFragment = fragments[fragments.size-1]
-        }
-
-        return  ""
-    }
-
-
-
-
 
 
 }
