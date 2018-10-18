@@ -35,19 +35,7 @@
 
         />
 
-  <!--  <com.park254.app.park254.widgets.ViewLoadingDotsBounce
-        app:layout_constraintTop_toBottomOf="@id/dialog_instruction_txt_view"
-        android:layout_marginTop="@dimen/spacing_middle"
-        android:id="@+id/lyt_progress_qr_code_dialog"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_gravity="center"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
-        android:background="@color/colorAccentDark2"
-        android:visibility="gone"
 
-        />  -->
 
     <LinearLayout
         android:visibility="gone"

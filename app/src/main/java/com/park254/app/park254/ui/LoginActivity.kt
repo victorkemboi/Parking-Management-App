@@ -1,8 +1,10 @@
 package com.park254.app.park254.ui
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import com.facebook.AccessToken
 import com.facebook.FacebookCallback
@@ -36,19 +38,17 @@ class LoginActivity : AppCompatActivity() {
     @Inject
     lateinit var retrofitApiService: RetrofitApiService
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         (application as App).applicationInjector.inject(this)
 
        google_sign_in_button.setOnClickListener {
+           Log.w("G Button:","PRESSED")
            lyt_login_btn.visibility = View.GONE
            lyt_progress_login.visibility = View.VISIBLE
            googleSignIn()
        }
-
 
       facebook_sign_in_button.setOnClickListener { view->
 
@@ -60,10 +60,6 @@ class LoginActivity : AppCompatActivity() {
 
         LoginManager.getInstance().registerCallback(viewModel.callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
-                // App code
-
-               // Log.d("Fb Login","SUCCESS")
-
                 handleFacebookAccessToken(loginResult.accessToken)
             }
 
@@ -91,38 +87,39 @@ class LoginActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == viewModel.RC_GOOGLE_SIGN_IN) {
+        if (requestCode == viewModel.RC_GOOGLE_SIGN_IN ) {
+            Log.w("G Button:","onActivityResult google sign in")
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)
-               firebaseAuthwithGoogle(account)
+                if (account != null) {
+                    Log.w("G Button:","onActivityResult google sign in success")
+                    firebaseAuthwithGoogle(account)
+                }
 
-                //check if new user
-                //if new user, ask for more info
-                //if existing user, differentiate according to roles.
             } catch (e: ApiException) {
                 lyt_login_btn.visibility = View.VISIBLE
                 lyt_progress_login.visibility = View.GONE
-                // Google Sign In failed, update UI appropriately
-                //Log.w("Sign In", "Google sign in failed", e)
-                //display error message, and allow to re-sign in again.
+
+                Log.w("G Button:statusCode=","${e.statusCode}")
+                Log.w("G Button:message=","${e.message}")
+                Log.w("G Button:cause=","${e.cause}")
             }
 
         }else{
             viewModel.callbackManager.onActivityResult(requestCode, resultCode, data)
+            Log.w("Sign In", "Google sign in failed")
         }
     }
 
     private fun googleSignIn() {
+        Log.w("G Button:","googleSignIn()")
         viewModel.setupGoogleUserData(this.application )
-        val signInIntent = viewModel.mGoogleSignInClient.signInIntent
-        startActivityForResult(signInIntent,  viewModel.RC_GOOGLE_SIGN_IN)
+        startActivityForResult(viewModel.mGoogleSignInClient.signInIntent,  viewModel.RC_GOOGLE_SIGN_IN)
     }
 
     fun handleFacebookAccessToken(token: AccessToken) {
-
-
 
         val credential = FacebookAuthProvider.getCredential(token.token)
         viewModel.firebaseAuth.signInWithCredential(credential)
@@ -132,18 +129,16 @@ class LoginActivity : AppCompatActivity() {
                             task2 ->
                             run {
                                 if (task2.isSuccessful) {
-                                    val userToken = task2.result.token
+                                    val userToken = task2.result?.token
                                     settings.token = userToken
 
-
-                                    if( task.result.additionalUserInfo.isNewUser){
+                                    if( task.result?.additionalUserInfo!!.isNewUser){
 
                                         startActivity(
                                                 Intent(this@LoginActivity, AddUserInfoActivity::class.java))
                                     }else{
                                         saveUserId()
                                     }
-
 
                                 }
                             }
@@ -157,6 +152,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun firebaseAuthwithGoogle(account: GoogleSignInAccount){
 
+        Log.w("G Button:","firebaseAuthwithGoogle(account: GoogleSignInAccount)")
       //  Log.d("Sign In", "firebaseAuthWithGoogle:" + account.id)
         //progressdialogstart
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
@@ -166,32 +162,30 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener { task->
                   //  Log.w("Sign In task", task.toString())
                     if(task.isSuccessful){
-
-
+                        Log.w("G Button:","signInWithCredential(credential) success")
                         viewModel.firebaseAuth.getAccessToken(true).addOnCompleteListener {
                             task2 ->
                             run {
                                 if (task2.isSuccessful) {
-                                    val token = task2.result.token
+                                    val token = task2.result?.token
                                     settings.token = token
 
                                    // Log.d("Sign In jwt token", token   )
 
-                                    if( task.result.additionalUserInfo.isNewUser){
+                                    if( task.result?.additionalUserInfo!!.isNewUser){
 
                                         startActivity(
                                                 Intent(this@LoginActivity, AddUserInfoActivity::class.java))
-
 
                                     }else{
                                         saveUserId()
                                     }
 
-
                                 }
                             }
                         }
                     }else{
+                        Log.w("G Button:","signInWithCredential(credential) failed")
                        // Log.w("Sign In", "signInWithCredential:failed")
 
                         lyt_login_btn.visibility = View.VISIBLE
@@ -217,9 +211,7 @@ class LoginActivity : AppCompatActivity() {
                     finish()
                 }
 
-
             }
-
 
         })
     }

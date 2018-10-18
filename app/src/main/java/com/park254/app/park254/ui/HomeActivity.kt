@@ -1,5 +1,6 @@
 package com.park254.app.park254.ui
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
@@ -17,16 +19,25 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.park254.app.park254.App
 import com.park254.app.park254.R
+import com.park254.app.park254.models.Employee
+import com.park254.app.park254.models.LotResponse
+import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.fragments.AttendantFragment
 import com.park254.app.park254.ui.fragments.HomeFragment
 import com.park254.app.park254.ui.fragments.MyPlacesFragment
 import com.park254.app.park254.ui.fragments.OwnerFragment
 import com.park254.app.park254.ui.repo.HomeViewModel
+import com.park254.app.park254.utils.SharedPrefs
 import com.park254.app.park254.utils.UtilityClass.REQUEST_CHECK_SETTINGS
+import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.toolbar_2.*
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.experimental.Job
 import javax.inject.Inject
+import kotlin.coroutines.experimental.CoroutineContext
 
 class HomeActivity : AppCompatActivity(),
         MyPlacesFragment.OnFragmentInteractionListener,
@@ -36,9 +47,15 @@ class HomeActivity : AppCompatActivity(),
         HomeFragment.OnFragmentInteractionListener,
         View.OnClickListener {
 
-
     @Inject
     lateinit var viewModel: HomeViewModel
+
+    @Inject
+    lateinit var retrofitApiService: RetrofitApiService
+
+    @Inject
+    lateinit var settings : SharedPrefs
+
 
     override fun onClick(p0: View?) {
 
@@ -56,7 +73,7 @@ class HomeActivity : AppCompatActivity(),
         (application as App).applicationInjector.inject(this)
 
         initToolBar("Home")
-
+        setNavDrawerMenu()
         initNavigationMenu()
 
         val fragmentClass: Class<*> = HomeFragment::class.java
@@ -115,7 +132,6 @@ class HomeActivity : AppCompatActivity(),
             drawer_layout.closeDrawer(GravityCompat.START)
             true
         }
-
 
     }
 
@@ -205,8 +221,58 @@ class HomeActivity : AppCompatActivity(),
         supportActionBar!!.title = menuItem.title
         // Close the navigation drawer
         drawer_layout.closeDrawers()
+    }
+
+    private fun setNavDrawerMenu(){
+        if (isOwner()){
+            nav_view.menu.findItem(R.id.nav_owner).isVisible = true
+        }
+
+        if (isAttendant()){
+            nav_view.menu.findItem(R.id.nav_attendant).isVisible = true
+        }
+    }
+
+   private fun isOwner(): Boolean{
+        retrofitApiService.getOwnedParkingLots().observe(
+                this, Observer <ApiResponse<List<LotResponse>>>{
+            lots ->run{
+             if (lots !=null ){
+                if (lots.isSuccessful){
+
+                 return@run lots.body?.isNotEmpty()
+
+                }else{
+                    return@run false
+                }
+            }else{
+                 return@run false
+             }
+        }
+        }
+        )
+        return false
+    }
+
+    private fun isAttendant(): Boolean{
+
+        retrofitApiService.getEmployeeByUserId(settings.userId!!).observe(this, Observer<ApiResponse<Employee>> { response ->
+            run {
+                if (response != null) {
+                    if (response.isSuccessful) {
+                        return@run response.body != null
+                    } else {
+                        return@run false
+                    }
+                } else {
+                    return@run false
+                }
+            }
+        }
+        )
 
 
+        return false
     }
 
 

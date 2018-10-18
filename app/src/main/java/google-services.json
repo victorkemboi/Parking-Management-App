@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "532535428473-4t52te3cccfj6a1s8eod872sd8q6n770.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.park254.app.park254",
+            "certificate_hash": "d6e34a293c1ecabb8b1c6c7ab1b243d0380118af"
+          }
+        },
+        {
           "client_id": "532535428473-4v6vfn6ijcj19n4q5q2aau53auflh2g4.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "532535428473-4v6vfn6ijcj19n4q5q2aau53auflh2g4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

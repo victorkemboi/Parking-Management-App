@@ -37,8 +37,6 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.park254.app.park254.ui.repo.PaymentsViewModel
 import com.park254.app.park254.utils.UtilityClass
-import com.park254.app.park254.widgets.ViewLoadingDotsBounce
-import kotlinx.android.synthetic.main.activity_bookings.*
 import kotlinx.coroutines.experimental.*
 import kotlin.coroutines.experimental.CoroutineContext
 

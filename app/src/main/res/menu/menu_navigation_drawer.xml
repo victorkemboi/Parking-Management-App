@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-        android:id="@+id/grp_1"
+        android:id="@+id/main_group"
         android:checkableBehavior="single">
         <item
             android:checked="true"
@@ -10,16 +10,17 @@
             android:icon="@drawable/ic_home"
             android:title="Home" />
 
-
         <item
             android:id="@+id/nav_owner"
             android:icon="@drawable/ic_work"
-            android:title="Owner" />
+            android:title="Owner"
+            android:visible="false"/>
 
         <item
             android:id="@+id/nav_attendant"
             android:icon="@drawable/ic_attendant"
-            android:title="Attendant" />
+            android:title="Attendant"
+            android:visible="false"/>
     </group>
     <group
         android:id="@+id/nav_group"

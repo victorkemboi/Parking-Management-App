@@ -39,6 +39,7 @@ constructor( val firebaseAuth:FirebaseAuth) : ViewModel() {
 
      fun setupGoogleUserData( app: Application){
          //requestGoogleUserData
+         Log.w("G Button:","setupGoogleUserData( app: Application)")
          gso  = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                  .requestIdToken(GOOGLE_WEB_CLIENT_ID)
                  .requestEmail()

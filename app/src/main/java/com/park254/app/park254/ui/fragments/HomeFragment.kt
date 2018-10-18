@@ -128,7 +128,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         }
 
         viewModel.locationSnackbar =  Snackbar.make((activity as HomeActivity).window.decorView.rootView,
-                "Please turn on location for improved experience!", Snackbar.LENGTH_INDEFINITE).withColor(R.color.red_600)
+                "Please turn on location for improved experience!", Snackbar.LENGTH_INDEFINITE).withColor(
+               ContextCompat.getColor(context!!,R.color.red_600) )
 
         mGpsSwitchStateReceiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, intent: Intent?) {
@@ -410,10 +411,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
                                // Set the map's camera position to the current location of the device.
                                val location = task.result
 
-                               viewModel.deviceLocation.postValue(
-                                       com.google.maps.model.LatLng(location.latitude,
-                                               location.longitude)
-                               )
+                               if (location != null) {
+                                   viewModel.deviceLocation.postValue(
+                                           com.google.maps.model.LatLng(location.latitude,
+                                                   location.longitude)
+                                   )
+                               }
 
                            }else{
                                Log.d("Location:","getDeviceLocation task  null, request location")
@@ -576,8 +579,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         viewModel.mFusedLocationProviderClient.requestLocationUpdates(viewModel.mLocationRequest, viewModel.locationCallback, null)
     }
 
-    private fun Snackbar.withColor(@ColorInt colorInt: Int): Snackbar{
-        this.view.setBackgroundColor(ContextCompat.getColor(this.context, colorInt))
+    private fun Snackbar.withColor(colorInt: Int): Snackbar{
+        this.view.setBackgroundColor(colorInt)
         return this
     }
 

@@ -39,7 +39,7 @@ class SplashActivity : AppCompatActivity() {
                     val mUser = auth.currentUser
                     mUser?.getIdToken(true)?.addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            val idToken = task.result.token
+                            val idToken = task.result?.token
                             // Log.w("User getToken: ", idToken)
                             settings.token = idToken
 
@@ -55,13 +55,11 @@ class SplashActivity : AppCompatActivity() {
                 }
             }
 
-
         } else {
 
             startLogin()
 
         }
-
 
     }
 
