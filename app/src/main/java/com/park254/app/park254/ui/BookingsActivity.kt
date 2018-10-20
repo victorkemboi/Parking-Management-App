@@ -92,8 +92,6 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
 
         bookings_recyclerview.setHasFixedSize(false)
 
-
-
         launch {
             withContext(threadPool) {
                 retrofitApiService.getUserBookings().observe(bookingsActivityContext, Observer<ApiResponse<List<Booking>>> { response ->
@@ -132,26 +130,30 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
 
         val view = layoutInflater.inflate(R.layout.payment_pop_out_lyt, null)
 
-
         builder.setView(view)
 
         builder.setPositiveButton("PAY") { dialog, p1 ->
 
+            retrofitApiService.payForBooking(booking.id).observe(this, Observer<ApiResponse<String>>{
+                result->run{
+                if (result!=null){
+                    if (result.isSuccessful){
+                        Log.d("Mpesa: ","booking id" + booking.id)
+                        Log.d("Mpesa: ","Payment is success.")
 
-        launch {
-                withContext(threadPool) {
-
-                    retrofitApiService.payForBooking(booking.id).observe(
-                            bookingsActivityContext, Observer<ApiResponse<Void>> {
-                        Log.d("Resp","MPESA")
+                        Log.d("Mpesa: ",result.body)
+                    }else{
+                        Log.d("Mpesa: ","booking id" + booking.id)
+                        Log.d("Mpesa: ","Payment Failed.")
                     }
-                    )
+                }else{
+                    Log.d("Mpesa: ","result is null.")
                 }
             }
+            })
+
 
         }
-
-
 
         builder.setNegativeButton(android.R.string.cancel) { dialog, p1 ->
             dialog.cancel()

@@ -60,13 +60,14 @@ class LoginActivity : AppCompatActivity() {
 
         LoginManager.getInstance().registerCallback(viewModel.callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
+                Log.w("Fb callback:","success")
                 handleFacebookAccessToken(loginResult.accessToken)
             }
 
             override fun onCancel() {
                 // App code
                // Log.w("Fb Login","cancelled")
-
+                Log.w("Fb callback:","cancelled")
                 lyt_login_btn.visibility = View.VISIBLE
                 lyt_progress_login.visibility = View.GONE
             }
@@ -74,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
             override fun onError(exception: FacebookException) {
                 // App code
 
-                //Log.e("Fb Login","FAILED")
+                Log.w("Fb callback:","failed")
                 lyt_login_btn.visibility = View.VISIBLE
                 lyt_progress_login.visibility = View.GONE
 
@@ -90,7 +91,8 @@ class LoginActivity : AppCompatActivity() {
         if (requestCode == viewModel.RC_GOOGLE_SIGN_IN ) {
             Log.w("G Button:","onActivityResult google sign in")
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
+
+          try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)
                 if (account != null) {
@@ -107,6 +109,7 @@ class LoginActivity : AppCompatActivity() {
                 Log.w("G Button:cause=","${e.cause}")
             }
 
+
         }else{
             viewModel.callbackManager.onActivityResult(requestCode, resultCode, data)
             Log.w("Sign In", "Google sign in failed")
@@ -115,7 +118,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun googleSignIn() {
         Log.w("G Button:","googleSignIn()")
-        viewModel.setupGoogleUserData(this.application )
+
+        viewModel.setupGoogleUserData(this)
         startActivityForResult(viewModel.mGoogleSignInClient.signInIntent,  viewModel.RC_GOOGLE_SIGN_IN)
     }
 

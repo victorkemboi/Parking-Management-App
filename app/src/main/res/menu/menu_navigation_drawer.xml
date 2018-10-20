@@ -11,22 +11,6 @@
             android:title="Home" />
 
         <item
-            android:id="@+id/nav_owner"
-            android:icon="@drawable/ic_work"
-            android:title="Owner"
-            android:visible="false"/>
-
-        <item
-            android:id="@+id/nav_attendant"
-            android:icon="@drawable/ic_attendant"
-            android:title="Attendant"
-            android:visible="false"/>
-    </group>
-    <group
-        android:id="@+id/nav_group"
-        android:checkableBehavior="none">
-
-        <item
             android:id="@+id/nav_my_places"
             android:icon="@drawable/ic_place"
             android:title="My Places" />
@@ -38,6 +22,27 @@
             android:id="@+id/nav_payments"
             android:icon="@drawable/ic_payment"
             android:title="My Payments" />
+
+
+    </group>
+    <group
+        android:id="@+id/nav_group"
+        android:checkableBehavior="none">
+
+
+
+        <item
+            android:id="@+id/nav_owner"
+            android:icon="@drawable/ic_work"
+            android:title="Owner"
+            android:visible="true"/>
+
+        <item
+            android:id="@+id/nav_attendant"
+            android:icon="@drawable/ic_attendant"
+            android:title="Attendant"
+            android:visible="true"/>
+
         <item
             android:id="@+id/nav_log_out"
             android:icon="@drawable/ic_exit_to_app"

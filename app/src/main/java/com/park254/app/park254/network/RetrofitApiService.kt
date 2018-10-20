@@ -46,8 +46,8 @@ interface RetrofitApiService{
     @POST("Profiles/update")
     fun updateUserInfo(@Body userUpdate: UserUpdate): LiveData<ApiResponse<User>>
 
-    @POST("Mpesa")
-    fun payForBooking(@Body bookingId: String): LiveData<ApiResponse<Void>>
+    @POST("Hela")
+    fun payForBooking(@Query("BookingRequestId")BookingRequestId:String) : LiveData<ApiResponse<String>>
 
     @POST("Management")
     fun registerEmployee(@Body baseEmployeeRegistration: BaseEmployeeRegistration): LiveData<ApiResponse<Employee>>

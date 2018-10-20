@@ -4,7 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.view.View;
 
-public class ItemAnimation {
+public class ItemAnimation1 {
 
     public static final int NONE = 0;
     /* animation type */

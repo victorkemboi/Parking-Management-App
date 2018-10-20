@@ -10,6 +10,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -73,9 +74,9 @@ class HomeActivity : AppCompatActivity(),
         (application as App).applicationInjector.inject(this)
 
         initToolBar("Home")
-        setNavDrawerMenu()
-        initNavigationMenu()
 
+        initNavigationMenu()
+        setNavDrawerMenuOwnerAndAttendant()
         val fragmentClass: Class<*> = HomeFragment::class.java
 
         viewModel.homeMapFragment = fragmentClass.newInstance() as Fragment
@@ -223,56 +224,46 @@ class HomeActivity : AppCompatActivity(),
         drawer_layout.closeDrawers()
     }
 
-    private fun setNavDrawerMenu(){
-        if (isOwner()){
-            nav_view.menu.findItem(R.id.nav_owner).isVisible = true
-        }
+    private fun setNavDrawerMenuOwnerAndAttendant(){
 
-        if (isAttendant()){
-            nav_view.menu.findItem(R.id.nav_attendant).isVisible = true
-        }
+        isAttendant()
+        isOwner()
     }
 
-   private fun isOwner(): Boolean{
+   private fun isOwner(){
         retrofitApiService.getOwnedParkingLots().observe(
                 this, Observer <ApiResponse<List<LotResponse>>>{
             lots ->run{
              if (lots !=null ){
                 if (lots.isSuccessful){
+               // Log.w("isOwner:",lots.body?.isNotEmpty().toString())
+                    if (lots.body !=null){
+                        nav_view.menu.findItem(R.id.nav_owner).isVisible = lots.body.isNotEmpty()
+                    }
 
-                 return@run lots.body?.isNotEmpty()
-
-                }else{
-                    return@run false
                 }
-            }else{
-                 return@run false
-             }
+            }
         }
         }
         )
-        return false
     }
 
-    private fun isAttendant(): Boolean{
+    private fun isAttendant(){
 
         retrofitApiService.getEmployeeByUserId(settings.userId!!).observe(this, Observer<ApiResponse<Employee>> { response ->
             run {
                 if (response != null) {
                     if (response.isSuccessful) {
-                        return@run response.body != null
-                    } else {
-                        return@run false
+
+                        nav_view.menu.findItem(R.id.nav_attendant).isVisible  = response.body != null
+
                     }
-                } else {
-                    return@run false
                 }
             }
         }
         )
 
 
-        return false
     }
 
 

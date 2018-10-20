@@ -112,6 +112,7 @@ class BookingsListAdapter(private val ctx: Context, items: ArrayList<Booking>)
                 response ->run{
                 if (response?.body != null && response.isSuccessful) {
                     if(response.body.parkingLotPhotos.isNotEmpty()) {
+                        holder.name.text = response.body.name
                         try {
                             Glide.with(ctx as BookingsActivity).load(response.body.parkingLotPhotos[0].blobUrl).into(holder.imageView)
                         } catch (e: FileNotFoundException) {

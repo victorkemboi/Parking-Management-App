@@ -34,6 +34,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
+import com.google.android.gms.location.places.AutocompleteFilter
 import com.google.android.gms.location.places.Place
 import com.google.android.gms.location.places.ui.PlaceSelectionListener
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment
@@ -81,6 +82,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
     private var listener: OnFragmentInteractionListener? = null
 
+    private  var homeFragmentContext : Context? = null
+
     override val coroutineContext: CoroutineContext
         get() =   Dispatchers.Default + job
 
@@ -97,12 +100,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         }
 
        // (activity as HomeActivity).viewModel.setParkingLotsLocationList(this)
-
+        homeFragmentContext = context
         viewModel.mFusedLocationProviderClient = LocationServices
                 .getFusedLocationProviderClient(activity as HomeActivity)
 
         viewModel.googleApiClient =
-                GoogleApiClient.Builder(this.context!!)
+                GoogleApiClient.Builder(homeFragmentContext!!)
                 .addApi(LocationServices.API).build()
 
         viewModel.mLocationRequest =  LocationRequest.create()
@@ -178,6 +181,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
       mapView?.onCreate(savedInstanceState)
       mapView?.getMapAsync(this)
 
+
       return view
     }
 
@@ -194,10 +198,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         // Retrieve the PlaceAutocompleteFragment.
        viewModel.autocompleteFragment  = childFragmentManager.findFragmentById(R.id.place_autocomplete_fragment) as SupportPlaceAutocompleteFragment
 
+        val typeFilter = AutocompleteFilter.Builder().setTypeFilter(Place.TYPE_COUNTRY)
+                .setCountry("KE").build()
+        viewModel.autocompleteFragment?.setFilter(typeFilter)
         val searchEditText = viewModel.autocompleteFragment!!.view?.findViewById<TextView>(R.id.place_autocomplete_search_input)
 
-        searchEditText?.hint = "Where to?"
-        searchEditText?.setHintTextColor( ContextCompat.getColor(this.context!!, R.color.grey_60))
+        searchEditText?.hint = "Where would you like to park?"
+        searchEditText?.setHintTextColor( ContextCompat.getColor(homeFragmentContext!!, R.color.grey_60))
+        searchEditText?.textSize  = 15f
+
         viewModel.autocompleteFragment!!.setOnPlaceSelectedListener(this)
 
         viewModel.autocompleteFragment!!.view?.findViewById<AppCompatImageButton>(R.id.place_autocomplete_clear_button)?.setOnClickListener{ view ->
@@ -205,7 +214,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
             viewModel.userDestinationMarker?.remove()
 
             viewModel.autocompleteFragment!!.view?.findViewById<TextView>(R.id.place_autocomplete_search_input)?.text = ""
-            searchEditText?.hint = "Where to?"
+            searchEditText?.hint = "Where would you like to park?"
 
             viewModel.autocompleteFragment!!.view?.findViewById<AppCompatImageButton>(R.id.place_autocomplete_clear_button)?.visibility = View.INVISIBLE
             viewModel.routePolyline?.remove()
@@ -265,9 +274,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         }catch (e: KotlinNullPointerException){
             turnOnLocation()
         }
-
-
-
 
      }
 
@@ -339,15 +345,18 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
     private fun checkIfLocationPermissionIsGranted(): Boolean{
 
-        if (ContextCompat.checkSelfPermission(this.context!!,Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED
-            &&
-        ContextCompat.checkSelfPermission(this.context!!,Manifest.permission.ACCESS_COARSE_LOCATION)
-        == PackageManager.PERMISSION_GRANTED
+        if (homeFragmentContext!=null){
+            if (ContextCompat.checkSelfPermission(homeFragmentContext!!,Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED
+                    &&
+                    ContextCompat.checkSelfPermission(homeFragmentContext!!,Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED
 
-        ) {
-            return true
+            ) {
+                return true
+            }
         }
+
         return false
     }
 
@@ -445,7 +454,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
             viewModel.deviceLocationMarker!!.position = location
         }else{
             viewModel.deviceLocationMarker = viewModel. map?.addMarker(MarkerOptions().position(location).icon(BitmapDescriptorFactory.fromBitmap(
-                    createUserLocationMarker(this.context!!, R.layout.user_current_location_marker_layout))))
+                    createUserLocationMarker(homeFragmentContext!!, R.layout.user_current_location_marker_layout))))
         }
 
 
@@ -464,7 +473,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
             var locationMode  = 0
             try {
-                locationMode = Settings.Secure.getInt(this.context?.contentResolver,Settings.Secure.LOCATION_MODE)
+                locationMode = Settings.Secure.getInt(homeFragmentContext?.contentResolver,Settings.Secure.LOCATION_MODE)
 
             } catch ( e: Settings.SettingNotFoundException) {
                 e.printStackTrace()
@@ -474,18 +483,18 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
 
         }else{
-            val locationProviders = Settings.Secure.getString(this.context?.contentResolver, Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
+            val locationProviders = Settings.Secure.getString(homeFragmentContext?.contentResolver, Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
             !TextUtils.isEmpty(locationProviders)
         }
 
     }
 
     private  fun isLocationEnabled(): Boolean{
-        var locationMode = 0
+        val locationMode: Int
         val locationProviders : String
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
             try {
-                locationMode = android.provider.Settings.Secure.getInt(context?.contentResolver, android.provider.Settings.Secure.LOCATION_MODE)
+                locationMode = android.provider.Settings.Secure.getInt(homeFragmentContext?.contentResolver, android.provider.Settings.Secure.LOCATION_MODE)
             }catch (e:android.provider.Settings.SettingNotFoundException){
                 e.printStackTrace()
                 return false
@@ -503,7 +512,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         val  nairobi= LatLng(-1.28333 , 36.81667)
         val center: CameraUpdate=
                 CameraUpdateFactory.newLatLng(nairobi)
-        val zoom: CameraUpdate=CameraUpdateFactory.zoomTo((15).toFloat())
+        val zoom: CameraUpdate=CameraUpdateFactory.zoomTo(15f)
 
         viewModel.map?.moveCamera(center)
         viewModel.map?.animateCamera(zoom)
@@ -516,7 +525,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         if((activity as HomeActivity).viewModel.parsedLot!=null){
 
             startActivity(
-                    Intent(this@HomeFragment.context, LotInfoActivity::class.java))
+                    Intent(homeFragmentContext, LotInfoActivity::class.java))
         }
     }
 

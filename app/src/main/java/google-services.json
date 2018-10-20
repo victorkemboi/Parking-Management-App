@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "532535428473-oce3g8bq6k982vdh452jdkurqrjp64j1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.park254.app.park254",
+            "certificate_hash": "8e207593598056e8637c16595a22e71df03ae6f9"
+          }
+        },
+        {
           "client_id": "532535428473-4v6vfn6ijcj19n4q5q2aau53auflh2g4.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -1,17 +1,10 @@
 package com.park254.app.park254.ui
 
-import android.Manifest
-import android.app.Activity
-import android.app.Dialog
 import android.arch.lifecycle.Observer
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.annotation.RequiresApi
-import android.support.v4.app.ActivityCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -20,7 +13,6 @@ import com.park254.app.park254.App
 import com.park254.app.park254.R
 import com.park254.app.park254.models.Payment
 import com.park254.app.park254.network.RetrofitApiService
-import com.park254.app.park254.ui.adapters.BookingsListAdapter
 import com.park254.app.park254.ui.adapters.PaymentsListAdapter
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import kotlinx.android.synthetic.main.activity_lot_info.*
@@ -29,10 +21,7 @@ import java.util.ArrayList
 import javax.inject.Inject
 import android.support.v7.app.AlertDialog
 import android.util.Log
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.park254.app.park254.ui.repo.PaymentsViewModel
@@ -208,7 +197,6 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
             builder.setView(view)
 
             builder.show()
-
 
         }
 
