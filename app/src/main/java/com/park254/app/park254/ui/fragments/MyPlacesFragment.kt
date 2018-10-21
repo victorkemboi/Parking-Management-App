@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -45,7 +46,6 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
 
 {
 
-
     private var param1: String? = null
     private var param2: String? = null
 
@@ -61,7 +61,7 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
     @Inject
     lateinit var threadPool : ExecutorCoroutineDispatcher
 
-    private val homeFragmentContext: MyPlacesFragment = this
+    private val myPlacesFragmentContext: MyPlacesFragment = this
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -100,23 +100,22 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
         super.onActivityCreated(savedInstanceState)
 
 
-
-
         home_swipe_container.setOnRefreshListener(this)
         home_swipe_container.setColorSchemeColors(
-                resources.getColor( android.R.color.holo_green_dark),
-                resources.getColor(android.R.color.holo_red_dark)  ,
-                resources.getColor(android.R.color.holo_blue_dark)   ,
-                resources.getColor(android.R.color.holo_orange_dark)   )
+                ContextCompat.getColor( myPlacesFragmentContext.context!!,android.R.color.holo_green_dark),
+                ContextCompat.getColor(myPlacesFragmentContext.context!!,android.R.color.holo_red_dark)  ,
+                ContextCompat.getColor(myPlacesFragmentContext.context!!, android.R.color.holo_blue_dark)   ,
+                ContextCompat.getColor(myPlacesFragmentContext.context!!, android.R.color.holo_orange_dark)   )
 
+        home_packing_lots_recycler_view.layoutManager = LinearLayoutManager(myPlacesFragmentContext.context)
 
-        setHomePage()
+        home_packing_lots_recycler_view.setHasFixedSize(false)
 
-
+        setMyPlaces()
     }
     override fun onRefresh() {
 
-        setHomePage()
+        setMyPlaces()
     }
 
     override fun onAttach(context: Context) {
@@ -142,14 +141,11 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
         super.onResume()
 
 
-        if ((activity as HomeActivity).viewModel.address != "" && (activity as HomeActivity).viewModel.latitude !=0.0 && (activity as HomeActivity).viewModel.longitude!=0.0){
+       // setMyPlaces()
 
-            //txt_view_home_location.setText((activity as HomeActivity).viewModel.address)
-
-            //perform network requests
+        if (home_swipe_container.isRefreshing){
+            home_swipe_container.isRefreshing = false
         }
-
-        setHomePage()
 
 
     }
@@ -202,7 +198,7 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
 
 
 
-    private fun setHomePage(){
+    private fun setMyPlaces(){
 
         if (!home_swipe_container.isRefreshing){
             home_swipe_container.isRefreshing = true
@@ -210,12 +206,9 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
         launch {
             withContext(threadPool){
 
-                retrofitApiService.getParkingLots().observe(homeFragmentContext, Observer<ApiResponse<List<LotResponse>>> {
+                retrofitApiService.getParkingLots().observe(myPlacesFragmentContext, Observer<ApiResponse<List<LotResponse>>> {
                     response->
                     if (response != null && response.isSuccessful) {
-                        home_packing_lots_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
-
-                        home_packing_lots_recycler_view.setHasFixedSize(false)
 
                         // Log.d("Resp",response.body.toString())
                         mAdapter = HomeListAdapter(activity as HomeActivity, response.body as ArrayList<LotResponse>)

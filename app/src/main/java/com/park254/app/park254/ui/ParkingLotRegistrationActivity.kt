@@ -126,7 +126,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         toolbar2.setNavigationIcon(R.drawable.ic_back_arrow)
         setSupportActionBar(toolbar2)
 
-        supportActionBar!!.title = "Registration"
+        supportActionBar!!.title = "Parking lot"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
     }
@@ -611,7 +611,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
 
     private fun changeHeader(pos:Int){
         when(pos){
-            1->txtRegHeader.text = "Basic Info"
+            1->txtRegHeader.text = "Registration"
             2->txtRegHeader.text = "Parking Charges"
             3->txtRegHeader.text = "Photos"
         }

@@ -68,6 +68,9 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
                 resources.getColor(android.R.color.holo_blue_dark)   ,
                 resources.getColor(android.R.color.holo_orange_dark)   )
 
+        payments_recyclerview.layoutManager = LinearLayoutManager(paymentActivityContext)
+        payments_recyclerview.setHasFixedSize(false)
+
         setPayments()
 
 
@@ -118,8 +121,7 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
         if (!payments_swipe_container.isRefreshing){
             payments_swipe_container.isRefreshing = true
         }
-        payments_recyclerview.layoutManager = LinearLayoutManager(this)
-        payments_recyclerview.setHasFixedSize(false)
+
 
         launch {
             withContext(threadPool) {

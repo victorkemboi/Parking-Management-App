@@ -96,6 +96,9 @@ class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshLi
                 resources.getColor(android.R.color.holo_blue_dark)   ,
                 resources.getColor(android.R.color.holo_orange_dark)   )
 
+        owner_packing_lots_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
+
+        owner_packing_lots_recycler_view.setHasFixedSize(false)
 
         btn_add_parking_lot.setOnClickListener { startActivity(
                 Intent(activity, ParkingLotRegistrationActivity::class.java))}
@@ -112,9 +115,7 @@ class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshLi
 
 
     private fun setOwner(){
-        owner_packing_lots_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
 
-        owner_packing_lots_recycler_view.setHasFixedSize(false)
 
         if (!owner_swipe_container.isRefreshing){
             owner_swipe_container.isRefreshing = true

@@ -69,8 +69,6 @@
                     android:paddingBottom="@dimen/spacing_medium"
                     >
 
-
-
                     <TextView
                         android:id="@+id/owner_lot_info_name"
                         android:layout_width="wrap_content"
@@ -93,26 +91,13 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-
                 </LinearLayout>
-
-
-
-
-
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/spacing_xlarge" />
 
-
-
             </LinearLayout>
-
-
-
-
-
 
 
             <LinearLayout
@@ -261,6 +246,37 @@
 
 
         </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+            android:layout_marginTop="@dimen/spacing_large">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:tint="@android:color/white"
+                    app:backgroundTint="@color/red_600"
+                    app:elevation="0dp"
+                    app:fabSize="mini"
+                    app:rippleColor="@android:color/white"
+                    app:srcCompat="@drawable/ic_clear"
+                    app:fabCustomSize="60dp"
+                    android:id="@+id/fab_delete_lot"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:text="REMOVE"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                    android:textColor="@color/grey_40" />
+
+            </LinearLayout>
 
 
         </LinearLayout>

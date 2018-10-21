@@ -1,5 +1,6 @@
 package com.park254.app.park254.ui.repo
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.BroadcastReceiver
@@ -62,9 +63,11 @@ constructor(
                 .apiKey(context.getString(R.string.directions_apikey))
                 .build()
     }
-    // lateinit var mGpsSwitchStateReceiver : BroadcastReceiver
+    // lateinit var mSwitchStateReceiver : BroadcastReceiver
 
-    lateinit var locationSnackbar :Snackbar
+     var locationStatusSnackbar :Snackbar? =null
+     var networkStatusSnackBar: Snackbar? = null
+
 
     var deviceLocationMarker: Marker?  = null
 

@@ -106,16 +106,19 @@ class HomeActivity : AppCompatActivity(),
         // TODO Implement
     }
 
-    private fun initToolBar(title: String) {
+     fun initToolBar(title: String) {
         toolbar2.setNavigationIcon(R.drawable.ic_back_arrow)
         setSupportActionBar(toolbar2)
 
-        supportActionBar!!.title = title
+        setToolbarTitle(title)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
 
+    }
+    fun setToolbarTitle(title: String){
+        supportActionBar!!.title = title
     }
 
     private fun initNavigationMenu() {
@@ -168,6 +171,8 @@ class HomeActivity : AppCompatActivity(),
                 // Do something when user press the positive button
 
                 FirebaseAuth.getInstance().signOut()
+                settings.userId = ""
+                settings.token = ""
                 startActivity(Intent(this@HomeActivity, LoginActivity::class.java))
                 finishAffinity()
                 finish()
@@ -209,7 +214,6 @@ class HomeActivity : AppCompatActivity(),
                 e.printStackTrace()
             }
         }
-
 
         // Insert the fragment by replacing any existing fragment
         val fragmentManager = supportFragmentManager

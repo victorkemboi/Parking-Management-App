@@ -17,6 +17,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.AuthResult
 import android.support.annotation.NonNull
+import android.support.design.widget.Snackbar
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.AuthCredential
 import com.facebook.AccessToken
@@ -26,6 +27,7 @@ import com.park254.app.park254.R
 
 class LoginViewModel @Inject
 constructor( val firebaseAuth:FirebaseAuth) : ViewModel() {
+
       lateinit var gso : GoogleSignInOptions
       lateinit var  mGoogleSignInClient : GoogleSignInClient
       val RC_GOOGLE_SIGN_IN = 1
@@ -37,6 +39,8 @@ constructor( val firebaseAuth:FirebaseAuth) : ViewModel() {
       val EMAIL = "email"
      var phoneNumber = ""
      var gender = 0
+
+     var networkStateSnackBar:Snackbar? = null
 
 
      fun setupGoogleUserData( context:Context){

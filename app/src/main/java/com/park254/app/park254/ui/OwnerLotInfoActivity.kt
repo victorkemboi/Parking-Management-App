@@ -82,6 +82,9 @@ class OwnerLotInfoActivity : AppCompatActivity() {
         fab_employees.setOnClickListener{
             startActivity(Intent(this@OwnerLotInfoActivity, EmployeeActivity::class.java))
         }
+        fab_delete_lot.setOnClickListener{
+
+        }
 
     }
     private fun initToolbar() {

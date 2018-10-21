@@ -36,7 +36,7 @@ interface RetrofitApiService{
     fun getEmployeeByUserId(@Path("employeeId") id:String) :LiveData<ApiResponse<Employee>>
 
     @GET("Management")
-    fun getParkingLotEmployees(@Query("lotId")  id:String ) :  LiveData<ApiResponse<ArrayList<User>>>
+    fun getParkingLotEmployees(@Query("parkingLotId")  id:String ) :  LiveData<ApiResponse<ArrayList<User>>>
 
     @GET("Parking/bookings/{id}")
     fun geBookingById(@Path("id") id:String) :LiveData<ApiResponse<Booking>>

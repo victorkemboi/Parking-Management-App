@@ -4,9 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
+import android.net.ConnectivityManager
 import android.os.Environment
 import android.os.Handler
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -244,6 +246,13 @@ object UtilityClass {
 
         return ""
 
+    }
+
+    fun isOnline(context: Context): Boolean{
+        val cm  =context.getSystemService(Context.CONNECTIVITY_SERVICE)  as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+
+        return netInfo!=null && netInfo.isConnected
     }
 
 

@@ -60,6 +60,9 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
                 resources.getColor(android.R.color.holo_blue_dark)   ,
                 resources.getColor(android.R.color.holo_orange_dark)   )
 
+        bookings_recyclerview.layoutManager = LinearLayoutManager(bookingsActivityContext)
+
+        bookings_recyclerview.setHasFixedSize(false)
 
         setBookings()
 
@@ -88,9 +91,7 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
         if (!bookings_swipe_container.isRefreshing){
             bookings_swipe_container.isRefreshing = true
         }
-        bookings_recyclerview.layoutManager = LinearLayoutManager(this)
 
-        bookings_recyclerview.setHasFixedSize(false)
 
         launch {
             withContext(threadPool) {

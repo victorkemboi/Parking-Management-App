@@ -8,19 +8,21 @@ import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Typeface
 import android.location.Location
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
-import android.support.annotation.ColorInt
 import android.support.annotation.NonNull
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.AppCompatImageButton
 import android.text.TextUtils
 import android.util.DisplayMetrics
@@ -47,6 +49,7 @@ import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.models.NearByParkingLotRequest
 import com.park254.app.park254.ui.HomeActivity
 import com.park254.app.park254.ui.LotInfoActivity
+import com.park254.app.park254.ui.ParkingLotRegistrationActivity
 import com.park254.app.park254.ui.repo.HomeMapViewModel
 import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.UtilityClass.REQUEST_CHECK_SETTINGS
@@ -87,7 +90,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
     override val coroutineContext: CoroutineContext
         get() =   Dispatchers.Default + job
 
-    lateinit var mGpsSwitchStateReceiver : BroadcastReceiver
+    lateinit var mSwitchStateReceiver : BroadcastReceiver
+
+
 
 
     // Class methods
@@ -130,16 +135,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
             }
         }
 
-        viewModel.locationSnackbar =  Snackbar.make((activity as HomeActivity).window.decorView.rootView,
-                "Please turn on location for improved experience!", Snackbar.LENGTH_INDEFINITE).withColor(
-               ContextCompat.getColor(context!!,R.color.red_600) )
 
-        mGpsSwitchStateReceiver = object : BroadcastReceiver() {
+
+        mSwitchStateReceiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, intent: Intent?) {
                 Log.d("mGps Receiver:","On receive")
                 if (intent != null) {
                     Log.d("mGps Receiver:","On receive, intent not null")
-                    if (LocationManager.PROVIDERS_CHANGED_ACTION == intent.action) {
+                    if ( intent.action  == LocationManager.PROVIDERS_CHANGED_ACTION ) {
                         // Make an action or refresh an already managed state.
                         Log.d("mGps Receiver:","On receive, intent not null, provider changed")
                         if(isLocationEnabled() && isLocationAccuracyModeHigh()){
@@ -150,25 +153,51 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
                             }
                             getDeviceLocation()
 
-                            viewModel.locationSnackbar.dismiss()
+                         viewModel.locationStatusSnackbar?.dismiss()
+                            //viewModel.statusSnackbar.dismiss()
                         }else{
                             if(viewModel.deviceLocationMarker!=null){
                                 viewModel.deviceLocationMarker?.remove()
                             }
                             viewModel.routePolyline = null
-                            viewModel.locationSnackbar.show()
 
+                            viewModel.locationStatusSnackbar =  Snackbar.make((activity as HomeActivity).window.decorView.rootView,
+                                    "Please turn on location for improved experience!", Snackbar.LENGTH_INDEFINITE).withColor(
+                                    ContextCompat.getColor(context!!,R.color.splash_background) )
+                            viewModel.locationStatusSnackbar?.show()
                         }
-                    }else{
-                        Log.d("mGps Receiver:","On receive, location provider not changed")
                     }
+
+                    if(intent.extras !=null){
+                         val connectivityManager = homeFragmentContext!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                        val netInfo = connectivityManager.activeNetworkInfo
+
+                        if(netInfo !=null && netInfo.isConnected ){
+
+                            viewModel.networkStatusSnackBar?.dismiss()
+
+                        }else if(intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY,false)){
+
+                            viewModel.networkStatusSnackBar =  Snackbar.make((activity as HomeActivity).window.decorView.rootView,
+                                    "Unavailable internet connection!", Snackbar.LENGTH_INDEFINITE).withColor(
+                                    ContextCompat.getColor(context!!,R.color.red_600) )
+
+
+                            viewModel.networkStatusSnackBar?.show()
+                        }
+                    }
+
                 }else{
                     Log.d("mGps Receiver:","On receive, intent null")
                 }
+
+
+
             }
 
-        }
 
+
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -203,9 +232,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         viewModel.autocompleteFragment?.setFilter(typeFilter)
         val searchEditText = viewModel.autocompleteFragment!!.view?.findViewById<TextView>(R.id.place_autocomplete_search_input)
 
-        searchEditText?.hint = "Where would you like to park?"
+        searchEditText?.hint = "Find  parking?"
         searchEditText?.setHintTextColor( ContextCompat.getColor(homeFragmentContext!!, R.color.grey_60))
-        searchEditText?.textSize  = 15f
+        searchEditText?.setTextColor( ContextCompat.getColor(homeFragmentContext!!, R.color.colorPrimary))
+        searchEditText?.typeface = Typeface.DEFAULT_BOLD
+        searchEditText?.textSize  = 15.8f
 
         viewModel.autocompleteFragment!!.setOnPlaceSelectedListener(this)
 
@@ -214,14 +245,26 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
             viewModel.userDestinationMarker?.remove()
 
             viewModel.autocompleteFragment!!.view?.findViewById<TextView>(R.id.place_autocomplete_search_input)?.text = ""
-            searchEditText?.hint = "Where would you like to park?"
+            searchEditText?.hint = "Find  parking?"
 
             viewModel.autocompleteFragment!!.view?.findViewById<AppCompatImageButton>(R.id.place_autocomplete_clear_button)?.visibility = View.INVISIBLE
             viewModel.routePolyline?.remove()
             viewModel.deviceLocation.observe(this@HomeFragment, Observer<com.google.maps.model.LatLng> {
                 deviceLocation-> run{
                 val userLocation = LatLng(deviceLocation?.lat!!, deviceLocation.lng)
-                showDeviceLocation(userLocation)
+
+                if (viewModel.routePolyline!=null){
+                    moveToBounds( viewModel.routePolyline!!)
+                    Handler().postDelayed({
+
+                       showDeviceLocation(userLocation)
+                    }, 1500)
+
+                }else{
+                    showDeviceLocation(userLocation)
+                }
+
+
             }
             })
 
@@ -232,12 +275,22 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
             turnOnLocation()
 
         }
+        add_parking_lot_card_view.setOnClickListener {
+            startActivity(
+                    Intent(
+                            homeFragmentContext,ParkingLotRegistrationActivity::class.java
+                    )
+            )
+        }
 
     }
 
     override fun onMapReady(gMap: GoogleMap?) {
 
         viewModel.map = gMap
+        viewModel.map?.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(homeFragmentContext,R.raw.style_json)
+        )
 
         defaultMapLocation()
 
@@ -269,7 +322,18 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
             val polyLine =    viewModel.addPolyline(viewModel.startDiractionsRequest(context!!, deviceLocation!!,destination))
 
             if (polyLine != null) {
-                moveToBounds( polyLine)
+               moveToBounds( polyLine)
+                Handler().postDelayed({
+
+                    val center: CameraUpdate=
+                            CameraUpdateFactory.newLatLng(destinationLocation)
+                    val zoom: CameraUpdate=CameraUpdateFactory.zoomTo(16f)
+
+                    viewModel.map?.moveCamera(center)
+                    viewModel.map?.animateCamera(zoom)
+                }, 1500)
+
+
             }
         }catch (e: KotlinNullPointerException){
             turnOnLocation()
@@ -460,7 +524,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
         val center: CameraUpdate=
                 CameraUpdateFactory.newLatLng(location)
-        val zoom: CameraUpdate=CameraUpdateFactory.zoomTo((15).toFloat())
+        val zoom: CameraUpdate=CameraUpdateFactory.zoomTo(15f)
 
         viewModel.map?.moveCamera(center)
         viewModel.map?.animateCamera(zoom)
@@ -663,6 +727,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
     }
 
 
+
     // Fragment override functions section.
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -715,7 +780,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         }
 
         viewModel.mFusedLocationProviderClient.removeLocationUpdates(viewModel.locationCallback)
-        context!!.unregisterReceiver(mGpsSwitchStateReceiver)
+        context!!.unregisterReceiver(mSwitchStateReceiver)
         viewModel.deviceLocationMarker = null
 
 
@@ -742,11 +807,16 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
     override fun onResume() {
 
         super.onResume()
-        context!!.registerReceiver(mGpsSwitchStateReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION))
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+        context!!.registerReceiver(mSwitchStateReceiver, intentFilter)
         if (mapView !=null){
             mapView!!.onResume()
         }
-        //LocalBroadcastManager.getInstance(context!!).registerReceiver(viewModel.mGpsSwitchStateReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION))
+
+        (activity as HomeActivity).setToolbarTitle("Home")
+        //LocalBroadcastManager.getInstance(context!!).registerReceiver(viewModel.mSwitchStateReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION))
 
 
 

@@ -3,6 +3,8 @@ import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -22,6 +24,7 @@ import com.park254.app.park254.models.User
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.repo.LoginViewModel
 import com.park254.app.park254.utils.SharedPrefs
+import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
@@ -43,19 +46,36 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         (application as App).applicationInjector.inject(this)
 
+        viewModel.networkStateSnackBar = Snackbar.make(window.decorView.rootView,
+                "Unavailable internet connection!", Snackbar.LENGTH_INDEFINITE).withColor(
+                ContextCompat.getColor(this,R.color.red_600) )
+
        google_sign_in_button.setOnClickListener {
            Log.w("G Button:","PRESSED")
-           lyt_login_btn.visibility = View.GONE
-           lyt_progress_login.visibility = View.VISIBLE
-           googleSignIn()
+
+           if (UtilityClass.isOnline(this)){
+               viewModel.networkStateSnackBar?.dismiss()
+               lyt_login_btn.visibility = View.GONE
+               lyt_progress_login.visibility = View.VISIBLE
+               googleSignIn()
+           }else{
+                 viewModel.networkStateSnackBar?.show()
+           }
+
        }
 
       facebook_sign_in_button.setOnClickListener { view->
 
           //Log.d("Fb Button","PRESSED")
-          lyt_login_btn.visibility = View.GONE
-          lyt_progress_login.visibility = View.VISIBLE
-          LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(viewModel.EMAIL))
+          if (UtilityClass.isOnline(this)) {
+              viewModel.networkStateSnackBar?.dismiss()
+              lyt_login_btn.visibility = View.GONE
+              lyt_progress_login.visibility = View.VISIBLE
+              LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(viewModel.EMAIL))
+
+          }else{
+              viewModel.networkStateSnackBar?.show()
+          }
       }
 
         LoginManager.getInstance().registerCallback(viewModel.callbackManager, object : FacebookCallback<LoginResult> {
@@ -222,5 +242,10 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         finish()
+    }
+
+    private fun Snackbar.withColor(colorInt: Int): Snackbar {
+        this.view.setBackgroundColor(colorInt)
+        return this
     }
 }

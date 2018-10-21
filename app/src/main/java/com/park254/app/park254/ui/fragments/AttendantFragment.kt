@@ -118,16 +118,12 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
 
         attendant_swipe_container.setOnRefreshListener(this)
         attendant_swipe_container.setColorSchemeColors(
-                resources.getColor( android.R.color.holo_green_dark),
-                resources.getColor(android.R.color.holo_red_dark)  ,
-                resources.getColor(android.R.color.holo_blue_dark)   ,
-                resources.getColor(android.R.color.holo_orange_dark)   )
+                ContextCompat.getColor(attendantFragmentContext.context!!,android.R.color.holo_green_dark),
+                ContextCompat.getColor(attendantFragmentContext.context!!,android.R.color.holo_red_dark)  ,
+                ContextCompat.getColor(attendantFragmentContext.context!!, android.R.color.holo_blue_dark)   ,
+                ContextCompat.getColor(attendantFragmentContext.context!!, android.R.color.holo_orange_dark)   )
 
         setAttendant()
-
-
-
-
 
     }
 
@@ -342,7 +338,7 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
                 } else {
 
                     Snackbar.make((activity as HomeActivity).window.decorView.rootView,
-                            "QR code scanning unsuccessful!", Snackbar.LENGTH_LONG).withColor(R.color.red_600).show()
+                            "QR code scanning unsuccessful!", Snackbar.LENGTH_LONG).withColor(R.color.splash_background).show()
 
                     //cancel
                     Log.d("QR Results:", "result content null")
@@ -572,7 +568,7 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
     private fun IntRange.random() =
             Random().nextInt((endInclusive + 1) - start) +  start
 
-    private fun Snackbar.withColor(@ColorInt colorInt: Int): Snackbar{
+    private fun Snackbar.withColor( colorInt: Int): Snackbar{
         this.view.setBackgroundColor(ContextCompat.getColor(this.context, colorInt))
         return this
     }
