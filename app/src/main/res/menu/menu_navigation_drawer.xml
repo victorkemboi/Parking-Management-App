@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group
         android:id="@+id/main_group"
@@ -35,18 +36,19 @@
             android:id="@+id/nav_owner"
             android:icon="@drawable/ic_work"
             android:title="Owner"
-            android:visible="true"/>
+            android:visible="false"/>
 
         <item
             android:id="@+id/nav_attendant"
             android:icon="@drawable/ic_attendant"
             android:title="Attendant"
-            android:visible="true"/>
+            android:visible="false"/>
 
         <item
             android:id="@+id/nav_become_owner"
-            android:icon="@drawable/ic_attendant"
+            android:icon="@drawable/ic_star"
             android:title="Become an Owner!"
+            app:actionLayout="@layout/menu_action_item_badge"
             android:visible="true"/>
 
         <item

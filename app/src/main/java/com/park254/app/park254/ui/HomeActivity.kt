@@ -42,7 +42,8 @@ import kotlin.coroutines.experimental.CoroutineContext
 import android.view.ViewGroup
 import android.widget.Button
 import com.crashlytics.android.Crashlytics
-
+import com.mikepenz.actionitembadge.library.ActionItemBadge
+import com.mikepenz.actionitembadge.library.ActionItemBadgeAdder
 
 
 class HomeActivity : AppCompatActivity(),
@@ -81,7 +82,7 @@ class HomeActivity : AppCompatActivity(),
         initToolBar("Home")
 
         initNavigationMenu()
-        setNavDrawerMenuOwnerAndAttendant()
+       // setNavDrawerMenuOwnerAndAttendant()
         val fragmentClass: Class<*> = HomeFragment::class.java
 
         viewModel.homeMapFragment = fragmentClass.newInstance() as Fragment
@@ -111,7 +112,7 @@ class HomeActivity : AppCompatActivity(),
         // TODO Implement
     }
 
-     fun initToolBar(title: String) {
+     private fun initToolBar(title: String) {
         toolbar2.setNavigationIcon(R.drawable.ic_back_arrow)
         setSupportActionBar(toolbar2)
 
@@ -122,6 +123,14 @@ class HomeActivity : AppCompatActivity(),
         }
 
     }
+
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        setNavDrawerMenuOwnerAndAttendant()
+        return super.onPrepareOptionsMenu(menu)
+
+    }
+
     fun setToolbarTitle(title: String){
         supportActionBar!!.title = title
     }
@@ -240,37 +249,51 @@ class HomeActivity : AppCompatActivity(),
     }
 
    private fun isOwner(){
-        retrofitApiService.getOwnedParkingLots().observe(
-                this, Observer <ApiResponse<List<LotResponse>>>{
-            lots ->run{
-             if (lots !=null ){
-                if (lots.isSuccessful){
-               // Log.w("isOwner:",lots.body?.isNotEmpty().toString())
-                    if (lots.body !=null){
-                        nav_view.menu.findItem(R.id.nav_owner).isVisible = lots.body.isNotEmpty()
-                    }
+       if (settings.owner){
+           nav_view.menu.findItem(R.id.nav_owner).isVisible = true
+           nav_view.menu.findItem(R.id.nav_become_owner).isVisible = false
+       }else {
+           retrofitApiService.getOwnedParkingLots().observe(
+                   this, Observer<ApiResponse<List<LotResponse>>> { lots ->
+               run {
+                   if (lots != null) {
+                       if (lots.isSuccessful) {
+                           // Log.w("isOwner:",lots.body?.isNotEmpty().toString())
+                           if (lots.body != null) {
+                               settings.owner = lots.body.isNotEmpty()
+                               nav_view.menu.findItem(R.id.nav_owner).isVisible = lots.body.isNotEmpty()
+                               if (nav_view.menu.findItem(R.id.nav_owner).isVisible) {
+                                   nav_view.menu.findItem(R.id.nav_become_owner).isVisible = false
+                               }
+                           }
 
-                }
-            }
-        }
-        }
-        )
+                       }
+                   }
+               }
+           }
+           )
+       }
     }
 
     private fun isAttendant(){
 
-        retrofitApiService.getEmployeeByUserId(settings.userId!!).observe(this, Observer<ApiResponse<Employee>> { response ->
-            run {
-                if (response != null) {
-                    if (response.isSuccessful) {
+        if (settings.attendant){
+            nav_view.menu.findItem(R.id.nav_attendant).isVisible = true
+        }else{
+            retrofitApiService.getEmployeeByUserId(settings.userId!!).observe(this, Observer<ApiResponse<Employee>> { response ->
+                run {
+                    if (response != null) {
+                        if (response.isSuccessful) {
+                            settings.attendant = response.body != null
+                            nav_view.menu.findItem(R.id.nav_attendant).isVisible  = response.body != null
 
-                        nav_view.menu.findItem(R.id.nav_attendant).isVisible  = response.body != null
-
+                        }
                     }
                 }
             }
+            )
         }
-        )
+
 
 
     }

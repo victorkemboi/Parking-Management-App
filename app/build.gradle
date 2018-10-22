@@ -113,6 +113,7 @@ dependencies {
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
 
 
+    implementation 'com.mikepenz:actionitembadge:3.3.2@aar'
 
     apply plugin: 'com.google.gms.google-services'
 

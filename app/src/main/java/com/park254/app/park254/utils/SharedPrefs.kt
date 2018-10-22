@@ -35,7 +35,25 @@ class SharedPrefs(context: Context) {
             val editor = settings.edit()
             editor.putString("user", value)
             editor.apply()
+        }
 
+
+    var owner: Boolean
+        get() = settings.getBoolean("owner",false)
+        set(value) {
+
+            val editor = settings.edit()
+            editor.putBoolean("owner", value)
+            editor.apply()
+        }
+
+    var attendant: Boolean
+        get() = settings.getBoolean("attendant",false)
+        set(value) {
+
+            val editor = settings.edit()
+            editor.putBoolean("attendant", value)
+            editor.apply()
         }
 
     var apiVersion: APIVersion
