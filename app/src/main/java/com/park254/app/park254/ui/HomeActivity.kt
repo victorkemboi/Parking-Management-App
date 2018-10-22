@@ -39,6 +39,11 @@ import kotlinx.coroutines.experimental.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.experimental.Job
 import javax.inject.Inject
 import kotlin.coroutines.experimental.CoroutineContext
+import android.view.ViewGroup
+import android.widget.Button
+import com.crashlytics.android.Crashlytics
+
+
 
 class HomeActivity : AppCompatActivity(),
         MyPlacesFragment.OnFragmentInteractionListener,

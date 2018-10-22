@@ -99,10 +99,10 @@
             android:parentActivityName=".ui.HomeActivity" />
         <activity android:name=".ui.PaymentsActivity" />
 
-        <meta-data
+      <!--  <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3a5493669d6e7ef5ac00de777320a4d9ecbd3861" />
-
+    -->
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"

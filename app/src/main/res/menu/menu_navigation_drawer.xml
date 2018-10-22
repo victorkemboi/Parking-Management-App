@@ -44,6 +44,12 @@
             android:visible="true"/>
 
         <item
+            android:id="@+id/nav_become_owner"
+            android:icon="@drawable/ic_attendant"
+            android:title="Become an Owner!"
+            android:visible="true"/>
+
+        <item
             android:id="@+id/nav_log_out"
             android:icon="@drawable/ic_exit_to_app"
             android:title="Log Out" />
