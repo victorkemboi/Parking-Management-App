@@ -16,6 +16,7 @@ import com.park254.app.park254.ui.adapters.EmployeeListAdapter
 import com.park254.app.park254.ui.repo.HomeViewModel
 import com.park254.app.park254.ui.repo.ParkingLotRegistrationViewModel
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_employees.*
 import kotlinx.android.synthetic.main.fragment_main_home.*
 import java.util.ArrayList
@@ -36,7 +37,7 @@ class EmployeeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_employees)
-        (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
 
         viewModel.lotResponse = homeViewModel.parsedLot!!
 

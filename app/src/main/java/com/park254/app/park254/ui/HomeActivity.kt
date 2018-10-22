@@ -44,6 +44,7 @@ import android.widget.Button
 import com.crashlytics.android.Crashlytics
 import com.mikepenz.actionitembadge.library.ActionItemBadge
 import com.mikepenz.actionitembadge.library.ActionItemBadgeAdder
+import dagger.android.AndroidInjection
 
 
 class HomeActivity : AppCompatActivity(),
@@ -77,8 +78,8 @@ class HomeActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         // initToolbar()
-        (application as App).applicationInjector.inject(this)
-
+       // (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
         initToolBar("Home")
 
         initNavigationMenu()

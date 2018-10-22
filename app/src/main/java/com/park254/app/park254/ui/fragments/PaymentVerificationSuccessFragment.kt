@@ -1,6 +1,8 @@
 package com.park254.app.park254.ui.fragments
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.DialogFragment
@@ -14,6 +16,7 @@ import com.park254.app.park254.App
 
 import com.park254.app.park254.R
 import com.park254.app.park254.ui.repo.PaymentVerificationViewModel
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.payment_verification_dialog.*
 import javax.inject.Inject
 
@@ -38,7 +41,7 @@ class PaymentVerificationSuccessFragment : DialogFragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        (activity!!.application as App).applicationInjector.inject(this)
+
        val  rootView = inflater.inflate(R.layout.payment_verification_dialog, container, false)
 
         rootView.findViewById<FloatingActionButton>(R.id.fab_close_verification_dialog) .setOnClickListener {
@@ -50,6 +53,11 @@ class PaymentVerificationSuccessFragment : DialogFragment() {
         rootView.findViewById<TextView>(R.id.payment_dialog_phone_number).text =  paymentVerificationViewModel.payment?.paidBy
 
         return rootView
+    }
+
+    override fun onAttach(context: Context?) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

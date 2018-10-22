@@ -37,6 +37,9 @@ import com.park254.app.park254.ui.repo.PaymentVerificationViewModel
 import com.park254.app.park254.utils.SharedPrefs
 import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import dagger.android.AndroidInjection
+import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.attendant_update_layout.*
 import kotlinx.android.synthetic.main.attendant_update_layout.view.*
 import kotlinx.android.synthetic.main.fragment_attendant.*
@@ -59,7 +62,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshListener, AppBarLayout.OnOffsetChangedListener {
+class AttendantFragment : DaggerFragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshListener, AppBarLayout.OnOffsetChangedListener {
 
 
     // TODO: Rename and change types of parameters
@@ -101,7 +104,6 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
 
         }
 
-        (activity!!.application as App).applicationInjector.inject(this)
         requestOptions.centerCrop()
         requestOptions.placeholder(R.drawable.parking_lot_image_preview)
     }
@@ -513,10 +515,10 @@ class AttendantFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefre
         lyt_not_an_attendant.visibility = View.VISIBLE
     }
 
-
     //Extra method ovverides
 
     override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context

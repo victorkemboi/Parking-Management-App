@@ -22,6 +22,7 @@ import com.park254.app.park254.ui.HomeActivity
 import com.park254.app.park254.ui.LotInfoActivity
 import com.park254.app.park254.ui.adapters.HomeListAdapter
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_main_home.*
 import kotlinx.coroutines.experimental.*
 import java.util.*
@@ -78,7 +79,6 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
             param2 = it.getString(ARG_PARAM2)
         }
 
-        (activity!!.application as App).applicationInjector.inject(this)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
 
@@ -119,6 +119,7 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
     }
 
     override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context

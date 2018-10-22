@@ -55,6 +55,7 @@ import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.UtilityClass.REQUEST_CHECK_SETTINGS
 import com.park254.app.park254.utils.UtilityClass.REQUEST_LOCATION_PERMISSION_FOR_GET_DEVICE_LOCATION
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.home_map_view_fragment.*
 import kotlinx.coroutines.experimental.*
 import java.util.*
@@ -98,7 +99,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
     // Class methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity!!.application as App).applicationInjector.inject(this)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -730,6 +730,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
     // Fragment override functions section.
     override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context

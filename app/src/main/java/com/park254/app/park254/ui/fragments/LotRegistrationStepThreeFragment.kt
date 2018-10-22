@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.park254.app.park254.R
 import com.park254.app.park254.ui.ParkingLotRegistrationActivity
 import com.park254.app.park254.utils.UtilityClass
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_three.*
 import java.io.File
 
@@ -61,6 +62,7 @@ class LotRegistrationStepThreeFragment : Fragment() {
     }
 
     override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context

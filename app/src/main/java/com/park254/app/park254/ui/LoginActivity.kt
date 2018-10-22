@@ -26,6 +26,7 @@ import com.park254.app.park254.ui.repo.LoginViewModel
 import com.park254.app.park254.utils.SharedPrefs
 import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
 import javax.inject.Inject
@@ -44,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
 
         viewModel.networkStateSnackBar = Snackbar.make(window.decorView.rootView,
                 "Unavailable internet connection!", Snackbar.LENGTH_INDEFINITE).withColor(

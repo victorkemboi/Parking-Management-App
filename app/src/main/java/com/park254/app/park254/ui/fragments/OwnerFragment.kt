@@ -20,6 +20,7 @@ import com.park254.app.park254.ui.OwnerLotInfoActivity
 import com.park254.app.park254.ui.ParkingLotRegistrationActivity
 import com.park254.app.park254.ui.adapters.OwnerListAdapter
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_owner.*
 import kotlinx.coroutines.experimental.*
 import java.util.*
@@ -43,7 +44,6 @@ private const val ARG_PARAM2 = "param2"
 class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshListener {
 
 
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
@@ -74,7 +74,6 @@ class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshLi
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        (activity!!.application as App).applicationInjector.inject(this)
 
 
     }
@@ -171,6 +170,7 @@ class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshLi
 
 
     override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context
@@ -184,32 +184,13 @@ class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshLi
         listener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment OwnerFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
                 OwnerFragment().apply {

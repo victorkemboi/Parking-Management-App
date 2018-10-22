@@ -11,16 +11,18 @@ import com.park254.app.park254.ui.fragments.*
 import com.park254.app.park254.ui.repo.*
 import com.park254.app.park254.utils.SharedPrefs
 import dagger.Component
+import dagger.android.AndroidInjector
 import javax.inject.Singleton
 import dagger.android.support.AndroidSupportInjectionModule
 
 @Singleton
 @Component(modules = [(AppModule::class), (RoomModule::class), (NetModule::class),
-   (FirebaseModule::class),(ViewModelModule::class), (AndroidSupportInjectionModule::class),  (DaoModule::class), (ThreadModule::class)])
-interface AppComponent{
+   (FirebaseModule::class),(ViewModelModule::class), (AndroidSupportInjectionModule::class),
+    (DaoModule::class), (ThreadModule::class),(ActivityModule::class)])
+interface AppComponent: AndroidInjector<App> {
 
     fun inject(loginActivity: LoginActivity)
-     fun inject(addUserInfoActivity: AddUserInfoActivity)
+    fun inject(addUserInfoActivity: AddUserInfoActivity)
     fun inject(homeActivity: HomeActivity)
     fun inject(parkingLotRegistrationActivity: ParkingLotRegistrationActivity)
     fun inject(lotRegistrationStepOneFragment: LotRegistrationStepOneFragment)
@@ -47,7 +49,7 @@ interface AppComponent{
     fun inject(paymentVerificationActivity: PaymentVerificationActivity)
     fun inject(paymentVerificationSuccessFragment: PaymentVerificationSuccessFragment)
 
-   fun provideApplication(): App
+    fun provideApplication(): App
 
     fun provideFirebaseAuth(): FirebaseAuth
 

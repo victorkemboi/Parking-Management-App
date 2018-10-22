@@ -19,6 +19,7 @@ import com.schibstedspain.leku.LATITUDE
 import com.schibstedspain.leku.LOCATION_ADDRESS
 import com.schibstedspain.leku.LONGITUDE
 import com.schibstedspain.leku.LocationPickerActivity
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_one.*
 import javax.inject.Inject
 
@@ -112,6 +113,7 @@ class LotRegistrationStepOneFragment : Fragment() {
     }
 
     override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context

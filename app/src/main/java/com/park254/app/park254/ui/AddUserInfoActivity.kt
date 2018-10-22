@@ -19,6 +19,7 @@ import com.park254.app.park254.utils.SharedPrefs
 import com.park254.app.park254.utils.UtilityClass.hideKeyboard
 import com.park254.app.park254.utils.UtilityClass.requestFocus
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_add_user_info.*
 import javax.inject.Inject
 
@@ -34,7 +35,7 @@ class AddUserInfoActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_user_info)
-        (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
 
         btn_finish_sign_in.setOnClickListener { finishSignIn() }
 

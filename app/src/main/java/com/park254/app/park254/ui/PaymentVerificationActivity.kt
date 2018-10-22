@@ -14,6 +14,7 @@ import com.park254.app.park254.App
 import com.park254.app.park254.R
 import com.park254.app.park254.ui.fragments.PaymentVerificationSuccessFragment
 import com.park254.app.park254.ui.repo.PaymentVerificationViewModel
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_payment_verification.*
 import kotlinx.android.synthetic.main.payment_verification_dialog.*
 import kotlinx.android.synthetic.main.toolbar_2.*
@@ -29,7 +30,7 @@ class PaymentVerificationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment_verification)
-        (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
         initToolbar()
         submitAction()
 

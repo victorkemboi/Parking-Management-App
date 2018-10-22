@@ -11,6 +11,7 @@ import com.glide.slider.library.SliderTypes.DefaultSliderView
 import com.park254.app.park254.App
 import com.park254.app.park254.R
 import com.park254.app.park254.ui.repo.HomeViewModel
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_owner_lot_info.*
 import java.util.*
 import javax.inject.Inject
@@ -24,7 +25,7 @@ class OwnerLotInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_owner_lot_info)
-        (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
         initToolbar()
 
         requestOptions.centerCrop()

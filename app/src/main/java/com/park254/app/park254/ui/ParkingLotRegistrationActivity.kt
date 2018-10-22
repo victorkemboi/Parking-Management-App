@@ -37,6 +37,7 @@ import com.park254.app.park254.models.LotImage
 import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.models.Rate
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import dagger.android.AndroidInjection
 import kotlinx.coroutines.experimental.*
 import java.io.ByteArrayOutputStream
 import kotlin.coroutines.experimental.CoroutineContext
@@ -67,7 +68,7 @@ class ParkingLotRegistrationActivity : AppCompatActivity() ,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parking_lot_registration)
 
-        (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
 
         initToolbar()
         initComponent()

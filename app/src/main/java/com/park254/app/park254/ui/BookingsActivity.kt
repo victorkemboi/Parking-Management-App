@@ -15,6 +15,7 @@ import com.park254.app.park254.models.Booking
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.adapters.BookingsListAdapter
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_bookings.*
 import kotlinx.android.synthetic.main.activity_lot_info.*
 import kotlinx.android.synthetic.main.payment_pop_out_lyt.view.*
@@ -50,7 +51,7 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bookings)
 
-        (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
         initToolbar()
 
         bookings_swipe_container.setOnRefreshListener(this)

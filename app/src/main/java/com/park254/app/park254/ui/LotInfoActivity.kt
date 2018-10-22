@@ -31,6 +31,7 @@ import com.glide.slider.library.SliderLayout
 import com.glide.slider.library.SliderTypes.DefaultSliderView
 import com.park254.app.park254.models.EstimateRequest
 import com.park254.app.park254.utils.UtilityClass
+import dagger.android.AndroidInjection
 
 class LotInfoActivity : AppCompatActivity() {
 
@@ -51,7 +52,7 @@ class LotInfoActivity : AppCompatActivity() {
 
         initToolbar()
 
-        (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
         requestOptions.centerCrop()
         requestOptions.placeholder(R.drawable.parking_lot_image_preview)
 

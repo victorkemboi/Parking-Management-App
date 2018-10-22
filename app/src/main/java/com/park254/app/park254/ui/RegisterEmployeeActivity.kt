@@ -16,6 +16,7 @@ import com.park254.app.park254.ui.repo.EmployeeViewModel
 import com.park254.app.park254.ui.repo.HomeViewModel
 import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_register_employee.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,7 +34,7 @@ class RegisterEmployeeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_employee)
-        (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
 
         btn_add_lot_employee.setOnClickListener { _ ->
             if(txt_input_employee_email.text.toString().trim { it <= ' ' }.isNotEmpty()) run {

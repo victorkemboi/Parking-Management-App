@@ -8,6 +8,7 @@ import com.park254.app.park254.R
 import com.park254.app.park254.ui.fragments.LotRegistrationStepOneFragment
 import com.park254.app.park254.ui.repo.HomeViewModel
 import com.park254.app.park254.ui.repo.ParkingLotRegistrationViewModel
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_update_info.*
 import javax.inject.Inject
 
@@ -25,7 +26,7 @@ class UpdateInfoActivity : AppCompatActivity(), LotRegistrationStepOneFragment.O
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_info)
-        (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
 
         initToolbar()
 

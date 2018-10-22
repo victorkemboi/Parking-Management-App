@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.park254.app.park254.ui.repo.PaymentsViewModel
 import com.park254.app.park254.utils.UtilityClass
+import dagger.android.AndroidInjection
 import kotlinx.coroutines.experimental.*
 import kotlin.coroutines.experimental.CoroutineContext
 
@@ -58,7 +59,7 @@ class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayou
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payments)
 
-        (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
         initToolbar()
 
         payments_swipe_container.setOnRefreshListener(this)

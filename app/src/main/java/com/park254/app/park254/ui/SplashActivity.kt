@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.park254.app.park254.App
 import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.utils.SharedPrefs
+import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 
@@ -24,7 +25,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (application as App).applicationInjector.inject(this)
+        AndroidInjection.inject(this)
         startMain()
 
     }

@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.park254.app.park254.R
 import com.park254.app.park254.ui.ParkingLotRegistrationActivity
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_lot_registration_step_two.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -123,6 +124,7 @@ class LotRegistrationStepTwoFragment : Fragment() {
     }
 
     override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context
