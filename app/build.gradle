@@ -15,8 +15,8 @@ android {
         applicationId "com.park254.app.park254"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 2
-        versionName "1.001"
+        versionCode 3
+        versionName "1.0.2-alpha"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true

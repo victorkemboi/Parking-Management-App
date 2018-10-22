@@ -72,7 +72,7 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.CardView
+  <!--  <android.support.v7.widget.CardView
         android:id="@+id/add_parking_lot_card_view"
         android:layout_width="45dp"
         android:layout_height="45dp"
@@ -96,7 +96,7 @@
             app:srcCompat="@drawable/ic_add" />
 
     </android.support.v7.widget.CardView>
-
+ -->
 
     <android.support.v7.widget.CardView
         android:id="@+id/my_location_card_view"

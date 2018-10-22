@@ -275,13 +275,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
             turnOnLocation()
 
         }
-        add_parking_lot_card_view.setOnClickListener {
-            startActivity(
-                    Intent(
-                            homeFragmentContext,ParkingLotRegistrationActivity::class.java
-                    )
-            )
-        }
+
 
     }
 

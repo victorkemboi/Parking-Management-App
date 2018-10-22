@@ -168,6 +168,16 @@ class HomeActivity : AppCompatActivity(),
                     Intent(this@HomeActivity, PaymentsActivity::class.java))
 
         }
+
+        if (menuItem.itemId == R.id.nav_become_owner){
+
+                startActivity(
+                        Intent(
+                                this,ParkingLotRegistrationActivity::class.java
+                        )
+                )
+
+        }
         if (menuItem.itemId == R.id.nav_log_out) {
 
 
@@ -188,6 +198,8 @@ class HomeActivity : AppCompatActivity(),
                 FirebaseAuth.getInstance().signOut()
                 settings.userId = ""
                 settings.token = ""
+                settings.owner= false
+                settings.attendant = false
                 startActivity(Intent(this@HomeActivity, LoginActivity::class.java))
                 finishAffinity()
                 finish()
