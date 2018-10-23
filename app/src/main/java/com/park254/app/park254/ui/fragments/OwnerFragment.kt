@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -90,10 +91,10 @@ class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshLi
 
         owner_swipe_container.setOnRefreshListener(this)
         owner_swipe_container.setColorSchemeColors(
-                resources.getColor( android.R.color.holo_green_dark),
-                resources.getColor(android.R.color.holo_red_dark)  ,
-                resources.getColor(android.R.color.holo_blue_dark)   ,
-                resources.getColor(android.R.color.holo_orange_dark)   )
+                ContextCompat.getColor( ownerFragmentContext.context!!,android.R.color.holo_green_dark),
+                ContextCompat.getColor(ownerFragmentContext.context!!,android.R.color.holo_red_dark)  ,
+                ContextCompat.getColor(ownerFragmentContext.context!!, android.R.color.holo_blue_dark)   ,
+                ContextCompat.getColor(ownerFragmentContext.context!!, android.R.color.holo_orange_dark)   )
 
         owner_packing_lots_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
 
@@ -154,11 +155,13 @@ class OwnerFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefreshLi
                     }
 
 
-                    (activity as HomeActivity).runOnUiThread {
+                    ownerFragmentContext.activity?.runOnUiThread {
                         if (owner_swipe_container.isRefreshing){
                             owner_swipe_container.isRefreshing = false
                         }
                     }
+
+
 
 
                 })

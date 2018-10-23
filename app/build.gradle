@@ -8,6 +8,10 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'io.fabric'
 
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 3
+def verCode = (versionMajor * 10000) + (versionMinor * 100) + versionPatch
 
 android {
     compileSdkVersion 28
@@ -15,8 +19,8 @@ android {
         applicationId "com.park254.app.park254"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.0.2-alpha"
+        versionCode verCode
+        versionName  "${versionMajor}.${versionMinor}.${versionPatch}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -24,7 +28,15 @@ android {
 
     }
     buildTypes {
+
+        debug {
+            versionNameSuffix "-alpha"
+            resValue "string", "app_version",
+                    "${defaultConfig.versionName}${versionNameSuffix}"
+        }
+
         release {
+            resValue "string", "app_version", "${defaultConfig.versionName}"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

@@ -68,5 +68,8 @@ abstract class ActivityModule {
     @ContributesAndroidInjector
     abstract fun contributeOwnerFragment (): OwnerFragment
 
+    @ContributesAndroidInjector
+    abstract fun contributePaymentVerificationSuccessFragment (): PaymentVerificationSuccessFragment
+
 
 }

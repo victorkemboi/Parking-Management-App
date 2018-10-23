@@ -54,34 +54,7 @@ class SplashActivity : AppCompatActivity() {
             startLogin()
         }
 
-   /*     if (firebaseAuth.currentUser != null) {
 
-            firebaseAuth.addAuthStateListener { auth ->
-                run {
-                    val mUser = auth.currentUser
-                    mUser?.getIdToken(true)?.addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val idToken = task.result?.token
-                            // Log.w("User getToken: ", idToken)
-                            settings.token = idToken
-
-                            startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
-
-                            finish()
-
-                        } else {
-                            startLogin()
-                        }
-                    } ?: startLogin()
-
-                }
-            }
-
-        } else {
-
-            startLogin()
-
-        }  */
 
     }
 

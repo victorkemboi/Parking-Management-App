@@ -3,6 +3,7 @@ package com.park254.app.park254.ui
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -56,10 +57,10 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
 
         bookings_swipe_container.setOnRefreshListener(this)
         bookings_swipe_container.setColorSchemeColors(
-                resources.getColor( android.R.color.holo_green_dark),
-                resources.getColor(android.R.color.holo_red_dark)  ,
-                resources.getColor(android.R.color.holo_blue_dark)   ,
-                resources.getColor(android.R.color.holo_orange_dark)   )
+                ContextCompat.getColor( bookingsActivityContext,android.R.color.holo_green_dark),
+                ContextCompat.getColor(bookingsActivityContext,android.R.color.holo_red_dark)  ,
+                ContextCompat.getColor(bookingsActivityContext, android.R.color.holo_blue_dark)   ,
+                ContextCompat.getColor(bookingsActivityContext, android.R.color.holo_orange_dark)   )
 
         bookings_recyclerview.layoutManager = LinearLayoutManager(bookingsActivityContext)
 

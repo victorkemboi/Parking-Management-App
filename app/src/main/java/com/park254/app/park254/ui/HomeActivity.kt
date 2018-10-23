@@ -34,16 +34,7 @@ import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.toolbar_2.*
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.ExecutorCoroutineDispatcher
-import kotlinx.coroutines.experimental.Job
 import javax.inject.Inject
-import kotlin.coroutines.experimental.CoroutineContext
-import android.view.ViewGroup
-import android.widget.Button
-import com.crashlytics.android.Crashlytics
-import com.mikepenz.actionitembadge.library.ActionItemBadge
-import com.mikepenz.actionitembadge.library.ActionItemBadgeAdder
 import dagger.android.AndroidInjection
 
 

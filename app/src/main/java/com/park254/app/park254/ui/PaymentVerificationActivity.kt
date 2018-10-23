@@ -67,25 +67,6 @@ class PaymentVerificationActivity : AppCompatActivity() {
         }, 1000)
     }
 
-   /* private fun showDialogPaymentSuccess() {
-        val fragmentManager = childFragmentManager
-
-
-
-        val transaction = fragmentManager.beginTransaction()
-        val previousFragment = fragmentManager.findFragmentByTag("verification")
-        if (previousFragment!=null){
-            transaction.remove(previousFragment)
-        }
-        transaction.addToBackStack(null)
-        val newFragment = PaymentVerificationSuccessFragment()
-        newFragment.show(transaction,"verification")
-        // transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        //transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit()
-
-    }
-
-    */
 
 
 

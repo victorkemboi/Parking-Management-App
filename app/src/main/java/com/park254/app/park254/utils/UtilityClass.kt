@@ -106,6 +106,14 @@ object UtilityClass {
             return "$diffWeeks weeks ago"
         }
 
+        // Calculate difference in days
+        val diffDays = timeDifference / (24 * 60 * 60 * 1000)
+        if (diffDays > 0) {
+            if (diffDays == (1).toLong()) {
+                return "$diffDays day ago"
+            }
+            return "$diffDays days ago"
+        }
 
         // Calculate difference in hours
         val diffHours = timeDifference / (60 * 60 * 1000)
@@ -138,14 +146,7 @@ object UtilityClass {
         }
 
 
-        // Calculate difference in days
-        val diffDays = timeDifference / (24 * 60 * 60 * 1000)
-        if (diffDays > 0) {
-            if (diffDays == (1).toLong()) {
-                return "$diffDays day ago"
-            }
-            return "$diffDays days ago"
-        }
+
 
 
 
@@ -197,9 +198,9 @@ object UtilityClass {
             for (x in 0 until bitMatrixWidth) {
 
                 pixels[offset + x] = if (bitMatrix.get(x, y))
-                    context.resources.getColor(R.color.black)
+                    ContextCompat.getColor(context,R.color.black)
                 else
-                    context.resources.getColor(R.color.white)
+                    ContextCompat.getColor(context,R.color.white)
             }
         }
         val bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444)

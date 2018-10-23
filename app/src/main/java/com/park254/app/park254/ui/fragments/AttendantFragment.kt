@@ -148,10 +148,7 @@ class AttendantFragment : DaggerFragment(), CoroutineScope, SwipeRefreshLayout.O
         launch {
             withContext(threadPool) {
 
-                (activity as HomeActivity).runOnUiThread {
-                    lyt_progress_attendant.visibility = View.VISIBLE
-                    lyt_not_an_attendant.visibility = View.GONE
-                }
+
 
                 retrofitApiService.getEmployeeByUserId(settings.userId!!).observe(attendantFragmentContext, Observer<ApiResponse<Employee>> { response ->
                     run {
@@ -295,15 +292,13 @@ class AttendantFragment : DaggerFragment(), CoroutineScope, SwipeRefreshLayout.O
                 )
 
 
-                (activity as HomeActivity).runOnUiThread {
-                    if(attendant_lyt.visibility!=View.VISIBLE){
-                        lyt_progress_attendant.visibility = View.GONE
-                        lyt_not_an_attendant.visibility = View.VISIBLE
-                    }
+
+                attendantFragmentContext.activity?.runOnUiThread {
                     if (attendant_swipe_container.isRefreshing){
                         attendant_swipe_container.isRefreshing = false
                     }
                 }
+
 
             }
         }
