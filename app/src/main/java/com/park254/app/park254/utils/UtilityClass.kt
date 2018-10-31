@@ -13,6 +13,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import com.google.android.gms.maps.model.LatLng
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
@@ -260,5 +261,17 @@ object UtilityClass {
     private fun IntRange.random() =
             Random().nextInt((endInclusive + 1) - start) + start
 
+    fun  computeCentroid( points:List<LatLng>): LatLng {
+    var latitude = 0.0
+    var longitude = 0.0
+    val n = points.size
+
+    for ( point in points) {
+        latitude += point.latitude
+        longitude += point.longitude
+    }
+
+    return  LatLng(latitude/n, longitude/n)
+}
 
 }

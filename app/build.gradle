@@ -116,7 +116,7 @@ dependencies {
 
     implementation "com.github.firdausmaulan:GlideSlider:$glide_slider_version"
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.26.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13'
 
     implementation 'com.journeyapps:zxing-android-embedded:3.4.0@aar'
     implementation 'com.google.zxing:core:3.3.0'

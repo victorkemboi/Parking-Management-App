@@ -12,10 +12,10 @@ import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.HomeActivity
 import com.park254.app.park254.ui.fragments.HomeFragment
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import java.util.ArrayList
 import javax.inject.Inject
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 class HomeViewModel @Inject
 constructor(

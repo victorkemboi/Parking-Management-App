@@ -28,8 +28,8 @@ import com.google.gson.Gson
 import com.park254.app.park254.ui.repo.PaymentsViewModel
 import com.park254.app.park254.utils.UtilityClass
 import dagger.android.AndroidInjection
-import kotlinx.coroutines.experimental.*
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 
 class PaymentsActivity : AppCompatActivity(),  CoroutineScope, SwipeRefreshLayout.OnRefreshListener  {

@@ -2,9 +2,9 @@ package com.park254.app.park254.di
 
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.experimental.ExecutorCoroutineDispatcher
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.asCoroutineDispatcher
+import kotlinx.coroutines.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.asCoroutineDispatcher
 import java.util.concurrent.Executors
 import javax.inject.Singleton
 

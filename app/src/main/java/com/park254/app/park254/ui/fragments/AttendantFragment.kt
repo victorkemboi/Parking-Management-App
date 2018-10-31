@@ -43,10 +43,10 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.attendant_update_layout.*
 import kotlinx.android.synthetic.main.attendant_update_layout.view.*
 import kotlinx.android.synthetic.main.fragment_attendant.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

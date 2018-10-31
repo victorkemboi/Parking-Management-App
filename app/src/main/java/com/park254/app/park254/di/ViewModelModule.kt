@@ -7,8 +7,8 @@ import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.repo.*
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.experimental.ExecutorCoroutineDispatcher
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.Job
 import javax.inject.Singleton
 
 @Module

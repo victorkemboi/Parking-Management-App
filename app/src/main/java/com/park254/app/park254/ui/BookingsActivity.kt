@@ -20,10 +20,10 @@ import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_bookings.*
 import kotlinx.android.synthetic.main.activity_lot_info.*
 import kotlinx.android.synthetic.main.payment_pop_out_lyt.view.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import java.util.ArrayList
 import javax.inject.Inject
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineScope, SwipeRefreshLayout.OnRefreshListener {
 

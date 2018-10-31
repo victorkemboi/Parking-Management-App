@@ -7,7 +7,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.Snackbar
+import android.widget.LinearLayout
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -20,9 +22,9 @@ import com.google.android.gms.maps.model.Polyline
 import com.google.maps.DirectionsApi
 import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.network.RetrofitApiService
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import javax.inject.Inject
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 import com.google.maps.GeoApiContext
 import com.google.maps.model.DirectionsResult
 import com.google.maps.model.LatLng
@@ -55,8 +57,11 @@ constructor(
 
    val nearByParkingLotsMarkersHashMap =HashMap<Marker, LotResponse>()
 
-    val destinationNearByParkingLotsMarkersHashMap = HashMap<Marker, LotResponse>()
+   val destinationNearByParkingLotsMarkersHashMap = HashMap<Marker, LotResponse>()
 
+   val nearestParkingLot : MutableLiveData<com.google.android.gms.maps.model.LatLng> = MutableLiveData()
+
+   var bottomSheetBehavior:BottomSheetBehavior<LinearLayout>? = null
 
     private fun getGeoContext(context: Context) : GeoApiContext {
         return GeoApiContext.Builder()

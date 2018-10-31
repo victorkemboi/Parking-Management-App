@@ -24,10 +24,10 @@ import com.park254.app.park254.ui.adapters.HomeListAdapter
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_main_home.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

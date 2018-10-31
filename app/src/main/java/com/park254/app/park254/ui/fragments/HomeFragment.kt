@@ -12,13 +12,13 @@ import android.graphics.Typeface
 import android.location.Location
 import android.location.LocationManager
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.support.annotation.NonNull
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
@@ -30,6 +30,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.common.api.GoogleApiClient
@@ -43,13 +44,10 @@ import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragmen
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.Task
-import com.park254.app.park254.App
 import com.park254.app.park254.R
 import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.models.NearByParkingLotRequest
 import com.park254.app.park254.ui.HomeActivity
-import com.park254.app.park254.ui.LotInfoActivity
-import com.park254.app.park254.ui.ParkingLotRegistrationActivity
 import com.park254.app.park254.ui.repo.HomeMapViewModel
 import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.UtilityClass.REQUEST_CHECK_SETTINGS
@@ -57,10 +55,11 @@ import com.park254.app.park254.utils.UtilityClass.REQUEST_LOCATION_PERMISSION_FO
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.home_map_view_fragment.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.android.synthetic.main.map_bottom_sheet_lyt.*
+import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 
 private const val ARG_PARAM1 = "param1"
@@ -210,6 +209,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
       mapView?.onCreate(savedInstanceState)
       mapView?.getMapAsync(this)
 
+        val bottomSheet = view.findViewById<FrameLayout>(R.id.bottom_sheet)
+
+
 
       return view
     }
@@ -230,22 +232,24 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         val typeFilter = AutocompleteFilter.Builder().setTypeFilter(Place.TYPE_COUNTRY)
                 .setCountry("KE").build()
         viewModel.autocompleteFragment?.setFilter(typeFilter)
-        val searchEditText = viewModel.autocompleteFragment!!.view?.findViewById<TextView>(R.id.place_autocomplete_search_input)
+        val searchTextView = viewModel.autocompleteFragment!!.view?.findViewById<TextView>(R.id.place_autocomplete_search_input)
 
-        searchEditText?.hint = "Find  parking?"
-        searchEditText?.setHintTextColor( ContextCompat.getColor(homeFragmentContext!!, R.color.grey_60))
-        searchEditText?.setTextColor( ContextCompat.getColor(homeFragmentContext!!, R.color.colorPrimary))
-        searchEditText?.typeface = Typeface.DEFAULT_BOLD
-        searchEditText?.textSize  = 15.8f
+        searchTextView?.hint = "Find  parking?"
+        searchTextView?.setHintTextColor( ContextCompat.getColor(homeFragmentContext!!, R.color.grey_60))
+        searchTextView?.setTextColor( ContextCompat.getColor(homeFragmentContext!!, R.color.colorPrimary))
+        searchTextView?.typeface = Typeface.DEFAULT_BOLD
+        searchTextView?.textSize  = 15.8f
+
 
         viewModel.autocompleteFragment!!.setOnPlaceSelectedListener(this)
 
         viewModel.autocompleteFragment!!.view?.findViewById<AppCompatImageButton>(R.id.place_autocomplete_clear_button)?.setOnClickListener{ view ->
 
+            viewModel.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
             viewModel.userDestinationMarker?.remove()
 
             viewModel.autocompleteFragment!!.view?.findViewById<TextView>(R.id.place_autocomplete_search_input)?.text = ""
-            searchEditText?.hint = "Find  parking?"
+            searchTextView?.hint = "Find  parking?"
 
             viewModel.autocompleteFragment!!.view?.findViewById<AppCompatImageButton>(R.id.place_autocomplete_clear_button)?.visibility = View.INVISIBLE
             viewModel.routePolyline?.remove()
@@ -290,9 +294,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
         turnOnLocation()
 
+        initComponent()
     }
 
     override fun onPlaceSelected(place: Place?) {
+        if(bottom_sheet_lot_title.text != ""){
+            viewModel.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
         viewModel.autocompleteFragment!!.view?.findViewById<AppCompatImageButton>(R.id.place_autocomplete_clear_button)?.visibility = View.VISIBLE
 
         viewModel.userDestinationMarker?.remove()
@@ -322,9 +331,25 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
                     val center: CameraUpdate=
                             CameraUpdateFactory.newLatLng(destinationLocation)
                     val zoom: CameraUpdate=CameraUpdateFactory.zoomTo(16f)
-
                     viewModel.map?.moveCamera(center)
                     viewModel.map?.animateCamera(zoom)
+
+                    Handler().postDelayed({
+
+                        viewModel.nearestParkingLot.observe(
+                                this, Observer<LatLng> {
+                            nearByParkingLot ->run{
+                            if (nearByParkingLot!=null){
+                               moveToBounds(listOf(nearByParkingLot,destinationLocation))
+
+                                viewModel.nearestParkingLot.removeObservers(this)
+                            }
+                        }
+                        }
+                        )
+
+                    }, 1500)
+
                 }, 1500)
 
 
@@ -362,6 +387,28 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
     }
 
     //custom functions
+    private fun initComponent() {
+
+        // init the bottom sheet behavior
+        viewModel.bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+
+        // change the state of the bottom sheet
+        viewModel.bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
+
+        // set callback for changes
+        viewModel.bottomSheetBehavior!!.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+        })
+
+      //  bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED
+    }
+
     private fun createCustomMarker(context: Context, _name: String,drawable: Int, layout: Int): Bitmap {
 
         val marker = (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(layout, null)
@@ -580,11 +627,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
         (activity as HomeActivity).viewModel.parsedLot = viewModel.nearByParkingLotsMarkersHashMap[marker]
 
-        if((activity as HomeActivity).viewModel.parsedLot!=null){
+        bottom_sheet_lot_title.text = (activity as HomeActivity).viewModel.parsedLot?.name
+        lot_min_rate.text = (activity as HomeActivity).viewModel.parsedLot?.parkingRates?.get(0)?.cost.toString()
+        lot_address.text = (activity as HomeActivity).viewModel.parsedLot?.streetName
+        lot_phone_number.text = (activity as HomeActivity).viewModel.parsedLot?.contactNumber
+        viewModel.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+      /*  if((activity as HomeActivity).viewModel.parsedLot!=null){
 
             startActivity(
                     Intent(homeFragmentContext, LotInfoActivity::class.java))
         }
+        */
     }
 
     private fun onDisplayLocationSettingsRequest() {
@@ -664,6 +717,18 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
     viewModel.map?.animateCamera(cu)
 }
 
+    private fun moveToBounds( points:List<LatLng>) {
+
+        val builder =  LatLngBounds.Builder()
+        for (point in points){
+            builder.include(point)
+        }
+        val bounds = builder.build()
+        val padding = 200  // offset from edges of the map in pixels
+        val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+        viewModel.map?.animateCamera(cu)
+    }
+
     private fun setNearByParkingLots(nearByParkingLotRequest: NearByParkingLotRequest,destinationLocation:Boolean){
         launch {
             withContext(threadPool) {
@@ -673,15 +738,17 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
                     run {
                         if (response != null && response.isSuccessful) {
                             val parkingLotList = response.body as ArrayList<LotResponse>
-
+                            val nearestParkingLot = LatLng(parkingLotList[0].latitude,parkingLotList[0].longitude)
+                            viewModel.nearestParkingLot.postValue(nearestParkingLot)
                             for (parkingLot in parkingLotList) {
 
                                 val parkingLotLocation = LatLng(parkingLot.latitude, parkingLot.longitude)
+
                                 val marker = viewModel.map?.addMarker(
                                         MarkerOptions().position(parkingLotLocation)
                                                 .icon(BitmapDescriptorFactory
                                                         .fromBitmap(
-                                                                createCustomMarker(activity as HomeActivity, parkingLot.name, R.drawable.park_marker, R.layout.park_custom_marker_layout)
+                                                                createCustomMarker(activity as HomeActivity, parkingLot.name, R.drawable.price_marker, R.layout.parking_lot_marker)
                                                         )))
                                 if (marker != null) {
                                     if (destinationLocation){
@@ -832,8 +899,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         }
 
     }
-
-
 
 }
 

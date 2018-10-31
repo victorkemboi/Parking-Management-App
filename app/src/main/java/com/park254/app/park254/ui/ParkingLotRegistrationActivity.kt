@@ -38,9 +38,9 @@ import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.models.Rate
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import dagger.android.AndroidInjection
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 
 class ParkingLotRegistrationActivity : AppCompatActivity() ,

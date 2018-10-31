@@ -14,6 +14,7 @@
     <dimen name="spacing_medium">5dp</dimen>
     <dimen name="spacing_xmedium">7dp</dimen>
     <dimen name="spacing_middle">10dp</dimen>
+    <dimen name="spacing_smmiddle">12dp</dimen>
     <dimen name="spacing_large">15dp</dimen>
     <dimen name="spacing_smlarge">18dp</dimen>
     <dimen name="spacing_mlarge">20dp</dimen>
@@ -23,5 +24,6 @@
     <dimen name="spacing_xxlarge">50dp</dimen>
     <dimen name="spacing_xxxlarge">55dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="cardview_corner_raius">20dp</dimen>
 
 </resources>
