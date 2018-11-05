@@ -27,6 +27,8 @@ import javax.inject.Inject
 import android.arch.lifecycle.Observer
 import com.park254.app.park254.models.AvailableSpaceResponse
 import com.park254.app.park254.ui.HomeActivity
+import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.HasSupportFragmentInjector
 
 
 class HomeListAdapter(private val ctx: Context, items: ArrayList<LotResponse>)
@@ -73,8 +75,8 @@ class HomeListAdapter(private val ctx: Context, items: ArrayList<LotResponse>)
     }
 
     init {
-        (ctx.applicationContext as App).applicationInjector.inject(this)
-        this.items = items
+       (ctx.applicationContext as App).applicationInjector.inject(this)
+
         requestOptions.centerCrop()
         requestOptions.placeholder(R.drawable.parking_lot_image_preview)
 

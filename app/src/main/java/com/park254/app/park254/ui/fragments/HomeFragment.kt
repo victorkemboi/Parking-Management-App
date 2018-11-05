@@ -88,12 +88,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
     private  var homeFragmentContext : Context? = null
 
     override val coroutineContext: CoroutineContext
-        get() =   Dispatchers.Default + job
+        get() =   threadPool + job
+        //get() =   Dispatchers.Default + job
 
     lateinit var mSwitchStateReceiver : BroadcastReceiver
-
-
-
 
     // Class methods
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,8 +131,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
             }
         }
-
-
 
         mSwitchStateReceiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, intent: Intent?) {
@@ -730,7 +726,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
     }
 
     private fun setNearByParkingLots(nearByParkingLotRequest: NearByParkingLotRequest,destinationLocation:Boolean){
-        launch {
+        launch(threadPool) {
             withContext(threadPool) {
 
                 (activity as HomeActivity).viewModel.retrofitApiService.getNearByParkingLots(nearByParkingLotRequest)
@@ -784,7 +780,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
                 }
                 )
 
-            }}
+            }
+
+        }
     }
 
 

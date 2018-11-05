@@ -3,6 +3,8 @@ package com.park254.app.park254
 import android.app.Activity
 import android.app.Application
 import android.support.v4.app.Fragment
+import android.support.v4.app.ListFragment
+import android.support.v7.widget.RecyclerView
 import com.crashlytics.android.Crashlytics
 import com.facebook.stetho.Stetho
 import com.park254.app.park254.di.*
@@ -30,14 +32,15 @@ class App : Application() , HasActivityInjector , HasSupportFragmentInjector{
 
         Stetho.initializeWithDefaults(this)
         Fabric.with(this, Crashlytics())
-        applicationInjector = DaggerAppComponent.builder()
+        applicationInjector =  DaggerAppComponent.builder()
                 .appModule(AppModule(this))
                 .roomModule(RoomModule(this))
                 .netModule(NetModule(UtilityClass.BASE_URL, this))
                 .build()
 
-        applicationInjector.inject(this)
-        //applicationInjector.provideApplication()
+
+
+       applicationInjector.inject(this)
 
     }
 
@@ -48,6 +51,9 @@ class App : Application() , HasActivityInjector , HasSupportFragmentInjector{
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
        return dispatchingFragmentInjector
     }
+
+
+
 
 }
 

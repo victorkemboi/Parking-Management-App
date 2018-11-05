@@ -58,6 +58,8 @@ class BookingsListAdapter(private val ctx: Context, items: ArrayList<Booking>)
         this.items = items
 
         (ctx.applicationContext as App).applicationInjector.inject(this)
+
+
     }
 
     inner class OriginalViewHolder(v: View) : RecyclerView.ViewHolder(v) {

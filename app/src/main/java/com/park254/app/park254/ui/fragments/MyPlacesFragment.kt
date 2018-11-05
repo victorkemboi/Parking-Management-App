@@ -1,5 +1,6 @@
 package com.park254.app.park254.ui.fragments
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
@@ -51,7 +52,10 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
     private var param2: String? = null
 
     private var listener: OnFragmentInteractionListener? = null
+
     private var mAdapter: HomeListAdapter? = null
+
+    private val adapterObserver = MutableLiveData<HomeListAdapter>()
 
     @Inject
     lateinit var retrofitApiService: RetrofitApiService
@@ -67,10 +71,7 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override val coroutineContext: CoroutineContext
-        get() =   Dispatchers.Default + job
-
-
-
+        get() =   threadPool + job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,6 +112,13 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
 
         home_packing_lots_recycler_view.setHasFixedSize(false)
 
+        adapterObserver.observe(this, Observer<HomeListAdapter>{
+            adapter->run{
+            if(adapter!=null){
+                home_packing_lots_recycler_view.adapter = adapter
+            }
+        }
+        })
         setMyPlaces()
     }
     override fun onRefresh() {
@@ -199,48 +207,47 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
 
 
 
-    private fun setMyPlaces(){
+    private fun setMyPlaces() {
 
-        if (!home_swipe_container.isRefreshing){
+        if (!home_swipe_container.isRefreshing) {
             home_swipe_container.isRefreshing = true
         }
         launch {
-            withContext(threadPool){
+           // withContext(threadPool) {
 
-                retrofitApiService.getParkingLots().observe(myPlacesFragmentContext, Observer<ApiResponse<List<LotResponse>>> {
-                    response->
+                retrofitApiService.getParkingLots().observe(myPlacesFragmentContext, Observer<ApiResponse<List<LotResponse>>> { response ->
                     if (response != null && response.isSuccessful) {
 
                         // Log.d("Resp",response.body.toString())
                         mAdapter = HomeListAdapter(activity as HomeActivity, response.body as ArrayList<LotResponse>)
 
-                        home_packing_lots_recycler_view.adapter = mAdapter
 
-                        mAdapter!!.onItemClick = {
-                            lot ->
+                        adapterObserver.postValue(mAdapter)
+
+                        mAdapter!!.onItemClick = { lot ->
 
                             (activity as HomeActivity).viewModel.parsedLot = lot
                             startActivity(
                                     Intent(this@MyPlacesFragment.context, LotInfoActivity::class.java))
                         }
 
-                    }else{
+                    } else {
                         if (response != null) {
                             // Log.d("Resp",response.body.toString())
                         }
                     }
 
                     this@MyPlacesFragment.run {
-                        if (home_swipe_container.isRefreshing){
+                        if (home_swipe_container.isRefreshing) {
                             home_swipe_container.isRefreshing = false
                         }
                     }
 
 
                 })
-            }
+           // }
+
         }
     }
-
 
 }

@@ -18,7 +18,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 @Singleton
 @Component(modules = [(AppModule::class), (RoomModule::class), (NetModule::class),
    (FirebaseModule::class),(ViewModelModule::class), (AndroidSupportInjectionModule::class),
-    (DaoModule::class), (ThreadModule::class),(ActivityModule::class)])
+    (DaoModule::class), (ThreadModule::class),(InjectorModule::class)])
 interface AppComponent: AndroidInjector<App> {
 
     fun inject(loginActivity: LoginActivity)

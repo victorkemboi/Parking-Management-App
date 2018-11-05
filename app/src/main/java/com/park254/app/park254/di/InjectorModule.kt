@@ -1,12 +1,13 @@
 package com.park254.app.park254.di
 
 import com.park254.app.park254.ui.*
+import com.park254.app.park254.ui.adapters.*
 import com.park254.app.park254.ui.fragments.*
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class ActivityModule {
+abstract class InjectorModule {
 
     @ContributesAndroidInjector
     abstract fun contributeHomeActivity (): HomeActivity
@@ -70,6 +71,8 @@ abstract class ActivityModule {
 
     @ContributesAndroidInjector
     abstract fun contributePaymentVerificationSuccessFragment (): PaymentVerificationSuccessFragment
+
+
 
 
 }
