@@ -90,6 +90,9 @@ class HomeActivity : AppCompatActivity(),
         val userAvatar = headerView.findViewById<ImageView>(R.id.avatar)
         Glide.with(this).load(FirebaseAuth.getInstance().currentUser!!.photoUrl).into(userAvatar)
 
+
+        Log.w("Token: ",settings.token)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

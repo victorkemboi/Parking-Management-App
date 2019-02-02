@@ -10,7 +10,7 @@ apply plugin: 'io.fabric'
 
 def versionMajor = 1
 def versionMinor = 0
-def versionPatch = 3
+def versionPatch = 4
 def verCode = (versionMajor * 10000) + (versionMinor * 100) + versionPatch
 
 android {

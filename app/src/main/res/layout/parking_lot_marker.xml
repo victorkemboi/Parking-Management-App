@@ -29,7 +29,7 @@
             android:src="@drawable/price_marker"
             android:id="@+id/park_marker_img"
             android:background="@android:color/transparent"
-            android:tint="@color/colorPrimary"/>
+            android:tint="@color/colorAccentDark1"/>
 
 
         <TextView
@@ -72,7 +72,7 @@
                 android:padding="@dimen/spacing_middle"
                 android:textColor="@color/white"
                 android:background="@drawable/rounded_black_rectangle"
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/colorAccentDark1"
                 android:id="@+id/name"
 
                 />

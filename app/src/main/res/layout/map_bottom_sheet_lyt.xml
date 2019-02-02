@@ -29,6 +29,11 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/swipe_up_handle" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/spacing_small">
             <TextView
                 android:id="@+id/bottom_sheet_lot_title"
                 android:layout_width="match_parent"
@@ -41,9 +46,11 @@
                 android:paddingLeft="@dimen/spacing_large"
                 android:paddingRight="@dimen/spacing_large"
                 android:paddingStart="@dimen/spacing_large"
-                android:text=""
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+                android:text="Parking lot info."
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:layout_weight="1"/>
 
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -84,17 +91,35 @@
                     android:layout_marginStart="@dimen/spacing_xxlarge"
                     android:background="@color/grey_10" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_marginLeft="@dimen/spacing_xxlarge"
-                    android:layout_marginStart="@dimen/spacing_xxlarge"
-                    android:gravity="center_vertical"
-                    android:text="Ksh. 250"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/colorPrimary"
-                    android:id="@+id/lot_min_rate"/>
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@android:color/transparent"
+                        android:tint="@color/grey_20"
+                        app:srcCompat="@drawable/ic_monetization" />
+
+                    <View
+                        android:layout_width="@dimen/spacing_mxlarge"
+                        android:layout_height="0dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:gravity="center_vertical"
+                        android:text="Minimum Price"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/colorPrimary"
+                        android:id="@+id/lot_min_rate"/>
+
+                </LinearLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -107,6 +132,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_middle"
                     android:orientation="vertical">
+
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -129,7 +156,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text="740 Valencia St, San Francisco, CA"
+                            android:text="Location"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/grey_90"
                             android:id="@+id/lot_address"/>
@@ -157,7 +184,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text="(415) 349-0942"
+                            android:text="Telephone"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/grey_90"
                             android:id="@+id/lot_phone_number"/>
@@ -168,28 +195,43 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal" android:visibility="gone">
 
                         <ImageButton
                             android:layout_width="wrap_content"
                             android:layout_height="?attr/actionBarSize"
                             android:background="@android:color/transparent"
                             android:tint="@color/grey_20"
-                            app:srcCompat="@drawable/ic_schedule" />
+                            app:srcCompat="@drawable/ic_schedule"
+                            android:visibility="invisible"/>
 
                         <View
                             android:layout_width="@dimen/spacing_mxlarge"
                             android:layout_height="0dp" />
 
-                        <TextView
+                      <!--  <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:text="Wed, 10 AM - 9 PM"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/grey_90" />
+                            android:textColor="@color/grey_90" /> -->
 
                     </LinearLayout>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Book Now!"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center"
+                        android:background="@drawable/btn_true"
+                        android:paddingStart="@dimen/spacing_mxlarge"
+                        android:paddingEnd="@dimen/spacing_mxlarge"
+                        android:id="@+id/btn_book"
+                        android:layout_marginBottom="@dimen/spacing_large"
+                        />
+
 
                 </LinearLayout>
 

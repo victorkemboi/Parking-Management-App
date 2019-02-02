@@ -32,6 +32,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResolvableApiException
@@ -48,7 +49,9 @@ import com.park254.app.park254.R
 import com.park254.app.park254.models.LotResponse
 import com.park254.app.park254.models.NearByParkingLotRequest
 import com.park254.app.park254.ui.HomeActivity
+import com.park254.app.park254.ui.LotInfoActivity
 import com.park254.app.park254.ui.repo.HomeMapViewModel
+import com.park254.app.park254.ui.repo.HomeViewModel
 import com.park254.app.park254.utils.UtilityClass
 import com.park254.app.park254.utils.UtilityClass.REQUEST_CHECK_SETTINGS
 import com.park254.app.park254.utils.UtilityClass.REQUEST_LOCATION_PERMISSION_FOR_GET_DEVICE_LOCATION
@@ -93,6 +96,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
 
     lateinit var mSwitchStateReceiver : BroadcastReceiver
 
+
+    @Inject
+    lateinit var homeViewModel: HomeViewModel
     // Class methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -205,8 +211,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
       mapView?.onCreate(savedInstanceState)
       mapView?.getMapAsync(this)
 
-        val bottomSheet = view.findViewById<FrameLayout>(R.id.bottom_sheet)
-
+       val bottomSheet = view.findViewById<LinearLayout>(R.id.bottom_sheet)
 
 
       return view
@@ -624,16 +629,18 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         (activity as HomeActivity).viewModel.parsedLot = viewModel.nearByParkingLotsMarkersHashMap[marker]
 
         bottom_sheet_lot_title.text = (activity as HomeActivity).viewModel.parsedLot?.name
-        lot_min_rate.text = (activity as HomeActivity).viewModel.parsedLot?.parkingRates?.get(0)?.cost.toString()
+        lot_min_rate.text = "Kes. " + (activity as HomeActivity).viewModel.parsedLot?.parkingRates?.get(0)?.cost.toString()
         lot_address.text = (activity as HomeActivity).viewModel.parsedLot?.streetName
         lot_phone_number.text = (activity as HomeActivity).viewModel.parsedLot?.contactNumber
-        viewModel.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-      /*  if((activity as HomeActivity).viewModel.parsedLot!=null){
+        btn_book.setOnClickListener {
+            if((activity as HomeActivity).viewModel.parsedLot!=null){
 
-            startActivity(
-                    Intent(homeFragmentContext, LotInfoActivity::class.java))
+                startActivity(
+                        Intent(homeFragmentContext, LotInfoActivity::class.java))
+            }
         }
-        */
+        viewModel.bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+
     }
 
     private fun onDisplayLocationSettingsRequest() {
