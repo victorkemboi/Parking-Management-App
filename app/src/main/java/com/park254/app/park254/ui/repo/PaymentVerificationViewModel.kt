@@ -2,7 +2,9 @@ package com.park254.app.park254.ui.repo
 
 import android.arch.lifecycle.ViewModel
 import android.graphics.Bitmap
+import com.park254.app.park254.models.Booking
 import com.park254.app.park254.models.Payment
+import com.park254.app.park254.models.User
 import com.park254.app.park254.network.RetrofitApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,5 +25,7 @@ constructor(
         get() =   Dispatchers.Default + job
 
     var payment :Payment? = null
+    var booking : Booking? = null
+    var user : User? = null
 
 }

@@ -70,33 +70,17 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-                            <LinearLayout
+                            android:layout_height="wrap_content"
+                            android:id="@+id/home_packing_lots_recycler_view_lyt"
+                            android:visibility="visible">
 
-                                android:id="@+id/lyt_progress_home"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_margin="@dimen/spacing_medium"
-                                android:orientation="vertical"
-                                android:visibility="gone">
-
-
-                                <com.park254.app.park254.widgets.BouncingDotsView
-                                    android:layout_width="50dp"
-                                    android:layout_height="40dp"
-                                    android:background="@color/colorAccentDark2"
-
-                                    />
-
-
-                            </LinearLayout>
                             <android.support.v7.widget.RecyclerView
+                                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                                 android:id="@+id/home_packing_lots_recycler_view"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:scrollbars="vertical"/>
+                                android:layout_height="fill_parent"
+                                android:scrollbars="vertical"
+                               />
 
                         </LinearLayout>
 

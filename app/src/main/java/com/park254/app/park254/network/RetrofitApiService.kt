@@ -29,6 +29,9 @@ interface RetrofitApiService{
     @GET("Profiles/email")
     fun getUserByEmail(@Query("q")  email:String ) :  LiveData<ApiResponse<User>>
 
+    @GET("profiles")
+    fun getUser() :  LiveData<ApiResponse<User>>
+
     @GET("Parking/{id}/free")
     fun getAvailableSpacesInaParkingLot(@Path("id") id:String) :LiveData<ApiResponse<AvailableSpaceResponse>>
 

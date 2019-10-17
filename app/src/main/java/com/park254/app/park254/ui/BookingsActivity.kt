@@ -146,7 +146,8 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
 
                         Log.d("Mpesa: ",result.body)
                     }else{
-                        Log.d("Mpesa: ","booking id" + booking.id)
+
+
                         Log.d("Mpesa: ","Payment Failed.")
                     }
                 }else{
@@ -165,5 +166,8 @@ class BookingsActivity : AppCompatActivity() ,View.OnClickListener, CoroutineSco
         builder.show()
     }
 
-
+    override fun onBackPressed() {
+        startActivity(
+                Intent(this, HomeActivity::class.java))
+    }
 }

@@ -3,6 +3,7 @@ package com.park254.app.park254.ui.fragments
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.DialogFragment
@@ -15,7 +16,11 @@ import android.widget.TextView
 import com.park254.app.park254.App
 
 import com.park254.app.park254.R
+import com.park254.app.park254.models.Booking
+import com.park254.app.park254.network.RetrofitApiService
 import com.park254.app.park254.ui.repo.PaymentVerificationViewModel
+import com.park254.app.park254.utils.UtilityClass
+import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.payment_verification_dialog.*
 import javax.inject.Inject
@@ -40,6 +45,9 @@ class PaymentVerificationSuccessFragment : DialogFragment() {
     lateinit var paymentVerificationViewModel: PaymentVerificationViewModel
 
 
+    @Inject
+    lateinit var retrofitApiService: RetrofitApiService
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
        val  rootView = inflater.inflate(R.layout.payment_verification_dialog, container, false)
@@ -48,10 +56,17 @@ class PaymentVerificationSuccessFragment : DialogFragment() {
            activity!!.finish()
 
         }
+        val checkIn = UtilityClass.getDateWithServerTimeStamp(paymentVerificationViewModel.booking?.starting!!)
+        val checkOut= UtilityClass.getDateWithServerTimeStamp(paymentVerificationViewModel.booking?.ending!!)
 
+        rootView.findViewById<TextView>(R.id.txt_check_in_date).text =  checkIn?.get(Calendar.DATE).toString()+  " " + UtilityClass.getMonthForInt(checkIn?.get(Calendar.MONTH)!!.toInt()).substring(0,3)  +" " + checkIn.get(Calendar.YEAR).toString()
+        rootView.findViewById<TextView>(R.id.txt_check_out_date).text =  checkOut?.get(Calendar.DATE).toString()+  " " + UtilityClass.getMonthForInt(checkOut?.get(Calendar.MONTH)!!.toInt()).substring(0,3)  +" " + checkOut.get(Calendar.YEAR).toString()
         rootView.findViewById<TextView>(R.id.payment_dialog_amount).text = paymentVerificationViewModel.payment?.amount
         rootView.findViewById<TextView>(R.id.payment_dialog_phone_number).text =  paymentVerificationViewModel.payment?.paidBy
+        rootView.findViewById<TextView>(R.id.txt_check_in_time).text = checkIn.get(Calendar.HOUR).toString()+ " : " + UtilityClass.addZeroForOneToNine(checkIn.get(Calendar.MINUTE) )+ " " + UtilityClass.timeAMorPM(checkIn)
+        rootView.findViewById<TextView>(R.id.txt_check_out_time).text = checkOut.get(Calendar.HOUR).toString()+ " : " + UtilityClass.addZeroForOneToNine(checkOut.get(Calendar.MINUTE) )+ " " + UtilityClass.timeAMorPM(checkOut)
 
+        rootView.findViewById<TextView>(R.id.txt_user_name).text = paymentVerificationViewModel.user?.name
         return rootView
     }
 

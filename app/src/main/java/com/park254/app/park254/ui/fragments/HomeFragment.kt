@@ -309,7 +309,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         val destinationLocation = place?.latLng
 
         val nearByParkingLotRequest = NearByParkingLotRequest()
-        nearByParkingLotRequest.latitude = destinationLocation!!.latitude
+        nearByParkingLotRequest.lattitude = destinationLocation!!.latitude
         nearByParkingLotRequest.longitude = destinationLocation.longitude
         nearByParkingLotRequest.count = 5
         setNearByParkingLots(nearByParkingLotRequest,true)
@@ -317,7 +317,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         viewModel.userDestinationMarker =  viewModel.map?.addMarker(
                 MarkerOptions().position(destinationLocation)
                         .icon(BitmapDescriptorFactory.fromBitmap(
-                createCustomMarker(activity as HomeActivity, place.name as String, R.drawable.ic_destination,R.layout.destination_marker_layout))) )
+                createCustomMarker(activity as HomeActivity, place.name as String, R.drawable.ic_destination,R.layout.destination_marker_layout,0))) )
         viewModel. userDestinationMarker?.isVisible = true
 
         val destination = com.google.maps.model.LatLng(place.latLng?.latitude!!, place.latLng?.longitude!!)
@@ -410,7 +410,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
       //  bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED
     }
 
-    private fun createCustomMarker(context: Context, _name: String,drawable: Int, layout: Int): Bitmap {
+    private fun createCustomMarker(context: Context, _name: String,drawable: Int, layout: Int, price: Int): Bitmap {
 
         val marker = (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(layout, null)
 
@@ -418,6 +418,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
         markerImage.setImageResource(drawable)
         val txt_name = marker.findViewById(R.id.name) as TextView
         txt_name.text = _name
+
+        if (layout == R.layout.parking_lot_marker){
+            val txt_cost = marker.findViewById(R.id.parking_lot_marker_price) as TextView
+            txt_cost.text =  "$price /="
+        }
 
         val displayMetrics = DisplayMetrics()
         (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
@@ -505,7 +510,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
             val userLocation = LatLng(deviceLocation?.lat!!, deviceLocation.lng)
             showDeviceLocation(userLocation)
             val nearByParkingLotRequest = NearByParkingLotRequest()
-            nearByParkingLotRequest.latitude = userLocation.latitude
+            nearByParkingLotRequest.lattitude = userLocation.latitude
             nearByParkingLotRequest.longitude = userLocation.longitude
             nearByParkingLotRequest.count = 5
             setNearByParkingLots(nearByParkingLotRequest,false)
@@ -751,7 +756,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback,  PlaceSelectionListener, Co
                                         MarkerOptions().position(parkingLotLocation)
                                                 .icon(BitmapDescriptorFactory
                                                         .fromBitmap(
-                                                                createCustomMarker(activity as HomeActivity, parkingLot.name, R.drawable.price_marker, R.layout.parking_lot_marker)
+                                                                createCustomMarker(activity as HomeActivity,
+                                                                        parkingLot.name, R.drawable.price_marker, R.layout.parking_lot_marker,
+                                                                        parkingLot.parkingRates[0].cost.toInt())
                                                         )))
                                 if (marker != null) {
                                     if (destinationLocation){

@@ -72,6 +72,7 @@ class PaymentsListAdapter(private val ctx: Context, items: ArrayList<Payment>)
         var paid_on = v.paid_on_txtview
 
 
+
         init {
             itemView.setOnClickListener {
                 onItemClick?.invoke(items[adapterPosition])
@@ -95,10 +96,10 @@ class PaymentsListAdapter(private val ctx: Context, items: ArrayList<Payment>)
 
            val paidDate = UtilityClass.getDateWithServerTimeStamp(paymentItem.receivedOn)
 
-           holder.paid_on.text = Calendar.DATE.toString()+  " " + UtilityClass.getMonthForInt(paidDate?.get(Calendar.MONTH)!!).substring(0,3)  +" " + paidDate.get(Calendar.YEAR).toString()
+           holder.paid_on.text = paidDate?.get(Calendar.DATE).toString()+  " " + UtilityClass.getMonthForInt(paidDate?.get(Calendar.MONTH)!!).substring(0,3)  +" " + paidDate.get(Calendar.YEAR).toString()
 
 
-            retrofitApiService.geBookingById(paymentItem.paymentReference).observe(ctx as PaymentsActivity, Observer<ApiResponse<Booking>>{
+            retrofitApiService.geBookingById(paymentItem.bookingId).observe(ctx as PaymentsActivity, Observer<ApiResponse<Booking>>{
                 response->run{
                 if (response?.body !=null && response.isSuccessful){
 

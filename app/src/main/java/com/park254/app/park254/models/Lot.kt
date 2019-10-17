@@ -47,6 +47,7 @@ data class Lot(
         @Ignore
         @ColumnInfo(name = "parkingLotPhotos")
         var parkingLotPhotos: ArrayList<LotImage> = ArrayList(),
+
         @Ignore
         @ColumnInfo(name = "parkingRates")
         var parkingRates: ArrayList<Rate> = ArrayList())

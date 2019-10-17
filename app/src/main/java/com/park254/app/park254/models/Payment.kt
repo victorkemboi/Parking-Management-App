@@ -32,7 +32,10 @@ data class   Payment(
         var currency: String = "" ,
 
         @ColumnInfo(name = "lotId")
-        var lotId: String = "")
+        var lotId: String = "",
+        @ColumnInfo(name = "bookingId")
+        var bookingId: String = "")
+
 {
     @PrimaryKey(autoGenerate = true)
     var uid: Long? = null

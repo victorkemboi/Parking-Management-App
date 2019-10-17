@@ -29,7 +29,8 @@
             android:src="@drawable/price_marker"
             android:id="@+id/park_marker_img"
             android:background="@android:color/transparent"
-            android:tint="@color/colorAccentDark1"/>
+            android:tint="@color/colorAccentDark1"
+            />
 
 
         <TextView
@@ -44,6 +45,9 @@
             android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="13sp"
+            android:id="@+id/parking_lot_marker_price"
+            android:paddingStart="@dimen/spacing_small"
+            android:paddingEnd="@dimen/spacing_small"
             />
     </android.support.constraint.ConstraintLayout>
 

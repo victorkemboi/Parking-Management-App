@@ -319,8 +319,41 @@ class AttendantFragment : DaggerFragment(), CoroutineScope, SwipeRefreshLayout.O
 
                         if (payment.amount != ""){
                             paymentVerificationViewModel.payment = payment
-                            startActivity(
-                                    Intent(this@AttendantFragment.activity, PaymentVerificationActivity::class.java))
+
+                            retrofitApiService.geBookingById(payment.bookingId ).observe(
+                                    attendantFragmentContext, Observer <ApiResponse<Booking>?>{
+                                response-> run {
+                                if (response!=null && response.isSuccessful){
+                                    val bookedItem = response.body
+                                    paymentVerificationViewModel.booking = bookedItem
+
+                                    retrofitApiService.getUser( ).observe(
+                                            attendantFragmentContext, Observer <ApiResponse<User>?>{
+                                        response-> run {
+                                        if (response!=null && response.isSuccessful){
+                                            val user = response.body
+                                            paymentVerificationViewModel.user = user
+
+                                            startActivity(
+                                                    Intent(this@AttendantFragment.activity, PaymentVerificationActivity::class.java))
+                                        }
+
+                                    }
+                                    }
+                                    )
+                                }else{
+                                    Log.w("booking response", response.toString())
+                                }
+
+                            }
+                            }
+                            )
+
+
+
+
+
+
                             Log.d("QR Results:", "result content success"  + result.contents)
                         }
 

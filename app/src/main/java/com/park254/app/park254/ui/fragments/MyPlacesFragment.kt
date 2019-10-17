@@ -25,6 +25,7 @@ import com.park254.app.park254.ui.adapters.HomeListAdapter
 import com.park254.app.park254.utils.livedata_adapter.ApiResponse
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_main_home.*
+import kotlinx.android.synthetic.main.fragment_owner.*
 import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
@@ -108,17 +109,17 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
                 ContextCompat.getColor(myPlacesFragmentContext.context!!, android.R.color.holo_blue_dark)   ,
                 ContextCompat.getColor(myPlacesFragmentContext.context!!, android.R.color.holo_orange_dark)   )
 
-        home_packing_lots_recycler_view.layoutManager = LinearLayoutManager(myPlacesFragmentContext.context)
+        home_packing_lots_recycler_view.layoutManager = LinearLayoutManager(activity!!.applicationContext)
 
         home_packing_lots_recycler_view.setHasFixedSize(false)
 
-        adapterObserver.observe(this, Observer<HomeListAdapter>{
+       /* adapterObserver.observe(this, Observer<HomeListAdapter>{
             adapter->run{
-            if(adapter!=null){
+
                 home_packing_lots_recycler_view.adapter = adapter
-            }
+
         }
-        })
+        }) */
         setMyPlaces()
     }
     override fun onRefresh() {
@@ -213,23 +214,34 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
             home_swipe_container.isRefreshing = true
         }
         launch {
-           // withContext(threadPool) {
+          withContext(threadPool) {
 
                 retrofitApiService.getParkingLots().observe(myPlacesFragmentContext, Observer<ApiResponse<List<LotResponse>>> { response ->
                     if (response != null && response.isSuccessful) {
 
                         // Log.d("Resp",response.body.toString())
-                        mAdapter = HomeListAdapter(activity as HomeActivity, response.body as ArrayList<LotResponse>)
 
+                        val items = response.body as ArrayList<LotResponse>
 
-                        adapterObserver.postValue(mAdapter)
+                        if (items.isNotEmpty()){
+                            home_packing_lots_recycler_view_lyt.visibility = View.VISIBLE
 
-                        mAdapter!!.onItemClick = { lot ->
+                            mAdapter = HomeListAdapter(activity!!, items)
 
-                            (activity as HomeActivity).viewModel.parsedLot = lot
-                            startActivity(
-                                    Intent(this@MyPlacesFragment.context, LotInfoActivity::class.java))
+                            home_packing_lots_recycler_view.adapter = mAdapter
+                            mAdapter!!.onItemClick = { lot ->
+
+                                (activity as HomeActivity).viewModel.parsedLot = lot
+                                startActivity(
+                                        Intent(this@MyPlacesFragment.context, LotInfoActivity::class.java))
+                            }
                         }
+
+
+
+                       // adapterObserver.postValue(mAdapter)
+
+
 
                     } else {
                         if (response != null) {
@@ -237,15 +249,17 @@ class MyPlacesFragment : Fragment(), CoroutineScope, SwipeRefreshLayout.OnRefres
                         }
                     }
 
-                    this@MyPlacesFragment.run {
-                        if (home_swipe_container.isRefreshing) {
+
+
+                    this@MyPlacesFragment.activity?.runOnUiThread {
+                        if (home_swipe_container.isRefreshing){
                             home_swipe_container.isRefreshing = false
                         }
                     }
 
 
                 })
-           // }
+          }
 
         }
     }
